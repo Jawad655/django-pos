@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Login | Signature Bistro
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #111827,
+                    #1f2937,
+                    #0f172a
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+
+        .login-wrapper {
+
+            width: 100%;
+
+            max-width: 430px;
+
+        }
+
+
+        .login-card {
+
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            padding: 42px 38px;
+
+            box-shadow:
+                0 25px 60px
+                rgba(0, 0, 0, 0.35);
+
+        }
+
+
+        .brand {
+
+            text-align: center;
+
+            margin-bottom: 32px;
+
+        }
+
+
+        .brand-name {
+
+            margin: 0;
+
+            font-size: 32px;
+
+            font-weight: 800;
+
+            letter-spacing: 4px;
+
+            color: #111827;
+
+        }
+
+
+        .brand-subtitle {
+
+            margin-top: 7px;
+
+            font-size: 14px;
+
+            color: #6b7280;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .login-title {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .login-title h2 {
+
+            margin: 0;
+
+            font-size: 24px;
+
+            color: #111827;
+
+        }
+
+
+        .login-title p {
+
+            margin-top: 7px;
+
+            margin-bottom: 0;
+
+            font-size: 14px;
+
+            color: #6b7280;
+
+        }
+
+
+        .error-message {
+
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #374151;
+
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #111827;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(17, 24, 39, 0.08);
+
+        }
+
+
+        .login-button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            background: #111827;
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .login-button:hover {
+
+            background: #000000;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            font-size: 12px;
+
+            color: #9ca3af;
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .login-card {
+
+                padding: 32px 24px;
+
+            }
+
+
+            .brand-name {
+
+                font-size: 27px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-wrapper">
+
+
+    <div class="login-card">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <h1 class="brand-name">
+                SIGNATURE
+            </h1>
+
+            <div class="brand-subtitle">
+                Jawad Khan Bistro
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN TITLE -->
+
+        <div class="login-title">
+
+            <h2>
+                Welcome Back
+            </h2>
+
+            <p>
+                Sign in to access your POS
+            </p>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        {% if error %}
+
+            <div class="error-message">
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- LOGIN FORM -->
+
+        <form
+            method="POST"
+            action="{% url 'login' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    required
+                    autofocus
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                🔐 Sign In
+            </button>
+
+        </form>
+
+
+        <div class="footer">
+
+            Restaurant POS Management System
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

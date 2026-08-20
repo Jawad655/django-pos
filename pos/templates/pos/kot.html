@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>KOT #{{ order.id }}</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f6f8;
+            font-family: Arial, sans-serif;
+            color: #111827;
+        }
+
+        /* =========================
+           KOT CONTAINER
+        ========================= */
+
+        .kot {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 25px;
+            background: white;
+
+            box-shadow:
+                0 3px 15px rgba(0, 0, 0, 0.10);
+
+            border-radius: 10px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-top: 5px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .kitchen-label {
+            text-align: center;
+            margin-top: 12px;
+            padding: 8px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           ORDER INFORMATION
+        ========================= */
+
+        .info {
+            margin-top: 20px;
+            padding: 15px 0;
+
+            border-top: 2px dashed #111827;
+            border-bottom: 2px dashed #111827;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+
+            margin: 8px 0;
+
+            font-size: 15px;
+        }
+
+        .info-row strong {
+            text-align: right;
+        }
+
+        /* =========================
+           ITEMS HEADER
+        ========================= */
+
+        .items-title {
+            margin-top: 20px;
+            padding-bottom: 8px;
+
+            border-bottom: 2px solid #111827;
+
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           ORDER ITEMS
+        ========================= */
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px dashed #9ca3af;
+
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .item-name {
+            flex: 1;
+        }
+
+        .qty {
+            min-width: 70px;
+            text-align: right;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            margin-top: 25px;
+            padding: 12px;
+
+            text-align: center;
+
+            background: #111827;
+            color: white;
+
+            border-radius: 6px;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           PRINT BUTTON
+        ========================= */
+
+        .print-btn {
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: #dc2626;
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .print-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-btn {
+            width: 100%;
+
+            margin-top: 10px;
+
+            padding: 12px;
+
+            border: none;
+            border-radius: 7px;
+
+            background: #374151;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #1f2937;
+        }
+
+        /* =========================
+           NO ITEMS
+        ========================= */
+
+        .no-items {
+            padding: 20px 0;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           PRINT
+        ========================= */
+
+        @media print {
+
+            body {
+                padding: 0;
+                margin: 0;
+                background: white;
+            }
+
+            .kot {
+                width: 100%;
+                max-width: 100%;
+
+                margin: 0;
+                padding: 10px;
+
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .print-btn,
+            .back-btn {
+                display: none;
+            }
+
+            .kitchen-label {
+                background: white;
+                color: black;
+                border: 1px solid black;
+            }
+
+            .footer {
+                background: white;
+                color: black;
+                border: 2px solid black;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="kot">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="title">
+        KITCHEN ORDER
+    </div>
+
+
+    <div class="subtitle">
+        KOT - KITCHEN ORDER TICKET
+    </div>
+
+
+    <div class="kitchen-label">
+        🔥 PREPARE ORDER
+    </div>
+
+
+    <!-- =========================
+         ORDER INFORMATION
+    ========================== -->
+
+    <div class="info">
+
+
+        <div class="info-row">
+
+            <span>
+                Order #
+            </span>
+
+            <strong>
+                {{ order.id }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Order Type
+            </span>
+
+            <strong>
+                {{ order.get_order_type_display }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Table
+            </span>
+
+            <strong>
+
+                {% if order.table %}
+
+                    Table {{ order.table.number }}
+
+                {% else %}
+
+                    Takeaway
+
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Time
+            </span>
+
+            <strong>
+                {{ order.created_at|date:"d M Y, h:i A" }}
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         ITEMS
+    ========================== -->
+
+    <div class="items-title">
+        ORDER ITEMS
+    </div>
+
+
+    {% for item in items %}
+
+
+        <div class="item">
+
+
+            <div class="item-name">
+
+                {{ item.menu_item.name }}
+
+            </div>
+
+
+            <div class="qty">
+
+                × {{ item.quantity }}
+
+            </div>
+
+
+        </div>
+
+
+    {% empty %}
+
+
+        <div class="no-items">
+
+            No items found in this order.
+
+        </div>
+
+
+    {% endfor %}
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <div class="footer">
+
+        PLEASE PREPARE THIS ORDER
+
+    </div>
+
+
+    <!-- =========================
+         BUTTONS
+    ========================== -->
+
+    <button
+        type="button"
+        class="print-btn"
+        onclick="window.print()"
+    >
+
+        🖨️ Print KOT
+
+    </button>
+
+
+    <button
+        type="button"
+        class="back-btn"
+        onclick="window.close()"
+    >
+
+        ✕ Close
+
+    </button>
+
+
+</div>
+
+
+</body>
+
+</html>

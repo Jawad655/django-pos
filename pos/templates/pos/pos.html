@@ -1,0 +1,4213 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SIGNATURE — Jawad Khan Bistro</title>
+
+
+    
+    <style>
+
+        * {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #f8fafc;
+
+    background-image:
+      url("{% static 'images/restaurant.jpg' %}");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    min-height: 100vh;
+}
+
+
+/* =====================================================
+   PREMIUM HEADER
+===================================================== */
+
+.header {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 12, 16, 0.96),
+            rgba(31, 35, 42, 0.94)
+        );
+
+    color: white;
+
+    padding: 22px 30px;
+
+    border-bottom:
+        1px solid rgba(248, 212, 119, 0.25);
+
+    box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.45);
+
+    position: relative;
+    z-index: 5;
+}
+
+.brand-area {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: 20px;
+}
+
+.brand-name {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 42px;
+
+    letter-spacing: 7px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    background:
+        linear-gradient(
+            90deg,
+            #d6a84f,
+            #fff4c7,
+            #d6a84f
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    text-shadow:
+        0 2px 15px rgba(214, 168, 79, 0.20);
+}
+
+.brand-subtitle {
+    margin-top: 8px;
+    margin-left: 3px;
+
+    font-size: 13px;
+
+    letter-spacing: 4px;
+
+    color: #d1d5db;
+
+    text-transform: uppercase;
+}
+
+.dashboard-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    text-decoration: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 4px 15px rgba(214, 168, 79, 0.25);
+}
+
+.dashboard-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 20px rgba(214, 168, 79, 0.35);
+}
+
+
+/* =====================================================
+   POS CONTAINER
+===================================================== */
+
+.pos-container {
+    display: flex;
+
+    min-height:
+        calc(100vh - 105px);
+
+    background:
+        rgba(10, 12, 16, 0.28);
+}
+
+.menu-section {
+    width: 65%;
+
+    padding: 28px;
+
+    background:
+        rgba(15, 18, 23, 0.55);
+
+    backdrop-filter:
+        blur(4px);
+    
+    border-right:
+       1px solid
+       rgba(255, 255, 255, 0.10);    
+}
+
+.cart-section {
+    width: 35%;
+
+    background:
+        rgba(255, 255, 255, 0.45);
+
+    color: #1f2937;
+
+    padding: 28px;
+
+    box-shadow:
+        -5px 0 25px
+        rgba(0, 0, 0, 0.35);
+    backdrop-filter:
+        blur(10px);
+    border-left:
+        1px solid
+        rgba(255, 255, 255, 0.35)        
+}
+
+h2 {
+    margin-top: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =====================================================
+   ORDER TYPE
+===================================================== */
+
+.order-type-section {
+    margin-bottom: 25px;
+}
+
+.order-type-section h3 {
+    margin-bottom: 12px;
+}
+
+.order-types {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.order-type-btn {
+    border: 1px solid rgba(214, 168, 79, 0.25);
+
+    padding: 12px 20px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    color: #f8fafc;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+
+    backdrop-filter: blur(8px);
+}
+
+.order-type-btn:hover {
+    background:
+        rgba(214, 168, 79, 0.20);
+}
+
+.order-type-btn.active {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    border-color: transparent;
+}
+
+
+/* =====================================================
+   TABLES
+===================================================== */
+
+.tables {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 25px;
+}
+
+.table-btn {
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.table-btn:hover {
+    transform: translateY(-2px);
+}
+
+.table-btn.selected {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+}
+
+.table-btn.occupied {
+    background:
+        linear-gradient(
+            135deg,
+            #dc2626,
+            #991b1b
+        );
+}
+
+.table-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+.table-note {
+    color: #d1d5db;
+
+    font-size: 14px;
+
+    margin-bottom: 15px;
+}
+
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
+.categories {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 25px;
+}
+
+.category-btn {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    color: #f8fafc;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.category-btn:hover {
+    background:
+        rgba(214, 168, 79, 0.20);
+}
+
+.category-btn.active {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    border-color: transparent;
+}
+
+
+/* =====================================================
+   MENU GRID
+===================================================== */
+
+.menu-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(180px, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   MENU CARD
+===================================================== */
+
+.menu-item {
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.14);
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    color: white;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+    overflow: hidden;
+
+    backdrop-filter:
+        blur(10px);
+}
+
+.menu-item:hover {
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(214, 168, 79, 0.65);
+
+    box-shadow:
+        0 15px 35px
+        rgba(0, 0, 0, 0.45);
+}
+
+.menu-item:active {
+    transform:
+        scale(0.98);
+}
+
+
+/* =====================================================
+   FOOD IMAGE
+===================================================== */
+
+.menu-item-image {
+    width: 100%;
+
+    height: 160px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    margin-bottom: 12px;
+
+    display: block;
+
+    background: #1f2937;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.30);
+
+    transition:
+        transform 0.25s ease;
+}
+
+.menu-item:hover .menu-item-image {
+    transform: scale(1.03);
+}
+
+.menu-item-no-image {
+    width: 100%;
+
+    height: 150px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #252a32,
+            #111827
+        );
+
+    border-radius: 10px;
+
+    margin-bottom: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 45px;
+}
+
+.item-name {
+    display: block;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    letter-spacing: 0.2px;
+}
+
+.item-price {
+    color: #f8d477;
+
+    font-weight: 700;
+
+    font-size: 16px;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+#cart-items {
+    margin-top: 20px;
+}
+
+.cart-item {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 0;
+
+    border-bottom:
+        1px solid
+        rgba(31, 41, 55, 0.12);
+
+    transition:
+       background 0.2s ease; 
+}
+
+.quantity {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.quantity button {
+    border: none;
+
+    background: #f3f4f6;
+
+    color: #1f2937;
+
+    width: 30px;
+
+    height: 30px;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    border-radius: 7px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    transition: all 0.2s ease;
+}
+
+.quantity button:hover {
+    background: #d6a84f;
+
+    color: #111827;
+
+    transform: translateY(-1px);
+}
+
+.cart-item strong {
+    color: #111827;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary {
+    margin-top: 25px;
+
+    border-top:
+        2px solid #eee;
+
+    padding-top: 20px;
+}
+
+.summary-row {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    margin: 10px 0;
+}
+
+.total {
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #111827;
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+.payment-section {
+    margin-top: 20px;
+}
+
+.payment-section h3 {
+    margin-bottom: 12px;
+}
+
+.payment-methods {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.payment-btn {
+    flex: 1;
+
+    min-width: 90px;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #e5e7eb;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+.payment-btn:hover {
+    background: #d1d5db;
+}
+
+.payment-btn.active {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+}
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+.checkout {
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 20px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(22, 163, 74, 0.30);
+
+    transition:
+        all 0.2s ease;
+}
+
+.checkout:hover {
+    transform: translateY(-1px);
+}
+
+.checkout:disabled {
+    background: #9ca3af;
+
+    cursor: not-allowed;
+}
+
+.empty {
+    color: #4b5566;
+
+    text-align: center;
+
+    margin-top: 50px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.message {
+    padding: 12px;
+
+    margin-top: 15px;
+
+    border-radius: 8px;
+
+    display: none;
+}
+
+.message.success {
+    display: block;
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+.message.error {
+    display: block;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* =====================================================
+   ORDER MANAGEMENT
+===================================================== */
+
+.orders-section {
+    width: 100%;
+
+    padding: 28px;
+
+    background:
+        rgba(10, 12, 16, 0.78);
+
+    border-top:
+        1px solid rgba(214, 168, 79, 0.25);
+
+    backdrop-filter:
+        blur(8px);
+}
+
+.orders-section h2 {
+    color: #fff4c7;
+}
+
+.orders-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(300px, 1fr)
+        );
+
+    gap: 20px;
+}
+
+.order-card {
+    background:
+        rgba(255, 255, 255, 0.45);
+
+    color: #1f2937;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.30);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.35);
+
+    backdrop-filter:
+        blur(10px);
+}
+
+.order-header {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+    gap: 10px;
+}
+
+.order-number {
+    font-size: 20px;
+
+    font-weight: 800;
+
+    color: #111827;
+
+    letter-spacing: 0.3px;
+}
+
+.status-badge {
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-preparing {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-ready {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-served {
+    background: #ede9fe;
+    color: #6b21a8;
+}
+
+.status-completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.order-info {
+    color: #374151;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    margin-bottom: 15px;
+}
+
+.order-info strong {
+    color: #111827;
+
+    font-weight: 700;
+}
+
+.order-items {
+    border-top:
+        1px solid
+        rgba(31, 41, 55, 0.15);
+
+    border-bottom:
+        1px solid
+        rgba(31, 41, 55, 0.15);
+
+    padding: 12px 0;
+
+    margin-bottom: 15px;
+}
+
+.order-item {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 12px;
+
+    padding: 7px 0;
+
+    color: #1f2937;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.order-item span:last-child {
+    font-weight: 700;
+
+    color: #111827;
+
+    white-space: nowrap;
+}
+
+.order-total {
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+    color: #111827;
+
+    margin-bottom: 15px;
+}
+
+.order-total span:last-child {
+    color: #dc2;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.status-buttons button {
+    border: none;
+
+    padding: 9px 12px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        all 0.2s ease;
+
+    box-shadow:
+        0 3px 8px
+        rgba(0, 0, 0, 0.15);
+}
+
+.status-buttons button:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.20);
+}
+
+.btn-preparing {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-ready {
+    background: #22c55e;
+    color: white;
+}
+
+.btn-served {
+    background: #8b5cf6;
+    color: white;
+}
+
+.btn-completed {
+    background: #059669;
+    color: white;
+}
+
+.btn-cancelled {
+    background: #ef4444;
+    color: white;
+}
+
+.order-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.order-actions a {
+    flex: 1;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1f2937,
+            #111827
+        );
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+
+    transition:
+        all 0.2s ease;
+}
+
+.order-actions a:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    transform:
+        translateY(-2px);
+}
+
+.cart-section h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 24px;
+
+    color: #111827;
+
+    margin-bottom: 18px;
+
+    letter-spacing: 0.5px;
+}
+
+.cart-section p {
+    color: #374151;
+
+    font-size: 14px;
+
+    margin: 8px 0;
+}
+
+.cart-section p strong {
+    color: #111827;
+
+    font-weight: bold;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .pos-container {
+        flex-direction: column;
+    }
+
+    .menu-section,
+    .cart-section {
+        width: 100%;
+    }
+
+    .brand-name {
+        font-size: 32px;
+        letter-spacing: 5px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .header {
+        padding: 18px;
+    }
+
+    .brand-area {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .brand-name {
+        font-size: 27px;
+        letter-spacing: 3px;
+    }
+
+    .brand-subtitle {
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    .menu-section,
+    .cart-section,
+    .orders-section {
+        padding: 18px;
+    }
+
+    .menu-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .menu-item-image,
+    .menu-item-no-image {
+        height: 115px;
+    }
+
+}
+
+/* =====================================================
+   STEP 15 — MOBILE POS IMPROVEMENTS
+===================================================== */
+
+@media (max-width: 700px) {
+
+    body {
+        background-attachment: scroll;
+    }
+
+    .header {
+        padding: 16px;
+    }
+
+    .brand-area {
+        gap: 14px;
+    }
+
+    .dashboard-btn {
+        width: 100%;
+        text-align: center;
+        padding: 13px;
+    }
+
+    .pos-container {
+        min-height: auto;
+    }
+
+    .menu-section {
+        padding: 16px;
+    }
+
+    .cart-section {
+        padding: 16px;
+    }
+
+    .order-types {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .order-type-btn {
+        width: 100%;
+        padding: 13px 8px;
+        font-size: 13px;
+    }
+
+    .tables {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .table-btn {
+        width: 100%;
+        padding: 12px 5px;
+        font-size: 13px;
+    }
+
+    .categories {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .category-btn {
+        width: 100%;
+        padding: 11px 6px;
+        font-size: 13px;
+    }
+
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .menu-item {
+        padding: 9px;
+        border-radius: 11px;
+    }
+
+    .menu-item-image,
+    .menu-item-no-image {
+        height: 110px;
+        border-radius: 9px;
+        margin-bottom: 8px;
+    }
+
+    .menu-item-no-image {
+        font-size: 34px;
+    }
+
+    .item-name {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .item-price {
+        font-size: 14px;
+    }
+
+    .cart-section h2 {
+        font-size: 21px;
+    }
+
+    .cart-item {
+        padding: 13px 0;
+    }
+
+    .quantity {
+        gap: 5px;
+    }
+
+    .quantity button {
+        width: 34px;
+        height: 34px;
+    }
+
+    .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .payment-btn {
+        min-width: 0;
+        padding: 12px 5px;
+        font-size: 12px;
+    }
+
+    .checkout {
+        padding: 15px;
+        font-size: 17px;
+    }
+
+    .orders-section {
+        padding: 16px;
+    }
+
+    .orders-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .order-card {
+        padding: 16px;
+    }
+
+    .order-header {
+        align-items: flex-start;
+    }
+
+    .order-number {
+        font-size: 17px;
+    }
+
+    .status-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+    }
+
+    .status-buttons button {
+        width: 100%;
+        padding: 11px 6px;
+    }
+
+    .order-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+    }
+
+    .menu-item {
+        padding: 7px;
+    }
+
+    .menu-item-image,
+    .menu-item-no-image {
+        height: 95px;
+    }
+
+    .item-name {
+        font-size: 13px;
+    }
+
+    .item-price {
+        font-size: 13px;
+    }
+
+    .tables {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =====================================================
+   STEP 15 — TABLE MANAGEMENT
+===================================================== */
+
+.table-management {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border:
+        1px solid
+        rgba(214, 168, 79, 0.25);
+
+    border-radius: 14px;
+
+    backdrop-filter:
+        blur(10px);
+}
+
+.table-management-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.table-management-header h3 {
+    margin: 0;
+
+    color: #fff4c7;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+}
+
+.add-table-btn {
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.add-table-btn:hover {
+    transform:
+        translateY(-2px);
+}
+
+.table-management-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(180px, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.managed-table {
+    padding: 15px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+}
+
+.managed-table-title {
+    font-size: 16px;
+
+    font-weight: bold;
+
+    color: white;
+
+    margin-bottom: 8px;
+}
+
+.table-status {
+    font-size: 12px;
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
+}
+
+.table-status.available {
+    color: #4ade80;
+}
+
+.table-status.occupied {
+    color: #f87171;
+}
+
+.table-management-actions {
+    display: flex;
+
+    gap: 7px;
+}
+
+.table-management-actions button {
+    flex: 1;
+
+    border: none;
+
+    padding: 8px 6px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.edit-table-btn {
+    background: #3b82f6;
+
+    color: white;
+}
+
+.delete-table-btn {
+    background: #ef4444;
+
+    color: white;
+}
+
+.delete-table-btn:disabled,
+.edit-table-btn:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   TABLE MODAL
+===================================================== */
+
+.table-modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    background:
+        rgba(0, 0, 0, 0.70);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.table-modal.active {
+    display: flex;
+}
+
+.table-modal-box {
+    width: 100%;
+
+    max-width: 400px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    border-radius: 14px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.45);
+}
+
+.table-modal-box h3 {
+    margin-top: 0;
+
+    margin-bottom: 18px;
+}
+
+.table-input {
+    width: 100%;
+
+    padding: 12px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.table-input:focus {
+    border-color: #d6a84f;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(214, 168, 79, 0.15);
+}
+
+.table-modal-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.table-modal-actions button {
+    flex: 1;
+
+    padding: 11px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+.save-table-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+}
+
+.cancel-table-btn {
+    background: #e5e7eb;
+
+    color: #111827;
+}
+
+
+/* =====================================================
+   TABLE MANAGEMENT MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .table-management {
+        padding: 15px;
+    }
+
+    .table-management-header {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .add-table-btn {
+        width: 100%;
+
+        padding: 12px;
+    }
+
+    .table-management-list {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+    .managed-table {
+        padding: 12px;
+    }
+
+    .table-management-actions {
+        flex-direction: column;
+    }
+
+    .table-management-actions button {
+        width: 100%;
+
+        padding: 10px;
+    }
+
+}
+
+/* =====================================================
+   3D — TABLE MANAGEMENT CSS
+===================================================== */
+
+.table-management {
+    margin-top: 18px;
+    margin-bottom: 20px;
+    padding: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border:
+        1px solid
+        rgba(214, 168, 79, 0.25);
+
+    border-radius: 12px;
+
+    backdrop-filter: blur(8px);
+}
+
+.table-management h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+
+    color: #fff4c7;
+
+    font-size: 18px;
+}
+
+.table-management-buttons {
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.table-manage-btn {
+    border: none;
+
+    padding: 11px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    font-size: 13px;
+
+    transition:
+        all 0.2s ease;
+}
+
+.table-manage-btn:hover {
+    transform:
+        translateY(-2px);
+}
+
+.add-table-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+}
+
+.edit-table-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #1d4ed8
+        );
+
+    color: white;
+}
+
+.delete-table-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #dc2626,
+            #991b1b
+        );
+
+    color: white;
+}
+
+
+/* =====================================================
+   TABLE MODAL
+===================================================== */
+
+.table-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.70);
+
+    backdrop-filter:
+        blur(5px);
+}
+
+.table-modal-content {
+    width: 100%;
+
+    max-width: 400px;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1f2937,
+            #111827
+        );
+
+    border:
+        1px solid
+        rgba(214, 168, 79, 0.35);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.55);
+}
+
+.table-modal-content h2 {
+    color: #fff4c7;
+
+    margin-top: 0;
+
+    margin-bottom: 20px;
+}
+
+#table-number-input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #4b5563;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 16px;
+
+    background: #f9fafb;
+
+    color: #111827;
+}
+
+#table-number-input:focus {
+    border-color: #d6a84f;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(214, 168, 79, 0.15);
+}
+
+.table-modal-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.table-modal-actions button {
+    flex: 1;
+
+    border: none;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+}
+
+.table-modal-actions button:first-child {
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #15803d
+        );
+
+    color: white;
+}
+
+.table-modal-actions button:last-child {
+    background: #e5e7eb;
+
+    color: #111827;
+}
+
+
+/* =====================================================
+   MOBILE TABLE MANAGEMENT
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .table-management {
+        padding: 14px;
+    }
+
+    .table-management-buttons {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+    }
+
+    .table-manage-btn {
+        width: 100%;
+
+        padding: 13px;
+    }
+
+    .table-modal-content {
+        padding: 20px;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+{% csrf_token %}
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    <div class="brand-area">
+
+        <div>
+
+            <h1 class="brand-name">
+                SIGNATURE
+            </h1>
+
+            <div class="brand-subtitle">
+                Jawad Khan Bistro
+            </div>
+
+        </div>
+
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="dashboard-btn"
+        >
+            📊 Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     POS CONTAINER
+===================================================== -->
+
+<div class="pos-container">
+
+
+    <!-- =================================================
+         MENU SECTION
+    ================================================= -->
+
+    <div class="menu-section">
+
+
+        <!-- ORDER TYPE -->
+
+        <div class="order-type-section">
+
+            <h3>
+                Order Type
+            </h3>
+
+
+            <div class="order-types">
+
+                <button
+                    type="button"
+                    class="order-type-btn active"
+                    onclick="selectOrderType(
+                        'dine_in',
+                        this
+                    )"
+                >
+                    🍽️ Dine In
+                </button>
+
+
+                <button
+                    type="button"
+                    class="order-type-btn"
+                    onclick="selectOrderType(
+                        'takeaway',
+                        this
+                    )"
+                >
+                    🥡 Takeaway
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE SECTION -->
+
+        <div id="table-section">
+
+            <h2>
+                Select Table
+            </h2>
+
+
+            <div class="table-note">
+
+                Green = Available
+                &nbsp; | &nbsp;
+                Red = Occupied
+
+            </div>
+
+
+            <div class="tables">
+
+                {% for table in tables %}
+
+                    <button
+                        type="button"
+                        class="table-btn {% if table.is_occupied %}occupied{% endif %}"
+                        onclick="selectTable(
+                            {{ table.id }},
+                            {{ table.number }},
+                            this
+                        )"
+                        {% if table.is_occupied %}
+                            disabled
+                        {% endif %}
+                    >
+
+                        Table {{ table.number }}
+
+                    </button>
+
+                {% empty %}
+
+                    <p>
+                        No tables available.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <h2>
+            Menu
+        </h2>
+
+
+        <!-- CATEGORIES -->
+
+        <div class="categories">
+
+            <button
+                type="button"
+                class="category-btn active"
+                onclick="showAll(this)"
+            >
+                All
+            </button>
+
+
+            {% for category in categories %}
+
+                <button
+                    type="button"
+                    class="category-btn"
+                    onclick="filterCategory(
+                        '{{ category.id }}',
+                        this
+                    )"
+                >
+                    {{ category.name }}
+                </button>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- MENU GRID -->
+
+        <div class="menu-grid">
+
+
+            {% for item in menu_items %}
+
+
+                <button
+                    type="button"
+                    class="menu-item"
+                    data-category="{{ item.category.id }}"
+                    onclick="addToCart(
+                        {{ item.id }},
+                        '{{ item.name|escapejs }}',
+                        {{ item.price }}
+                    )"
+                >
+
+
+                    <!-- FOOD IMAGE -->
+
+                    {% if item.image %}
+
+                        <img
+                            src="{{ item.image.url }}"
+                            alt="{{ item.name }}"
+                            class="menu-item-image"
+                        >
+
+                    {% else %}
+
+                        <div class="menu-item-no-image">
+                            🍔
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- NAME -->
+
+                    <span class="item-name">
+                        {{ item.name }}
+                    </span>
+
+
+                    <!-- PRICE -->
+
+                    <span class="item-price">
+                        Rs. {{ item.price }}
+                    </span>
+
+
+                </button>
+
+
+            {% empty %}
+
+
+                <p>
+                    No menu items available.
+                </p>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+     3D — TABLE MANAGEMENT CONTROLS
+===================================================== -->
+
+<div class="table-management">
+
+    <h3>
+        Table Management
+    </h3>
+
+    <div class="table-management-buttons">
+
+        <button
+            type="button"
+            class="table-manage-btn add-table-btn"
+            onclick="openAddTableModal()"
+        >
+            ➕ Add Table
+        </button>
+
+        <button
+            type="button"
+            class="table-manage-btn edit-table-btn"
+            onclick="openEditTableModal()"
+        >
+            ✏️ Edit Selected
+        </button>
+
+        <button
+            type="button"
+            class="table-manage-btn delete-table-btn"
+            onclick="deleteSelectedTable()"
+        >
+            🗑️ Delete Selected
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     3D — TABLE MODAL
+===================================================== -->
+
+<div
+    id="table-modal"
+    class="table-modal"
+    style="display: none;"
+>
+
+    <div class="table-modal-content">
+
+        <h2 id="table-modal-title">
+            Add Table
+        </h2>
+
+        <input
+            type="number"
+            id="table-number-input"
+            placeholder="Enter table number"
+            min="1"
+        >
+
+        <div class="table-modal-actions">
+
+            <button
+                type="button"
+                onclick="saveTable()"
+            >
+                Save
+            </button>
+
+            <button
+                type="button"
+                onclick="closeTableModal()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+    <!-- =================================================
+         CART SECTION
+    ================================================= -->
+
+    <div class="cart-section">
+
+
+        <h2>
+            Current Order
+        </h2>
+
+
+        <p>
+
+            Order Type:
+
+            <strong id="selected-order-type">
+                Dine In
+            </strong>
+
+        </p>
+
+
+        <p id="selected-table-row">
+
+            Selected Table:
+
+            <strong id="selected-table">
+                None
+            </strong>
+
+        </p>
+
+
+        <div id="cart-items">
+
+            <div class="empty">
+                Cart is empty
+            </div>
+
+        </div>
+
+
+        <div class="summary">
+
+
+            <!-- SUBTOTAL -->
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <span id="subtotal">
+                    Rs. 0
+                </span>
+
+            </div>
+
+
+            <!-- DISCOUNT -->
+
+            <div class="summary-row">
+
+                <span>
+                    Discount
+                </span>
+
+                <span>
+                    Rs. 0
+                </span>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="summary-row total">
+
+                <span>
+                    Total
+                </span>
+
+                <span id="total">
+                    Rs. 0
+                </span>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="payment-section">
+
+                <h3>
+                    Payment Method
+                </h3>
+
+
+                <div class="payment-methods">
+
+
+                    <button
+                        type="button"
+                        class="payment-btn active"
+                        onclick="selectPaymentMethod(
+                            'cash',
+                            this
+                        )"
+                    >
+                        💵 Cash
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="payment-btn"
+                        onclick="selectPaymentMethod(
+                            'card',
+                            this
+                        )"
+                    >
+                        💳 Card
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="payment-btn"
+                        onclick="selectPaymentMethod(
+                            'online',
+                            this
+                        )"
+                    >
+                        🌐 Online
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- CHECKOUT -->
+
+            <button
+                type="button"
+                class="checkout"
+                onclick="checkout()"
+            >
+                Checkout
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ORDER MANAGEMENT
+===================================================== -->
+
+<div class="orders-section">
+
+
+    <h2>
+        Order Management
+    </h2>
+
+
+    <div class="orders-grid">
+
+
+        {% for order in orders %}
+
+
+            <div class="order-card">
+
+
+                <!-- ORDER HEADER -->
+
+                <div class="order-header">
+
+                    <div class="order-number">
+                        Order #{{ order.id }}
+                    </div>
+
+
+                    <span class="status-badge status-{{ order.status }}">
+
+                        {{ order.get_status_display }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- ORDER INFORMATION -->
+
+                <div class="order-info">
+
+                    Type:
+
+                    <strong>
+                        {{ order.get_order_type_display }}
+                    </strong>
+
+                    <br>
+
+
+                    {% if order.table %}
+
+                        Table:
+
+                        <strong>
+                            {{ order.table.number }}
+                        </strong>
+
+                    {% else %}
+
+                        Table:
+
+                        <strong>
+                            Takeaway
+                        </strong>
+
+                    {% endif %}
+
+
+                    <br>
+
+
+                    Payment:
+
+                    <strong>
+                        {{ order.get_payment_method_display }}
+                    </strong>
+
+
+                    <br>
+
+
+                    Time:
+
+                    <strong>
+                        {{ order.created_at|date:"d M Y, h:i A" }}
+                    </strong>
+
+                </div>
+
+
+                <!-- ORDER ITEMS -->
+
+                <div class="order-items">
+
+
+                    {% for item in order.items.all %}
+
+
+                        <div class="order-item">
+
+                            <span>
+
+                                {{ item.menu_item.name }}
+
+                                ×
+
+                                {{ item.quantity }}
+
+                            </span>
+
+
+                            <span>
+
+                                Rs. {{ item.get_total }}
+
+                            </span>
+
+                        </div>
+
+
+                    {% empty %}
+
+
+                        <p>
+                            No items.
+                        </p>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="order-total">
+
+                    <span>
+                        Total
+                    </span>
+
+
+                    <span>
+                        Rs. {{ order.total }}
+                    </span>
+
+                </div>
+
+
+                <!-- STATUS BUTTONS -->
+
+                <div class="status-buttons">
+
+
+                    {% if order.status == "pending" %}
+
+                        <button
+                            type="button"
+                            class="btn-preparing"
+                            onclick="updateOrderStatus(
+                                {{ order.id }},
+                                'preparing'
+                            )"
+                        >
+                            Preparing
+                        </button>
+
+                    {% endif %}
+
+
+                    {% if order.status == "preparing" %}
+
+                        <button
+                            type="button"
+                            class="btn-ready"
+                            onclick="updateOrderStatus(
+                                {{ order.id }},
+                                'ready'
+                            )"
+                        >
+                            Ready
+                        </button>
+
+                    {% endif %}
+
+
+                    {% if order.status == "ready" %}
+
+                        <button
+                            type="button"
+                            class="btn-served"
+                            onclick="updateOrderStatus(
+                                {{ order.id }},
+                                'served'
+                            )"
+                        >
+                            Served
+                        </button>
+
+                    {% endif %}
+
+
+                    {% if order.status == "served" %}
+
+                        <button
+                            type="button"
+                            class="btn-completed"
+                            onclick="updateOrderStatus(
+                                {{ order.id }},
+                                'completed'
+                            )"
+                        >
+                            Completed
+                        </button>
+
+                    {% endif %}
+
+
+                    {% if order.status != "completed" and order.status != "cancelled" %}
+
+                        <button
+                            type="button"
+                            class="btn-cancelled"
+                            onclick="updateOrderStatus(
+                                {{ order.id }},
+                                'cancelled'
+                            )"
+                        >
+                            Cancel
+                        </button>
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <!-- KOT / BILL -->
+
+                <div class="order-actions">
+
+
+                    <a
+                        href="{% url 'kot' order.id %}"
+                        target="_blank"
+                    >
+                        KOT
+                    </a>
+
+
+                    <a
+                        href="{% url 'bill' order.id %}"
+                        target="_blank"
+                    >
+                        Bill
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        {% empty %}
+
+
+            <p>
+                No orders found.
+            </p>
+
+
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let cart = [];
+
+let selectedTable = null;
+
+let selectedOrderType = "dine_in";
+
+let selectedPaymentMethod = "cash";
+
+
+/* =========================================================
+   ORDER TYPE
+========================================================= */
+
+function selectOrderType(orderType, button) {
+
+    selectedOrderType = orderType;
+
+
+    document
+        .querySelectorAll(".order-type-btn")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+
+    const typeText =
+        document.getElementById(
+            "selected-order-type"
+        );
+
+
+    if (typeText) {
+
+        if (orderType === "takeaway") {
+
+            typeText.innerText =
+                "Takeaway";
+
+        } else {
+
+            typeText.innerText =
+                "Dine In";
+
+        }
+
+    }
+
+
+    const tableSection =
+        document.getElementById(
+            "table-section"
+        );
+
+
+    const tableRow =
+        document.getElementById(
+            "selected-table-row"
+        );
+
+
+    if (orderType === "takeaway") {
+
+        selectedTable = null;
+
+
+        document.getElementById(
+            "selected-table"
+        ).innerText =
+            "Not Required";
+
+
+        if (tableSection) {
+
+            tableSection.style.display =
+                "none";
+
+        }
+
+
+        if (tableRow) {
+
+            tableRow.style.display =
+                "none";
+
+        }
+
+    } else {
+
+        if (tableSection) {
+
+            tableSection.style.display =
+                "block";
+
+        }
+
+
+        if (tableRow) {
+
+            tableRow.style.display =
+                "block";
+
+        }
+
+
+        document.getElementById(
+            "selected-table"
+        ).innerText =
+            "None";
+
+    }
+
+}
+
+
+/* =========================================================
+   PAYMENT METHOD
+========================================================= */
+
+function selectPaymentMethod(method, button) {
+
+    selectedPaymentMethod = method;
+
+
+    document
+        .querySelectorAll(".payment-btn")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   CSRF
+========================================================= */
+
+function getCSRFToken() {
+
+    const csrfInput =
+        document.querySelector(
+            "[name=csrfmiddlewaretoken]"
+        );
+
+
+    if (!csrfInput) {
+
+        return "";
+
+    }
+
+
+    return csrfInput.value;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(message, type) {
+
+    const messageBox =
+        document.getElementById(
+            "message"
+        );
+
+
+    if (!messageBox) {
+
+        return;
+
+    }
+
+
+    messageBox.innerText =
+        message;
+
+
+    messageBox.className =
+        "message " + type;
+
+
+    setTimeout(function() {
+
+        messageBox.className =
+            "message";
+
+    }, 4000);
+
+}
+
+
+/* =========================================================
+   SELECT TABLE
+========================================================= */
+
+function selectTable(id, number, button) {
+
+    if (selectedOrderType !== "dine_in") {
+
+        return;
+
+    }
+
+
+    selectedTable = id;
+
+
+    const selectedTableElement =
+        document.getElementById(
+            "selected-table"
+        );
+
+
+    if (selectedTableElement) {
+
+        selectedTableElement.innerText =
+            "Table " + number;
+
+    }
+
+
+    document
+        .querySelectorAll(".table-btn")
+        .forEach(function(btn) {
+
+            btn.classList.remove("selected");
+
+        });
+
+
+    if (button) {
+
+        button.classList.add("selected");
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW ALL
+========================================================= */
+
+function showAll(button) {
+
+    document
+        .querySelectorAll(".menu-item")
+        .forEach(function(item) {
+
+            item.style.display = "";
+
+        });
+
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER CATEGORY
+========================================================= */
+
+function filterCategory(categoryId, button) {
+
+    document
+        .querySelectorAll(".menu-item")
+        .forEach(function(item) {
+
+            const itemCategory =
+                String(
+                    item.dataset.category
+                );
+
+
+            if (
+                itemCategory ===
+                String(categoryId)
+            ) {
+
+                item.style.display = "";
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   ADD TO CART
+========================================================= */
+
+function addToCart(id, name, price) {
+
+    const numericPrice =
+        Number(price);
+
+
+    let existingItem =
+        cart.find(function(item) {
+
+            return item.id === id;
+
+        });
+
+
+    if (existingItem) {
+
+        existingItem.quantity += 1;
+
+    } else {
+
+        cart.push({
+
+            id: id,
+
+            name: name,
+
+            price: numericPrice,
+
+            quantity: 1
+
+        });
+
+    }
+
+
+    updateCart();
+
+}
+
+
+/* =========================================================
+   UPDATE CART
+========================================================= */
+
+function updateCart() {
+
+    const cartContainer =
+        document.getElementById(
+            "cart-items"
+        );
+
+
+    if (!cartContainer) {
+
+        return;
+
+    }
+
+
+    if (cart.length === 0) {
+
+        cartContainer.innerHTML =
+            '<div class="empty">Cart is empty</div>';
+
+
+        document.getElementById(
+            "subtotal"
+        ).innerText =
+            "Rs. 0";
+
+
+        document.getElementById(
+            "total"
+        ).innerText =
+            "Rs. 0";
+
+
+        return;
+
+    }
+
+
+    let html = "";
+
+    let subtotal = 0;
+
+
+    cart.forEach(function(item, index) {
+
+        const itemTotal =
+            item.price *
+            item.quantity;
+
+
+        subtotal += itemTotal;
+
+
+        html += `
+
+            <div class="cart-item">
+
+                <div>
+
+                    <strong>
+                        ${escapeHTML(item.name)}
+                    </strong>
+
+                    <br>
+
+                    Rs. ${item.price}
+                    ×
+                    ${item.quantity}
+
+                </div>
+
+
+                <div class="quantity">
+
+                    <button
+                        type="button"
+                        onclick="decreaseItem(${index})"
+                    >
+                        −
+                    </button>
+
+
+                    <strong>
+                        ${item.quantity}
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        onclick="increaseItem(${index})"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    cartContainer.innerHTML =
+        html;
+
+
+    document.getElementById(
+        "subtotal"
+    ).innerText =
+        "Rs. " + subtotal;
+
+
+    document.getElementById(
+        "total"
+    ).innerText =
+        "Rs. " + subtotal;
+
+}
+
+
+/* =========================================================
+   INCREASE ITEM
+========================================================= */
+
+function increaseItem(index) {
+
+    if (!cart[index]) {
+
+        return;
+
+    }
+
+
+    cart[index].quantity += 1;
+
+
+    updateCart();
+
+}
+
+
+/* =========================================================
+   DECREASE ITEM
+========================================================= */
+
+function decreaseItem(index) {
+
+    if (!cart[index]) {
+
+        return;
+
+    }
+
+
+    cart[index].quantity -= 1;
+
+
+    if (cart[index].quantity <= 0) {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    updateCart();
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        showMessage(
+            "Please add items to the cart first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        selectedOrderType === "dine_in" &&
+        !selectedTable
+    ) {
+
+        showMessage(
+            "Please select a table for Dine In.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const checkoutButton =
+        document.querySelector(
+            ".checkout"
+        );
+
+
+    checkoutButton.disabled =
+        true;
+
+
+    checkoutButton.innerText =
+        "Processing...";
+
+
+    const orderData = {
+
+        table_id:
+            selectedTable,
+
+        items:
+            cart.map(function(item) {
+
+                return {
+
+                    id:
+                        item.id,
+
+                    quantity:
+                        item.quantity
+
+                };
+
+            }),
+
+        order_type:
+            selectedOrderType,
+
+        payment_method:
+            selectedPaymentMethod
+
+    };
+
+
+    fetch(
+        "{% url 'create_order' %}",
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json",
+
+                "X-CSRFToken":
+                    getCSRFToken(),
+
+                "X-Requested-With":
+                    "XMLHttpRequest"
+
+            },
+
+            body:
+                JSON.stringify(orderData)
+
+        }
+    )
+
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+
+    .then(function(data) {
+
+        if (data.success) {
+
+            showMessage(
+                "Order created successfully!",
+                "success"
+            );
+
+
+            cart = [];
+
+
+            updateCart();
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "{% url 'order_success' 0 %}"
+                    .replace(
+                        "/0/",
+                        "/" +
+                        data.order_id +
+                        "/"
+                    );
+
+            }, 800);
+
+
+        } else {
+
+            showMessage(
+                data.message ||
+                "Could not create order.",
+                "error"
+            );
+
+        }
+
+    })
+
+
+    .catch(function(error) {
+
+        console.error(
+            "Checkout error:",
+            error
+        );
+
+
+        showMessage(
+            "Server error. Please try again.",
+            "error"
+        );
+
+    })
+
+
+    .finally(function() {
+
+        checkoutButton.disabled =
+            false;
+
+        checkoutButton.innerText =
+            "Checkout";
+
+    });
+
+}
+
+
+/* =========================================================
+   UPDATE ORDER STATUS
+========================================================= */
+
+function updateOrderStatus(
+    orderId,
+    newStatus
+) {
+
+    if (!orderId) {
+
+        return;
+
+    }
+
+
+    if (!newStatus) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Change order status to " +
+            newStatus +
+            "?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const statusUrl =
+        "{% url 'update_order_status' 0 %}"
+        .replace(
+            "/0/",
+            "/" +
+            orderId +
+            "/"
+        );
+
+
+    fetch(
+        statusUrl,
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json",
+
+                "X-CSRFToken":
+                    getCSRFToken(),
+
+                "X-Requested-With":
+                    "XMLHttpRequest"
+
+            },
+
+            body:
+                JSON.stringify({
+
+                    status:
+                        newStatus
+
+                })
+
+        }
+    )
+
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+
+    .then(function(data) {
+
+        if (data.success) {
+
+            window.location.reload();
+
+        } else {
+
+            alert(
+                data.message ||
+                "Could not update order status."
+            );
+
+        }
+
+    })
+
+
+    .catch(function(error) {
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+
+        alert(
+            "Server error while updating order status."
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   PAGE LOADED
+========================================================= */
+
+console.log(
+    "SIGNATURE — Jawad Khan Bistro POS loaded successfully."
+);
+
+/* =========================================================
+   3D — TABLE MANAGEMENT
+========================================================= */
+
+let editingTableId = null;
+
+
+/* =========================================================
+   OPEN ADD TABLE MODAL
+========================================================= */
+
+function openAddTableModal() {
+
+    editingTableId = null;
+
+    const modal =
+        document.getElementById(
+            "table-modal"
+        );
+
+    const title =
+        document.getElementById(
+            "table-modal-title"
+        );
+
+    const input =
+        document.getElementById(
+            "table-number-input"
+        );
+
+    if (!modal || !title || !input) {
+
+        return;
+
+    }
+
+    title.innerText =
+        "Add Table";
+
+    input.value = "";
+
+    modal.style.display =
+        "flex";
+
+    input.focus();
+
+}
+
+
+/* =========================================================
+   OPEN EDIT TABLE MODAL
+========================================================= */
+
+function openEditTableModal() {
+
+    if (!selectedTable) {
+
+        showMessage(
+            "Please select an available table first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    editingTableId =
+        selectedTable;
+
+    const selectedButton =
+        document.querySelector(
+            ".table-btn.selected"
+        );
+
+    if (!selectedButton) {
+
+        return;
+
+    }
+
+    const tableNumber =
+        selectedButton.innerText
+            .replace(
+                "Table",
+                ""
+            )
+            .trim();
+
+    const modal =
+        document.getElementById(
+            "table-modal"
+        );
+
+    const title =
+        document.getElementById(
+            "table-modal-title"
+        );
+
+    const input =
+        document.getElementById(
+            "table-number-input"
+        );
+
+    if (!modal || !title || !input) {
+
+        return;
+
+    }
+
+    title.innerText =
+        "Edit Table";
+
+    input.value =
+        tableNumber;
+
+    modal.style.display =
+        "flex";
+
+    input.focus();
+
+}
+
+
+/* =========================================================
+   CLOSE TABLE MODAL
+========================================================= */
+
+function closeTableModal() {
+
+    const modal =
+        document.getElementById(
+            "table-modal"
+        );
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+
+    }
+
+    editingTableId =
+        null;
+
+}
+
+
+/* =========================================================
+   SAVE TABLE
+========================================================= */
+
+function saveTable() {
+
+    const input =
+        document.getElementById(
+            "table-number-input"
+        );
+
+    if (!input) {
+
+        return;
+
+    }
+
+    const tableNumber =
+        input.value.trim();
+
+    if (!tableNumber) {
+
+        alert(
+            "Please enter table number."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+    const number =
+        Number(tableNumber);
+
+    if (
+        !Number.isInteger(number) ||
+        number < 1
+    ) {
+
+        alert(
+            "Please enter a valid table number."
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    let url = "";
+
+    let method = "POST";
+
+
+    /* =====================================================
+       ADD TABLE
+    ===================================================== */
+
+    if (!editingTableId) {
+
+        url =
+            "{% url 'add_table' %}";
+
+    }
+
+
+    /* =====================================================
+       EDIT TABLE
+    ===================================================== */
+
+    else {
+
+        url =
+            "{% url 'edit_table' 0 %}"
+                .replace(
+                    "/0/",
+                    "/" +
+                    editingTableId +
+                    "/"
+                );
+
+    }
+
+
+    fetch(
+        url,
+        {
+
+            method:
+                method,
+
+            headers: {
+
+                "Content-Type":
+                    "application/json",
+
+                "X-CSRFToken":
+                    getCSRFToken(),
+
+                "X-Requested-With":
+                    "XMLHttpRequest"
+
+            },
+
+            body:
+                JSON.stringify({
+
+                    number:
+                        number
+
+                })
+
+        }
+    )
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+    .then(function(data) {
+
+        if (data.success) {
+
+            closeTableModal();
+
+            showMessage(
+                data.message ||
+                "Table saved successfully.",
+                "success"
+            );
+
+            setTimeout(function() {
+
+                window.location.reload();
+
+            }, 500);
+
+        } else {
+
+            showMessage(
+                data.message ||
+                "Could not save table.",
+                "error"
+            );
+
+        }
+
+    })
+
+    .catch(function(error) {
+
+        console.error(
+            "Table save error:",
+            error
+        );
+
+        showMessage(
+            "Server error. Please try again.",
+            "error"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   DELETE SELECTED TABLE
+========================================================= */
+
+function deleteSelectedTable() {
+
+    if (!selectedTable) {
+
+        showMessage(
+            "Please select an available table first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const selectedButton =
+        document.querySelector(
+            ".table-btn.selected"
+        );
+
+    if (!selectedButton) {
+
+        return;
+
+    }
+
+
+    if (
+        selectedButton.classList.contains(
+            "occupied"
+        )
+    ) {
+
+        showMessage(
+            "Occupied table cannot be deleted.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const tableNumber =
+        selectedButton.innerText
+            .replace(
+                "Table",
+                ""
+            )
+            .trim();
+
+
+    const confirmed =
+        confirm(
+            "Delete Table " +
+            tableNumber +
+            "?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    const deleteUrl =
+        "{% url 'delete_table' 0 %}"
+            .replace(
+                "/0/",
+                "/" +
+                selectedTable +
+                "/"
+            );
+
+
+    fetch(
+        deleteUrl,
+        {
+
+            method:
+                "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json",
+
+                "X-CSRFToken":
+                    getCSRFToken(),
+
+                "X-Requested-With":
+                    "XMLHttpRequest"
+
+            }
+
+        }
+    )
+
+    .then(function(response) {
+
+        return response.json();
+
+    })
+
+    .then(function(data) {
+
+        if (data.success) {
+
+            selectedTable =
+                null;
+
+            showMessage(
+                data.message ||
+                "Table deleted successfully.",
+                "success"
+            );
+
+            setTimeout(function() {
+
+                window.location.reload();
+
+            }, 500);
+
+        } else {
+
+            showMessage(
+                data.message ||
+                "Could not delete table.",
+                "error"
+            );
+
+        }
+
+    })
+
+    .catch(function(error) {
+
+        console.error(
+            "Table delete error:",
+            error
+        );
+
+        showMessage(
+            "Server error. Please try again.",
+            "error"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "table-modal"
+            );
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+
+            closeTableModal();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

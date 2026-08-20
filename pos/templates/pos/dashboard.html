@@ -1,0 +1,1188 @@
+{% extends "POS/base.html" %}
+
+{% block title %}
+    Dashboard — SIGNATURE
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard-page {
+
+    width: 100%;
+
+    max-width: 1600px;
+
+    margin: auto;
+
+    padding: 28px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.dashboard-title {
+
+    margin-bottom: 28px;
+
+    color: white;
+}
+
+.dashboard-title h1 {
+
+    margin: 0 0 8px 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    text-shadow:
+        0 2px 10px
+        rgba(0, 0, 0, 0.35);
+}
+
+.dashboard-title p {
+
+    margin: 0;
+
+    color: #e5e7eb;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   STAT CARDS
+===================================================== */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+
+.stat-card {
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.35);
+
+    backdrop-filter:
+        blur(10px);
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.stat-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+.stat-title {
+
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+
+.stat-value {
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.blue {
+    color: #2563eb;
+}
+
+.green {
+    color: #15803d;
+}
+
+.red {
+    color: #dc2626;
+}
+
+.purple {
+    color: #7c3aed;
+}
+
+
+/* =====================================================
+   SECTION TITLE
+===================================================== */
+
+.section-title {
+
+    margin:
+        30px 0 15px 0;
+
+    color: white;
+}
+
+
+.section-title h2 {
+
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+/* =====================================================
+   SALES CARDS
+===================================================== */
+
+.sales-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+
+.sales-card {
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.35);
+
+    backdrop-filter:
+        blur(10px);
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.sales-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+.sales-card h3 {
+
+    margin:
+        0 0 12px 0;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #1f2937;
+}
+
+
+.sales-amount {
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: #dc2626;
+}
+
+
+.sales-description {
+
+    margin-top: 7px;
+
+    color: #4b5563;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   QUICK ACTIONS
+===================================================== */
+
+.quick-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(180px, 1fr)
+        );
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+}
+
+
+.quick-btn {
+
+    text-decoration: none;
+
+    background:
+        rgba(255, 255, 255, 0.45);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.35);
+
+    backdrop-filter:
+        blur(10px);
+
+    padding: 18px;
+
+    border-radius: 11px;
+
+    color: #111827;
+
+    font-weight: 800;
+
+    text-align: center;
+
+    box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.20);
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.quick-btn:hover {
+
+    background:
+        rgba(255, 255, 255, 0.65);
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 9px 22px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+/* =====================================================
+   RECENT ORDERS
+===================================================== */
+
+.orders-section {
+
+    background:
+        rgba(255, 255, 255, 0.48);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.35);
+
+    backdrop-filter:
+        blur(10px);
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+.orders-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.orders-header h2 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 22px;
+}
+
+
+.report-btn {
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: white;
+
+    padding: 9px 14px;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.report-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #2563eb
+        );
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+    border-radius: 10px;
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse:
+        separate;
+
+    border-spacing: 0;
+
+    min-width: 750px;
+
+    overflow: hidden;
+
+    background:
+        rgba(255, 255, 255, 0.30);
+}
+
+
+th {
+
+    background:
+        rgba(17, 24, 39, 0.88);
+
+    color: white;
+
+    text-align: left;
+
+    padding: 13px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+}
+
+
+td {
+
+    padding: 13px;
+
+    border-bottom:
+        1px solid
+        rgba(31, 41, 55, 0.12);
+
+    font-size: 14px;
+
+    color: #1f2937;
+
+    font-weight: 600;
+}
+
+
+tbody tr {
+
+    transition:
+        background 0.2s ease;
+}
+
+
+tbody tr:hover td {
+
+    background:
+        rgba(255, 255, 255, 0.35);
+}
+
+
+.order-number {
+
+    font-weight: 800;
+
+    color: #111827;
+}
+
+
+.order-total {
+
+    font-weight: 800;
+
+    color: #dc2626;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.status-pending {
+
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.status-preparing {
+
+    background: #dbeafe;
+
+    color: #1e40af;
+}
+
+
+.status-ready {
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.status-served {
+
+    background: #ede9fe;
+
+    color: #6b21a8;
+}
+
+
+.status-completed {
+
+    background: #d1fae5;
+
+    color: #065f46;
+}
+
+
+.status-cancelled {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* =====================================================
+   PAYMENT
+===================================================== */
+
+.payment {
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background:
+        rgba(17, 24, 39, 0.08);
+
+    color: #1f2937;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.actions {
+
+    display: flex;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+}
+
+
+.action-btn {
+
+    text-decoration: none;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1f2937,
+            #111827
+        );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.action-btn:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #d6a84f,
+            #b8862c
+        );
+
+    color: #111827;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+
+    text-align: center;
+
+    padding: 40px 20px;
+
+    color: #374151;
+}
+
+
+.empty h3 {
+
+    margin-bottom: 8px;
+
+    color: #111827;
+
+    font-size: 20px;
+}
+
+
+.empty p {
+
+    margin: 0;
+
+    color: #4b5563;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .dashboard-page {
+
+        padding: 18px;
+    }
+
+
+    .dashboard-title h1 {
+
+        font-size: 26px;
+    }
+
+
+    .orders-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+
+    .report-btn {
+
+        width: 100%;
+
+        text-align: center;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-page">
+
+
+    <!-- =================================================
+         TITLE
+    ================================================= -->
+
+    <div class="dashboard-title">
+
+        <h1>
+            📊 Dashboard
+        </h1>
+
+        <p>
+            Overview of your restaurant orders and sales.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================= -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Orders
+            </div>
+
+            <div class="stat-value blue">
+                {{ total_orders }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Completed Orders
+            </div>
+
+            <div class="stat-value green">
+                {{ completed_orders }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Cancelled Orders
+            </div>
+
+            <div class="stat-value red">
+                {{ cancelled_orders }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Sales
+            </div>
+
+            <div class="stat-value green">
+                Rs. {{ total_sales }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SALES
+    ================================================= -->
+
+    <div class="section-title">
+
+        <h2>
+            Sales by Payment Method
+        </h2>
+
+    </div>
+
+
+    <div class="sales-grid">
+
+
+        <div class="sales-card">
+
+            <h3>
+                💵 Cash
+            </h3>
+
+            <div class="sales-amount">
+                Rs. {{ cash_sales }}
+            </div>
+
+            <div class="sales-description">
+                Completed cash sales
+            </div>
+
+        </div>
+
+
+        <div class="sales-card">
+
+            <h3>
+                💳 Card
+            </h3>
+
+            <div class="sales-amount">
+                Rs. {{ card_sales }}
+            </div>
+
+            <div class="sales-description">
+                Completed card sales
+            </div>
+
+        </div>
+
+
+        <div class="sales-card">
+
+            <h3>
+                🌐 Online
+            </h3>
+
+            <div class="sales-amount">
+                Rs. {{ online_sales }}
+            </div>
+
+            <div class="sales-description">
+                Completed online sales
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+    ================================================= -->
+
+    <div class="section-title">
+
+        <h2>
+            Quick Actions
+        </h2>
+
+    </div>
+
+
+    <div class="quick-actions">
+
+
+        <a
+            href="{% url 'pos_home' %}"
+            class="quick-btn"
+        >
+            🛒 New Order
+        </a>
+
+
+        <a
+            href="{% url 'menu' %}"
+            class="quick-btn"
+        >
+            🍔 Manage Menu
+        </a>
+
+
+        <a
+            href="{% url 'sales_report' %}"
+            class="quick-btn"
+        >
+            📈 Sales Report
+        </a>
+
+
+        <a
+            href="{% url 'pos_home' %}"
+            class="quick-btn"
+        >
+            📋 Manage Orders
+        </a>
+
+
+    </div>
+
+
+    <!-- =================================================
+         RECENT ORDERS
+    ================================================= -->
+
+    <div class="orders-section">
+
+
+        <div class="orders-header">
+
+            <h2>
+                Recent Orders
+            </h2>
+
+
+            <a
+                href="{% url 'sales_report' %}"
+                class="report-btn"
+            >
+                View Full Report
+            </a>
+
+        </div>
+
+
+        {% if recent_orders %}
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order #
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Table
+                            </th>
+
+                            <th>
+                                Payment
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for order in recent_orders %}
+
+
+                            <tr>
+
+                                <td>
+
+                                    <span class="order-number">
+                                        #{{ order.id }}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ order.created_at|date:"d M Y, h:i A" }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ order.get_order_type_display }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if order.table %}
+
+                                        Table
+                                        {{ order.table.number }}
+
+                                    {% else %}
+
+                                        Takeaway
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="payment">
+
+                                        {{ order.get_payment_method_display }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="status status-{{ order.status }}"
+                                    >
+
+                                        {{ order.get_status_display }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="order-total">
+
+                                        Rs. {{ order.total }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="actions">
+
+
+                                        <a
+                                            href="{% url 'kot' order.id %}"
+                                            target="_blank"
+                                            class="action-btn"
+                                        >
+                                            KOT
+                                        </a>
+
+
+                                        <a
+                                            href="{% url 'bill' order.id %}"
+                                            target="_blank"
+                                            class="action-btn"
+                                        >
+                                            Bill
+                                        </a>
+
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <h3>
+                    No Orders Yet
+                </h3>
+
+                <p>
+                    Orders will appear here after you create them.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

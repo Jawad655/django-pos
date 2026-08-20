@@ -1,0 +1,420 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            SIGNATURE — Jawad Khan Bistro
+        {% endblock %}
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            color: #1f2937;
+
+            background-image:
+                url("{% static 'images/restaurant.jpg' %}");
+
+            background-size: cover;
+
+            background-position: center center;
+
+            background-attachment: fixed;
+
+            background-repeat: no-repeat;
+
+            background-color: #f3f4f6;
+        }
+
+
+        /* =====================================================
+           RESTAURANT HEADER
+        ===================================================== */
+
+        .main-header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.96),
+                    rgba(31, 41, 55, 0.94)
+                );
+
+            color: white;
+
+            padding: 20px 30px;
+
+            box-shadow:
+                0 4px 20px
+                rgba(0, 0, 0, 0.35);
+
+            position: relative;
+
+            z-index: 100;
+        }
+
+
+        .header-content {
+
+            max-width: 1500px;
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+
+        /* =====================================================
+           RESTAURANT NAME
+        ===================================================== */
+
+        .restaurant-name {
+
+            margin: 0;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 36px;
+
+            letter-spacing: 6px;
+
+            font-weight: 700;
+
+            line-height: 1;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #f8d477,
+                    #ffffff,
+                    #f8d477
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color:
+                transparent;
+
+            background-clip: text;
+        }
+
+
+        .restaurant-subtitle {
+
+            margin-top: 8px;
+
+            font-size: 12px;
+
+            letter-spacing: 4px;
+
+            color: #e5e7eb;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =====================================================
+           HEADER BUTTONS
+        ===================================================== */
+
+        .header-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+        }
+
+
+        .header-btn {
+
+            display: inline-block;
+
+            padding: 10px 17px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1d4ed8
+                );
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition:
+                all 0.2s ease;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.20);
+        }
+
+
+        .header-btn:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #2563eb
+                );
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 5px 14px
+                rgba(0, 0, 0, 0.30);
+        }
+
+
+        .header-btn.dark {
+
+            background:
+                rgba(255, 255, 255, 0.12);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.18);
+
+            backdrop-filter:
+                blur(8px);
+        }
+
+
+        .header-btn.dark:hover {
+
+            background:
+                rgba(255, 255, 255, 0.20);
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main-content {
+
+            width: 100%;
+
+            min-height:
+                calc(100vh - 100px);
+
+            padding-bottom: 30px;
+        }
+
+
+        /* =====================================================
+           PAGE WRAPPER
+        ===================================================== */
+
+        .page-wrapper {
+
+            width: 100%;
+
+            max-width: 1600px;
+
+            margin: auto;
+
+            padding: 25px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .main-header {
+
+                padding: 18px;
+            }
+
+
+            .header-content {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+            }
+
+
+            .restaurant-name {
+
+                font-size: 28px;
+
+                letter-spacing: 4px;
+            }
+
+
+            .restaurant-subtitle {
+
+                font-size: 10px;
+
+                letter-spacing: 2px;
+            }
+
+
+            .header-buttons {
+
+                width: 100%;
+            }
+
+
+            .header-btn {
+
+                flex: 1;
+
+                text-align: center;
+            }
+
+
+            .page-wrapper {
+
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         RESTAURANT HEADER
+    ===================================================== -->
+
+    <header class="main-header">
+
+        <div class="header-content">
+
+
+            <div>
+
+                <h1 class="restaurant-name">
+                    SIGNATURE
+                </h1>
+
+
+                <div class="restaurant-subtitle">
+                    Jawad Khan Bistro
+                </div>
+
+            </div>
+
+
+            <div class="header-buttons">
+
+
+                <a
+                    href="{% url 'pos_home' %}"
+                    class="header-btn"
+                >
+                    🛒 POS
+                </a>
+
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="header-btn dark"
+                >
+                    📊 Dashboard
+                </a>
+
+                <a
+                    href="{% url 'inventory' %}"
+                    class="header-btn dark"
+                >
+                    📦 Inventory
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+    ===================================================== -->
+
+    <main class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>

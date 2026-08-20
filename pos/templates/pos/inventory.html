@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Inventory Management</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b
+    );
+    min-height: 100vh;
+    color: white;
+}
+
+.container {
+    width: 95%;
+    max-width: 1250px;
+    margin: auto;
+    padding: 30px 0 60px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.header p {
+    color: #cbd5e1;
+    margin: 6px 0 0;
+}
+
+.back-btn {
+    text-decoration: none;
+    color: white;
+    background: #2563eb;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card,
+.section {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.card {
+    padding: 22px;
+}
+
+.card-title {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.card-number {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.blue {
+    color: #60a5fa;
+}
+
+.green {
+    color: #22c55e;
+}
+
+.orange {
+    color: #f59e0b;
+}
+
+.red {
+    color: #ef4444;
+}
+
+.section {
+    padding: 22px;
+    margin-bottom: 25px;
+    overflow-x: auto;
+}
+
+.section h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: white;
+}
+
+.form-group textarea {
+    min-height: 75px;
+    resize: vertical;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+.primary-btn {
+    margin-top: 15px;
+    padding: 13px 22px;
+    background: #16a34a;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.blue-btn {
+    background: #2563eb;
+}
+
+.danger-btn {
+    background: #dc2626;
+}
+
+.small-btn {
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.message {
+    display: none;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.success {
+    background: #14532d;
+    color: #86efac;
+}
+
+.error {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 13px;
+    background: rgba(255,255,255,0.08);
+    color: #cbd5e1;
+}
+
+td {
+    padding: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-green {
+    background: #14532d;
+    color: #86efac;
+}
+
+.status-orange {
+    background: #78350f;
+    color: #fcd34d;
+}
+
+.status-red {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+.empty {
+    text-align: center;
+    padding: 25px;
+    color: #94a3b8;
+}
+
+@media(max-width:800px) {
+
+    .summary {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+}
+
+@media(max-width:500px) {
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+        font-size: 25px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div>
+
+<h1>📦 Inventory Management</h1>
+
+<p>Complete restaurant stock management</p>
+
+</div>
+
+<a href="/" class="back-btn">
+← Back to POS
+</a>
+
+</div>
+
+
+<div id="successMessage"
+     class="message success">
+</div>
+
+<div id="errorMessage"
+     class="message error">
+</div>
+
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
+
+<div class="summary">
+
+<div class="card">
+
+<div class="card-title">
+Total Ingredients
+</div>
+
+<div class="card-number blue">
+{{ total_ingredients }}
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-title">
+In Stock
+</div>
+
+<div class="card-number green">
+{{ in_stock }}
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-title">
+Low Stock
+</div>
+
+<div class="card-number orange">
+{{ low_stock }}
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-title">
+Out of Stock
+</div>
+
+<div class="card-number red">
+{{ out_of_stock }}
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD INGREDIENT
+===================================================== -->
+
+<div class="section">
+
+<h2>🧂 Add Ingredient</h2>
+
+<form
+    class="ajax-form"
+    action="{% url 'add_ingredient' %}"
+>
+
+{% csrf_token %}
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Ingredient Name</label>
+
+<input
+    type="text"
+    name="name"
+    required
+    placeholder="e.g. Chicken"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Unit</label>
+
+<select name="unit" required>
+
+{% for value,label in ingredients.0.UNIT_CHOICES %}
+
+<option value="{{ value }}">
+{{ label }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Minimum Stock</label>
+
+<input
+    type="number"
+    name="minimum_stock"
+    step="0.001"
+    min="0"
+    value="0"
+    required
+>
+
+</div>
+
+</div>
+
+<button class="primary-btn">
+➕ Add Ingredient
+</button>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     ADD STOCK
+===================================================== -->
+
+<div class="section">
+
+<h2>📥 Add Stock</h2>
+
+<form
+    class="ajax-form"
+    action="{% url 'add_stock_in' %}"
+>
+
+{% csrf_token %}
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Ingredient</label>
+
+<select name="ingredient_id" required>
+
+<option value="">
+Select Ingredient
+</option>
+
+{% for ingredient in ingredients %}
+
+<option value="{{ ingredient.id }}">
+{{ ingredient.name }} ({{ ingredient.unit }})
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Quantity</label>
+
+<input
+    type="number"
+    name="quantity"
+    step="0.001"
+    min="0.001"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Unit Price</label>
+
+<input
+    type="number"
+    name="unit_price"
+    step="0.01"
+    min="0"
+    value="0"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Supplier</label>
+
+<input
+    type="text"
+    name="supplier"
+    maxlength="150"
+    placeholder="Supplier"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>Note</label>
+
+<textarea name="note"></textarea>
+
+</div>
+
+</div>
+
+<button class="primary-btn">
+📥 Add Stock
+</button>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     MANUAL USAGE
+===================================================== -->
+
+<div class="section">
+
+<h2>📤 Manual Stock Usage</h2>
+
+<form
+    class="ajax-form"
+    action="{% url 'add_stock_usage' %}"
+>
+
+{% csrf_token %}
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Ingredient</label>
+
+<select name="ingredient_id" required>
+
+<option value="">
+Select Ingredient
+</option>
+
+{% for ingredient in ingredients %}
+
+<option value="{{ ingredient.id }}">
+{{ ingredient.name }}
+— Stock: {{ ingredient.current_stock }}
+{{ ingredient.unit }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Quantity Used</label>
+
+<input
+    type="number"
+    name="quantity"
+    step="0.001"
+    min="0.001"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Reason</label>
+
+<input
+    type="text"
+    name="reason"
+    placeholder="Waste, damaged, kitchen use..."
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Note</label>
+
+<input
+    type="text"
+    name="note"
+    placeholder="Optional note"
+>
+
+</div>
+
+</div>
+
+<button class="primary-btn">
+📤 Record Usage
+</button>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     INGREDIENTS
+===================================================== -->
+
+<div class="section">
+
+<h2>🧂 Ingredients</h2>
+
+{% if ingredients %}
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Ingredient</th>
+
+<th>Stock</th>
+
+<th>Minimum</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for ingredient in ingredients %}
+
+<tr>
+
+<td>
+{{ ingredient.name }}
+</td>
+
+<td>
+{{ ingredient.current_stock }}
+{{ ingredient.unit }}
+</td>
+
+<td>
+{{ ingredient.minimum_stock }}
+{{ ingredient.unit }}
+</td>
+
+<td>
+
+{% if ingredient.is_out_of_stock %}
+
+<span class="status status-red">
+🔴 Out
+</span>
+
+{% elif ingredient.is_low_stock %}
+
+<span class="status status-orange">
+🟠 Low
+</span>
+
+{% else %}
+
+<span class="status status-green">
+🟢 In Stock
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<button
+    class="small-btn blue-btn"
+    onclick="editIngredient(
+        '{{ ingredient.id }}',
+        '{{ ingredient.name|escapejs }}',
+        '{{ ingredient.unit }}',
+        '{{ ingredient.minimum_stock }}'
+    )"
+>
+✏️ Edit
+</button>
+
+<button
+    class="small-btn danger-btn"
+    onclick="deleteIngredient(
+        '{{ ingredient.id }}'
+    )"
+>
+🗑 Delete
+</button>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No ingredients found.
+</div>
+
+{% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     RECIPES
+===================================================== -->
+
+<div class="section">
+
+<h2>🍔 Menu Item Recipes</h2>
+
+<form
+    class="ajax-form"
+    action="{% url 'add_recipe' %}"
+>
+
+{% csrf_token %}
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Menu Item</label>
+
+<select name="menu_item_id" required>
+
+<option value="">
+Select Menu Item
+</option>
+
+{% for item in menu_items %}
+
+<option value="{{ item.id }}">
+{{ item.name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Ingredient</label>
+
+<select name="ingredient_id" required>
+
+<option value="">
+Select Ingredient
+</option>
+
+{% for ingredient in ingredients %}
+
+<option value="{{ ingredient.id }}">
+{{ ingredient.name }}
+({{ ingredient.unit }})
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Quantity Per Item</label>
+
+<input
+    type="number"
+    name="quantity"
+    step="0.001"
+    min="0.001"
+    required
+>
+
+</div>
+
+</div>
+
+<button class="primary-btn">
+➕ Add Recipe Ingredient
+</button>
+
+</form>
+
+<br>
+
+
+{% if recipes %}
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Menu Item</th>
+
+<th>Ingredient</th>
+
+<th>Quantity</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for recipe in recipes %}
+
+<tr>
+
+<td>
+{{ recipe.menu_item.name }}
+</td>
+
+<td>
+{{ recipe.ingredient.name }}
+</td>
+
+<td>
+{{ recipe.quantity }}
+{{ recipe.ingredient.unit }}
+</td>
+
+<td>
+
+<button
+    class="small-btn blue-btn"
+    onclick="editRecipe(
+        '{{ recipe.id }}',
+        '{{ recipe.quantity }}'
+    )"
+>
+✏️ Edit
+</button>
+
+<button
+    class="small-btn danger-btn"
+    onclick="deleteRecipe(
+        '{{ recipe.id }}'
+    )"
+>
+🗑 Delete
+</button>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No recipes configured yet.
+</div>
+
+{% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     STOCK IN HISTORY
+===================================================== -->
+
+<div class="section">
+
+<h2>📥 Recent Stock In</h2>
+
+{% if recent_stock_in %}
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Ingredient</th>
+
+<th>Quantity</th>
+
+<th>Price</th>
+
+<th>Supplier</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for stock in recent_stock_in %}
+
+<tr>
+
+<td>
+{{ stock.ingredient.name }}
+</td>
+
+<td>
+{{ stock.quantity }}
+{{ stock.ingredient.unit }}
+</td>
+
+<td>
+Rs. {{ stock.unit_price }}
+</td>
+
+<td>
+{% if stock.supplier %}
+{{ stock.supplier }}
+{% else %}
+-
+{% endif %}
+</td>
+
+<td>
+{{ stock.created_at|date:"d M Y, h:i A" }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No stock records yet.
+</div>
+
+{% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     USAGE HISTORY
+===================================================== -->
+
+<div class="section">
+
+<h2>📤 Recent Stock Usage</h2>
+
+{% if recent_stock_usage %}
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Ingredient</th>
+
+<th>Quantity</th>
+
+<th>Reason</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for usage in recent_stock_usage %}
+
+<tr>
+
+<td>
+{{ usage.ingredient.name }}
+</td>
+
+<td>
+{{ usage.quantity }}
+{{ usage.ingredient.unit }}
+</td>
+
+<td>
+{% if usage.reason %}
+{{ usage.reason }}
+{% else %}
+-
+{% endif %}
+</td>
+
+<td>
+{{ usage.created_at|date:"d M Y, h:i A" }}
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No usage records yet.
+</div>
+
+{% endif %}
+
+</div>
+
+
+</div>
+
+
+<script>
+
+function showMessage(message, success = true) {
+
+    const successBox =
+        document.getElementById(
+            "successMessage"
+        );
+
+    const errorBox =
+        document.getElementById(
+            "errorMessage"
+        );
+
+    successBox.style.display = "none";
+    errorBox.style.display = "none";
+
+    if (success) {
+
+        successBox.textContent = message;
+        successBox.style.display = "block";
+
+    } else {
+
+        errorBox.textContent = message;
+        errorBox.style.display = "block";
+    }
+}
+
+
+document.querySelectorAll(
+    ".ajax-form"
+).forEach(function(form) {
+
+    form.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            const formData =
+                new FormData(form);
+
+            fetch(
+                form.action,
+                {
+                    method: "POST",
+                    body: formData,
+
+                    headers: {
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    }
+                }
+            )
+            .then(
+                response =>
+                    response.json()
+            )
+            .then(
+                data => {
+
+                    if (data.success) {
+
+                        showMessage(
+                            data.message,
+                            true
+                        );
+
+                        form.reset();
+
+                        setTimeout(
+                            function() {
+
+                                location.reload();
+
+                            },
+                            700
+                        );
+
+                    } else {
+
+                        showMessage(
+                            data.message ||
+                            "Something went wrong.",
+                            false
+                        );
+                    }
+                }
+            )
+            .catch(
+                function() {
+
+                    showMessage(
+                        "Server error. Please try again.",
+                        false
+                    );
+
+                }
+            );
+
+        }
+    );
+
+});
+
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+    if (document.cookie &&
+        document.cookie !== "") {
+
+        const cookies =
+            document.cookie.split(";");
+
+        for (
+            let i = 0;
+            i < cookies.length;
+            i++
+        ) {
+
+            const cookie =
+                cookies[i].trim();
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) ===
+                (name + "=")
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+
+
+function postAction(
+    url,
+    data
+) {
+
+    const csrfToken =
+        getCookie("csrftoken");
+
+    return fetch(
+        url,
+        {
+            method: "POST",
+
+            headers: {
+                "X-CSRFToken":
+                    csrfToken,
+
+                "X-Requested-With":
+                    "XMLHttpRequest",
+
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+
+            body:
+                new URLSearchParams(data)
+        }
+    )
+    .then(
+        response =>
+            response.json()
+    );
+}
+
+
+function editIngredient(
+    id,
+    name,
+    unit,
+    minimum
+) {
+
+    const newName =
+        prompt(
+            "Ingredient name:",
+            name
+        );
+
+    if (newName === null) {
+        return;
+    }
+
+    const newMinimum =
+        prompt(
+            "Minimum stock:",
+            minimum
+        );
+
+    if (newMinimum === null) {
+        return;
+    }
+
+    postAction(
+        `/edit-ingredient/${id}/`,
+        {
+            name: newName,
+            unit: unit,
+            minimum_stock: newMinimum
+        }
+    )
+    .then(
+        data => {
+
+            if (data.success) {
+
+                showMessage(
+                    data.message,
+                    true
+                );
+
+                setTimeout(
+                    () => location.reload(),
+                    700
+                );
+
+            } else {
+
+                showMessage(
+                    data.message,
+                    false
+                );
+            }
+
+        }
+    );
+}
+
+
+function deleteIngredient(id) {
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this ingredient?"
+        )
+    ) {
+        return;
+    }
+
+    postAction(
+        `/delete-ingredient/${id}/`,
+        {}
+    )
+    .then(
+        data => {
+
+            if (data.success) {
+
+                showMessage(
+                    data.message,
+                    true
+                );
+
+                setTimeout(
+                    () => location.reload(),
+                    700
+                );
+
+            } else {
+
+                showMessage(
+                    data.message,
+                    false
+                );
+            }
+
+        }
+    );
+}
+
+
+function editRecipe(
+    id,
+    quantity
+) {
+
+    const newQuantity =
+        prompt(
+            "Quantity per menu item:",
+            quantity
+        );
+
+    if (newQuantity === null) {
+        return;
+    }
+
+    postAction(
+        `/edit-recipe/${id}/`,
+        {
+            quantity: newQuantity
+        }
+    )
+    .then(
+        data => {
+
+            if (data.success) {
+
+                showMessage(
+                    data.message,
+                    true
+                );
+
+                setTimeout(
+                    () => location.reload(),
+                    700
+                );
+
+            } else {
+
+                showMessage(
+                    data.message,
+                    false
+                );
+            }
+
+        }
+    );
+}
+
+
+function deleteRecipe(id) {
+
+    if (
+        !confirm(
+            "Remove this ingredient from the recipe?"
+        )
+    ) {
+        return;
+    }
+
+    postAction(
+        `/delete-recipe/${id}/`,
+        {}
+    )
+    .then(
+        data => {
+
+            if (data.success) {
+
+                showMessage(
+                    data.message,
+                    true
+                );
+
+                setTimeout(
+                    () => location.reload(),
+                    700
+                );
+
+            } else {
+
+                showMessage(
+                    data.message,
+                    false
+                );
+            }
+
+        }
+    );
+}
+
+</script>
+
+</body>
+</html>

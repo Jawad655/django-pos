@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bill #{{ order.id }}</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f6f8;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+        }
+
+        .bill {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+
+            box-shadow:
+                0 3px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .restaurant-name {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .restaurant-subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .bill-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* =========================
+           ORDER INFO
+        ========================= */
+
+        .info {
+            border-top: 2px dashed #333;
+            border-bottom: 2px dashed #333;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 8px 0;
+        }
+
+        .info-row span:first-child {
+            color: #6b7280;
+        }
+
+        .info-row strong {
+            text-align: right;
+        }
+
+        /* =========================
+           ITEMS
+        ========================= */
+
+        .items-header {
+            display: grid;
+            grid-template-columns: 1fr 60px 90px;
+            gap: 10px;
+
+            padding: 10px 0;
+
+            border-bottom: 2px solid #222;
+
+            font-weight: bold;
+        }
+
+        .items-header span:nth-child(2),
+        .items-header span:nth-child(3) {
+            text-align: right;
+        }
+
+        .item {
+            display: grid;
+            grid-template-columns: 1fr 60px 90px;
+            gap: 10px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .item-name {
+            font-weight: bold;
+        }
+
+        .item-qty,
+        .item-price {
+            text-align: right;
+        }
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary {
+            margin-top: 20px;
+            padding-top: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+
+            margin: 10px 0;
+        }
+
+        .grand-total {
+            display: flex;
+            justify-content: space-between;
+
+            margin-top: 15px;
+            padding-top: 15px;
+
+            border-top: 2px solid #222;
+
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           PAYMENT
+        ========================= */
+
+        .payment {
+            margin-top: 20px;
+            padding: 12px;
+
+            background: #f3f4f6;
+
+            border-radius: 8px;
+
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 30px;
+            padding-top: 20px;
+
+            border-top: 2px dashed #333;
+        }
+
+        .thank-you {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .footer-text {
+            color: #6b7280;
+        }
+
+        /* =========================
+           PRINT BUTTON
+        ========================= */
+
+        .print-btn {
+            width: 100%;
+
+            margin-top: 25px;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .print-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* =========================
+           PRINT
+        ========================= */
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .bill {
+                max-width: 100%;
+                box-shadow: none;
+                padding: 10px;
+            }
+
+            .print-btn {
+                display: none;
+            }
+
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .bill {
+                padding: 20px;
+            }
+
+            .restaurant-name {
+                font-size: 24px;
+            }
+
+            .items-header,
+            .item {
+                grid-template-columns:
+                    1fr 45px 75px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="bill">
+
+
+    <!-- =========================
+         RESTAURANT HEADER
+    ========================= -->
+
+    <div class="restaurant-name">
+
+        RESTAURANT POS
+
+    </div>
+
+
+    <div class="restaurant-subtitle">
+
+        Restaurant Management System
+
+    </div>
+
+
+    <div class="bill-title">
+
+        CUSTOMER BILL
+
+    </div>
+
+
+    <!-- =========================
+         ORDER INFORMATION
+    ========================= -->
+
+    <div class="info">
+
+
+        <div class="info-row">
+
+            <span>
+                Order #
+            </span>
+
+            <strong>
+                {{ order.id }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Order Type
+            </span>
+
+            <strong>
+                {{ order.get_order_type_display }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Table
+            </span>
+
+            <strong>
+
+                {% if order.table %}
+
+                    Table {{ order.table.number }}
+
+                {% else %}
+
+                    Takeaway
+
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Payment
+            </span>
+
+            <strong>
+                {{ order.get_payment_method_display }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Date
+            </span>
+
+            <strong>
+                {{ order.created_at|date:"d M Y" }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Time
+            </span>
+
+            <strong>
+                {{ order.created_at|date:"h:i A" }}
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         ITEMS HEADER
+    ========================= -->
+
+    <div class="items-header">
+
+        <span>
+            Item
+        </span>
+
+        <span>
+            Qty
+        </span>
+
+        <span>
+            Amount
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         ORDER ITEMS
+    ========================= -->
+
+    {% for item in items %}
+
+        <div class="item">
+
+
+            <span class="item-name">
+
+                {{ item.menu_item.name }}
+
+            </span>
+
+
+            <span class="item-qty">
+
+                {{ item.quantity }}
+
+            </span>
+
+
+            <span class="item-price">
+
+                Rs. {{ item.get_total }}
+
+            </span>
+
+
+        </div>
+
+    {% empty %}
+
+        <div style="
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        ">
+
+            No items found.
+
+        </div>
+
+    {% endfor %}
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <div class="summary">
+
+
+        <div class="summary-row">
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong>
+                Rs. {{ order.total }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span>
+                Discount
+            </span>
+
+            <strong>
+                Rs. 0
+            </strong>
+
+        </div>
+
+
+        <div class="grand-total">
+
+            <span>
+                TOTAL
+            </span>
+
+            <span>
+                Rs. {{ order.total }}
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         PAYMENT
+    ========================= -->
+
+    <div class="payment">
+
+        <span>
+            Payment Method
+        </span>
+
+        <strong>
+            {{ order.get_payment_method_display }}
+        </strong>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <div class="footer">
+
+        <div class="thank-you">
+
+            Thank You!
+
+        </div>
+
+        <div class="footer-text">
+
+            Please visit us again.
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PRINT BUTTON
+    ========================= -->
+
+    <button
+        type="button"
+        class="print-btn"
+        onclick="window.print()"
+    >
+
+        🖨️ Print Bill
+
+    </button>
+
+
+</div>
+
+
+</body>
+
+</html>
