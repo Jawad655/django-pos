@@ -12,2001 +12,1657 @@
 
     <title>SIGNATURE — Jawad Khan Bistro</title>
 
-
-    
     <style>
 
         * {
-    box-sizing: border-box;
-}
+            box-sizing: border-box;
+        }
 
-html {
-    scroll-behavior: smooth;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: #f8fafc;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #f8fafc;
 
-    background-image:
-      url("{% static 'images/restaurant.jpg' %}");
+            background-image:
+                url("{% static 'images/restaurant.jpg' %}");
 
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
 
-    min-height: 100vh;
-}
+            min-height: 100vh;
+        }
 
 
-/* =====================================================
-   PREMIUM HEADER
-===================================================== */
+        /* =====================================================
+           PREMIUM HEADER
+        ===================================================== */
 
-.header {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(10, 12, 16, 0.96),
-            rgba(31, 35, 42, 0.94)
-        );
+        .header {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(10, 12, 16, 0.96),
+                    rgba(31, 35, 42, 0.94)
+                );
 
-    color: white;
+            color: white;
 
-    padding: 22px 30px;
+            padding: 22px 30px;
 
-    border-bottom:
-        1px solid rgba(248, 212, 119, 0.25);
+            border-bottom:
+                1px solid rgba(248, 212, 119, 0.25);
 
-    box-shadow:
-        0 5px 25px rgba(0, 0, 0, 0.45);
+            box-shadow:
+                0 5px 25px rgba(0, 0, 0, 0.45);
 
-    position: relative;
-    z-index: 5;
-}
+            position: relative;
+            z-index: 5;
+        }
 
-.brand-area {
-    display: flex;
+        .brand-area {
+            display: flex;
 
-    justify-content: space-between;
+            justify-content: space-between;
 
-    align-items: center;
+            align-items: center;
 
-    width: 100%;
+            width: 100%;
 
-    gap: 20px;
-}
+            gap: 20px;
+        }
 
-.brand-name {
-    margin: 0;
+        .brand-name {
+            margin: 0;
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
 
-    font-size: 42px;
+            font-size: 42px;
 
-    letter-spacing: 7px;
+            letter-spacing: 7px;
 
-    font-weight: 700;
+            font-weight: 700;
 
-    line-height: 1;
+            line-height: 1;
 
-    background:
-        linear-gradient(
-            90deg,
-            #d6a84f,
-            #fff4c7,
-            #d6a84f
-        );
+            background:
+                linear-gradient(
+                    90deg,
+                    #d6a84f,
+                    #fff4c7,
+                    #d6a84f
+                );
 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
 
-    text-shadow:
-        0 2px 15px rgba(214, 168, 79, 0.20);
-}
+            text-shadow:
+                0 2px 15px rgba(214, 168, 79, 0.20);
+        }
 
-.brand-subtitle {
-    margin-top: 8px;
-    margin-left: 3px;
+        .brand-subtitle {
+            margin-top: 8px;
+            margin-left: 3px;
 
-    font-size: 13px;
+            font-size: 13px;
 
-    letter-spacing: 4px;
+            letter-spacing: 4px;
 
-    color: #d1d5db;
+            color: #d1d5db;
 
-    text-transform: uppercase;
-}
+            text-transform: uppercase;
+        }
 
-.dashboard-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+        .dashboard-btn {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-    color: #111827;
+            color: #111827;
 
-    text-decoration: none;
+            text-decoration: none;
 
-    padding: 11px 18px;
+            padding: 11px 18px;
 
-    border-radius: 8px;
+            border-radius: 8px;
 
-    font-size: 14px;
+            font-size: 14px;
 
-    font-weight: bold;
+            font-weight: bold;
 
-    white-space: nowrap;
+            white-space: nowrap;
 
-    transition: 0.2s;
+            transition: 0.2s;
 
-    box-shadow:
-        0 4px 15px rgba(214, 168, 79, 0.25);
-}
+            box-shadow:
+                0 4px 15px rgba(214, 168, 79, 0.25);
+        }
 
-.dashboard-btn:hover {
-    transform: translateY(-2px);
+        .dashboard-btn:hover {
+            transform: translateY(-2px);
 
-    box-shadow:
-        0 7px 20px rgba(214, 168, 79, 0.35);
-}
+            box-shadow:
+                0 7px 20px rgba(214, 168, 79, 0.35);
+        }
 
 
-/* =====================================================
-   POS CONTAINER
-===================================================== */
+        /* =====================================================
+           POS CONTAINER
+        ===================================================== */
 
-.pos-container {
-    display: flex;
+        .pos-container {
+            display: flex;
 
-    min-height:
-        calc(100vh - 105px);
+            min-height:
+                calc(100vh - 105px);
 
-    background:
-        rgba(10, 12, 16, 0.28);
-}
+            background:
+                rgba(10, 12, 16, 0.28);
+        }
 
-.menu-section {
-    width: 65%;
+        .menu-section {
+            width: 65%;
 
-    padding: 28px;
+            padding: 28px;
 
-    background:
-        rgba(15, 18, 23, 0.55);
+            background:
+                rgba(15, 18, 23, 0.55);
 
-    backdrop-filter:
-        blur(4px);
-    
-    border-right:
-       1px solid
-       rgba(255, 255, 255, 0.10);    
-}
+            backdrop-filter:
+                blur(4px);
 
-.cart-section {
-    width: 35%;
+            border-right:
+                1px solid
+                rgba(255, 255, 255, 0.10);
+        }
 
-    background:
-        rgba(255, 255, 255, 0.45);
+        .cart-section {
+            width: 35%;
 
-    color: #1f2937;
+            background:
+                rgba(255, 255, 255, 0.45);
 
-    padding: 28px;
+            color: #1f2937;
 
-    box-shadow:
-        -5px 0 25px
-        rgba(0, 0, 0, 0.35);
-    backdrop-filter:
-        blur(10px);
-    border-left:
-        1px solid
-        rgba(255, 255, 255, 0.35)        
-}
+            padding: 28px;
 
-h2 {
-    margin-top: 0;
+            box-shadow:
+                -5px 0 25px
+                rgba(0, 0, 0, 0.35);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+            backdrop-filter:
+                blur(10px);
 
-    letter-spacing: 0.5px;
-}
+            border-left:
+                1px solid
+                rgba(255, 255, 255, 0.35);
+        }
 
+        h2 {
+            margin-top: 0;
 
-/* =====================================================
-   ORDER TYPE
-===================================================== */
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
 
-.order-type-section {
-    margin-bottom: 25px;
-}
+            letter-spacing: 0.5px;
+        }
 
-.order-type-section h3 {
-    margin-bottom: 12px;
-}
 
-.order-types {
-    display: flex;
+        /* =====================================================
+           ORDER TYPE
+        ===================================================== */
 
-    gap: 10px;
+        .order-type-section {
+            margin-bottom: 25px;
+        }
 
-    flex-wrap: wrap;
-}
+        .order-type-section h3 {
+            margin-bottom: 12px;
+        }
 
-.order-type-btn {
-    border: 1px solid rgba(214, 168, 79, 0.25);
+        .order-types {
+            display: flex;
 
-    padding: 12px 20px;
+            gap: 10px;
 
-    border-radius: 8px;
+            flex-wrap: wrap;
+        }
 
-    background:
-        rgba(255, 255, 255, 0.10);
+        .order-type-btn {
+            border: 1px solid rgba(214, 168, 79, 0.25);
 
-    color: #f8fafc;
+            padding: 12px 20px;
 
-    cursor: pointer;
+            border-radius: 8px;
 
-    font-weight: bold;
+            background:
+                rgba(255, 255, 255, 0.10);
 
-    transition: 0.2s;
+            color: #f8fafc;
 
-    backdrop-filter: blur(8px);
-}
+            cursor: pointer;
 
-.order-type-btn:hover {
-    background:
-        rgba(214, 168, 79, 0.20);
-}
+            font-weight: bold;
 
-.order-type-btn.active {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+            transition: 0.2s;
 
-    color: #111827;
+            backdrop-filter: blur(8px);
+        }
 
-    border-color: transparent;
-}
+        .order-type-btn:hover {
+            background:
+                rgba(214, 168, 79, 0.20);
+        }
 
+        .order-type-btn.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-/* =====================================================
-   TABLES
-===================================================== */
+            color: #111827;
 
-.tables {
-    display: flex;
+            border-color: transparent;
+        }
 
-    gap: 10px;
 
-    flex-wrap: wrap;
+        /* =====================================================
+           TABLES
+        ===================================================== */
 
-    margin-bottom: 25px;
-}
+        .tables {
+            display: flex;
 
-.table-btn {
-    border: none;
+            gap: 10px;
 
-    padding: 12px 20px;
+            flex-wrap: wrap;
 
-    border-radius: 8px;
+            margin-bottom: 25px;
+        }
 
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #15803d
-        );
+        .table-btn {
+            border: none;
 
-    color: white;
+            padding: 12px 20px;
 
-    cursor: pointer;
+            border-radius: 8px;
 
-    font-weight: bold;
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #15803d
+                );
 
-    transition: 0.2s;
+            color: white;
 
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, 0.25);
-}
+            cursor: pointer;
 
-.table-btn:hover {
-    transform: translateY(-2px);
-}
+            font-weight: bold;
 
-.table-btn.selected {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+            transition: 0.2s;
 
-    color: #111827;
-}
+            box-shadow:
+                0 4px 10px rgba(0, 0, 0, 0.25);
+        }
 
-.table-btn.occupied {
-    background:
-        linear-gradient(
-            135deg,
-            #dc2626,
-            #991b1b
-        );
-}
+        .table-btn:hover {
+            transform: translateY(-2px);
+        }
 
-.table-btn:disabled {
-    opacity: 0.65;
+        .table-btn.selected {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-    cursor: not-allowed;
-}
+            color: #111827;
+        }
 
-.table-note {
-    color: #d1d5db;
+        .table-btn.occupied {
+            background:
+                linear-gradient(
+                    135deg,
+                    #dc2626,
+                    #991b1b
+                );
+        }
 
-    font-size: 14px;
+        .table-btn:disabled {
+            opacity: 0.65;
 
-    margin-bottom: 15px;
-}
+            cursor: not-allowed;
+        }
 
+        .table-note {
+            color: #d1d5db;
 
-/* =====================================================
-   CATEGORIES
-===================================================== */
+            font-size: 14px;
 
-.categories {
-    display: flex;
+            margin-bottom: 15px;
+        }
 
-    gap: 10px;
 
-    flex-wrap: wrap;
+        /* =====================================================
+           CATEGORIES
+        ===================================================== */
 
-    margin-bottom: 25px;
-}
+        .categories {
+            display: flex;
 
-.category-btn {
-    border: 1px solid rgba(255, 255, 255, 0.12);
+            gap: 10px;
 
-    padding: 10px 18px;
+            flex-wrap: wrap;
 
-    border-radius: 8px;
+            margin-bottom: 25px;
+        }
 
-    background:
-        rgba(255, 255, 255, 0.08);
+        .category-btn {
+            border: 1px solid rgba(255, 255, 255, 0.12);
 
-    color: #f8fafc;
+            padding: 10px 18px;
 
-    cursor: pointer;
+            border-radius: 8px;
 
-    font-weight: 600;
+            background:
+                rgba(255, 255, 255, 0.08);
 
-    transition: 0.2s;
-}
+            color: #f8fafc;
 
-.category-btn:hover {
-    background:
-        rgba(214, 168, 79, 0.20);
-}
+            cursor: pointer;
 
-.category-btn.active {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+            font-weight: 600;
 
-    color: #111827;
+            transition: 0.2s;
+        }
 
-    border-color: transparent;
-}
+        .category-btn:hover {
+            background:
+                rgba(214, 168, 79, 0.20);
+        }
 
+        .category-btn.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-/* =====================================================
-   MENU GRID
-===================================================== */
+            color: #111827;
 
-.menu-grid {
-    display: grid;
+            border-color: transparent;
+        }
 
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(180px, 1fr)
-        );
 
-    gap: 18px;
-}
+        /* =====================================================
+           MENU GRID
+        ===================================================== */
 
+        .menu-grid {
+            display: grid;
 
-/* =====================================================
-   MENU CARD
-===================================================== */
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(180px, 1fr)
+                );
 
-.menu-item {
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.14);
+            gap: 18px;
+        }
 
-    background:
-        rgba(255, 255, 255, 0.12);
 
-    color: white;
+        /* =====================================================
+           MENU CARD
+        ===================================================== */
 
-    padding: 14px;
+        .menu-item {
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.14);
 
-    border-radius: 14px;
+            background:
+                rgba(255, 255, 255, 0.12);
 
-    cursor: pointer;
+            color: white;
 
-    text-align: left;
+            padding: 14px;
 
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.25);
+            border-radius: 14px;
 
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+            cursor: pointer;
 
-    overflow: hidden;
+            text-align: left;
 
-    backdrop-filter:
-        blur(10px);
-}
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
 
-.menu-item:hover {
-    transform:
-        translateY(-6px);
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
 
-    border-color:
-        rgba(214, 168, 79, 0.65);
+            overflow: hidden;
 
-    box-shadow:
-        0 15px 35px
-        rgba(0, 0, 0, 0.45);
-}
+            backdrop-filter:
+                blur(10px);
+        }
 
-.menu-item:active {
-    transform:
-        scale(0.98);
-}
+        .menu-item:hover {
+            transform:
+                translateY(-6px);
 
+            border-color:
+                rgba(214, 168, 79, 0.65);
 
-/* =====================================================
-   FOOD IMAGE
-===================================================== */
+            box-shadow:
+                0 15px 35px
+                rgba(0, 0, 0, 0.45);
+        }
 
-.menu-item-image {
-    width: 100%;
+        .menu-item:active {
+            transform:
+                scale(0.98);
+        }
 
-    height: 160px;
 
-    object-fit: cover;
+        /* =====================================================
+           FOOD IMAGE
+        ===================================================== */
 
-    border-radius: 12px;
+        .menu-item-image {
+            width: 100%;
 
-    margin-bottom: 12px;
+            height: 160px;
 
-    display: block;
+            object-fit: cover;
 
-    background: #1f2937;
+            border-radius: 12px;
 
-    box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, 0.30);
+            margin-bottom: 12px;
 
-    transition:
-        transform 0.25s ease;
-}
+            display: block;
 
-.menu-item:hover .menu-item-image {
-    transform: scale(1.03);
-}
+            background: #1f2937;
 
-.menu-item-no-image {
-    width: 100%;
+            box-shadow:
+                0 5px 15px
+                rgba(0, 0, 0, 0.30);
 
-    height: 150px;
+            transition:
+                transform 0.25s ease;
+        }
 
-    background:
-        linear-gradient(
-            135deg,
-            #252a32,
-            #111827
-        );
+        .menu-item:hover .menu-item-image {
+            transform: scale(1.03);
+        }
 
-    border-radius: 10px;
+        .menu-item-no-image {
+            width: 100%;
 
-    margin-bottom: 12px;
+            height: 150px;
 
-    display: flex;
+            background:
+                linear-gradient(
+                    135deg,
+                    #252a32,
+                    #111827
+                );
 
-    align-items: center;
+            border-radius: 10px;
 
-    justify-content: center;
+            margin-bottom: 12px;
 
-    font-size: 45px;
-}
+            display: flex;
 
-.item-name {
-    display: block;
+            align-items: center;
 
-    font-size: 17px;
+            justify-content: center;
 
-    font-weight: 700;
+            font-size: 45px;
+        }
 
-    margin-bottom: 8px;
+        .item-name {
+            display: block;
 
-    color: #ffffff;
+            font-size: 17px;
 
-    letter-spacing: 0.2px;
-}
+            font-weight: 700;
 
-.item-price {
-    color: #f8d477;
+            margin-bottom: 8px;
 
-    font-weight: 700;
+            color: #ffffff;
 
-    font-size: 16px;
+            letter-spacing: 0.2px;
+        }
 
-    letter-spacing: 0.3px;
-}
+        .item-price {
+            color: #f8d477;
 
+            font-weight: 700;
 
-/* =====================================================
-   CART
-===================================================== */
+            font-size: 16px;
 
-#cart-items {
-    margin-top: 20px;
-}
+            letter-spacing: 0.3px;
+        }
 
-.cart-item {
-    display: flex;
 
-    justify-content:
-        space-between;
+        /* =====================================================
+           CART
+        ===================================================== */
 
-    align-items: center;
+        #cart-items {
+            margin-top: 20px;
+        }
 
-    gap: 12px;
+        .cart-item {
+            display: flex;
 
-    padding: 14px 0;
+            justify-content:
+                space-between;
 
-    border-bottom:
-        1px solid
-        rgba(31, 41, 55, 0.12);
+            align-items: center;
 
-    transition:
-       background 0.2s ease; 
-}
+            gap: 12px;
 
-.quantity {
-    display: flex;
+            padding: 14px 0;
 
-    align-items: center;
+            border-bottom:
+                1px solid
+                rgba(31, 41, 55, 0.12);
 
-    gap: 8px;
-}
+            transition:
+                background 0.2s ease;
+        }
 
-.quantity button {
-    border: none;
+        .quantity {
+            display: flex;
 
-    background: #f3f4f6;
+            align-items: center;
 
-    color: #1f2937;
+            gap: 8px;
+        }
 
-    width: 30px;
+        .quantity button {
+            border: none;
 
-    height: 30px;
+            background: #f3f4f6;
 
-    padding: 0;
+            color: #1f2937;
 
-    cursor: pointer;
+            width: 30px;
 
-    border-radius: 7px;
+            height: 30px;
 
-    font-size: 17px;
+            padding: 0;
 
-    font-weight: bold;
+            cursor: pointer;
 
-    transition: all 0.2s ease;
-}
+            border-radius: 7px;
 
-.quantity button:hover {
-    background: #d6a84f;
+            font-size: 17px;
 
-    color: #111827;
+            font-weight: bold;
 
-    transform: translateY(-1px);
-}
+            transition: all 0.2s ease;
+        }
 
-.cart-item strong {
-    color: #111827;
+        .quantity button:hover {
+            background: #d6a84f;
 
-    font-size: 15px;
+            color: #111827;
 
-    font-weight: 700;
-}
+            transform: translateY(-1px);
+        }
 
-/* =====================================================
-   SUMMARY
-===================================================== */
+        .cart-item strong {
+            color: #111827;
 
-.summary {
-    margin-top: 25px;
+            font-size: 15px;
 
-    border-top:
-        2px solid #eee;
+            font-weight: 700;
+        }
 
-    padding-top: 20px;
-}
 
-.summary-row {
-    display: flex;
+        /* =====================================================
+           SUMMARY
+        ===================================================== */
 
-    justify-content:
-        space-between;
+        .summary {
+            margin-top: 25px;
 
-    margin: 10px 0;
-}
+            border-top:
+                2px solid #eee;
 
-.total {
-    font-size: 22px;
+            padding-top: 20px;
+        }
 
-    font-weight: bold;
+        .summary-row {
+            display: flex;
 
-    color: #111827;
-}
+            justify-content:
+                space-between;
 
+            margin: 10px 0;
+        }
 
-/* =====================================================
-   PAYMENT
-===================================================== */
+        .total {
+            font-size: 22px;
 
-.payment-section {
-    margin-top: 20px;
-}
+            font-weight: bold;
 
-.payment-section h3 {
-    margin-bottom: 12px;
-}
+            color: #111827;
+        }
 
-.payment-methods {
-    display: flex;
 
-    gap: 8px;
+        /* =====================================================
+           PAYMENT
+        ===================================================== */
 
-    flex-wrap: wrap;
-}
+        .payment-section {
+            margin-top: 20px;
+        }
 
-.payment-btn {
-    flex: 1;
+        .payment-section h3 {
+            margin-bottom: 12px;
+        }
 
-    min-width: 90px;
+        .payment-methods {
+            display: flex;
 
-    padding: 10px;
+            gap: 8px;
 
-    border: none;
+            flex-wrap: wrap;
+        }
 
-    border-radius: 8px;
+        .payment-btn {
+            flex: 1;
 
-    background: #e5e7eb;
+            min-width: 90px;
 
-    cursor: pointer;
+            padding: 10px;
 
-    font-weight: bold;
-}
+            border: none;
 
-.payment-btn:hover {
-    background: #d1d5db;
-}
+            border-radius: 8px;
 
-.payment-btn.active {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+            background: #e5e7eb;
 
-    color: #111827;
-}
+            cursor: pointer;
 
+            font-weight: bold;
+        }
 
-/* =====================================================
-   CHECKOUT
-===================================================== */
+        .payment-btn:hover {
+            background: #d1d5db;
+        }
 
-.checkout {
-    width: 100%;
+        .payment-btn.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-    padding: 16px;
+            color: #111827;
+        }
 
-    border: none;
 
-    border-radius: 9px;
+        /* =====================================================
+           CHECKOUT
+        ===================================================== */
 
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #15803d
-        );
+        .checkout {
+            width: 100%;
 
-    color: white;
+            padding: 16px;
 
-    font-size: 18px;
+            border: none;
 
-    font-weight: bold;
+            border-radius: 9px;
 
-    cursor: pointer;
+            background:
+                linear-gradient(
+                    135deg,
+                    #16a34a,
+                    #15803d
+                );
 
-    margin-top: 20px;
+            color: white;
 
-    box-shadow:
-        0 6px 18px
-        rgba(22, 163, 74, 0.30);
+            font-size: 18px;
 
-    transition:
-        all 0.2s ease;
-}
+            font-weight: bold;
 
-.checkout:hover {
-    transform: translateY(-1px);
-}
+            cursor: pointer;
 
-.checkout:disabled {
-    background: #9ca3af;
+            margin-top: 20px;
 
-    cursor: not-allowed;
-}
+            box-shadow:
+                0 6px 18px
+                rgba(22, 163, 74, 0.30);
 
-.empty {
-    color: #4b5566;
+            transition:
+                all 0.2s ease;
+        }
 
-    text-align: center;
+        .checkout:hover {
+            transform: translateY(-1px);
+        }
 
-    margin-top: 50px;
+        .checkout:disabled {
+            background: #9ca3af;
 
-    font-size: 15px;
+            cursor: not-allowed;
+        }
 
-    font-weight: 600;
-}
+        .empty {
+            color: #4b5566;
 
+            text-align: center;
 
-/* =====================================================
-   MESSAGE
-===================================================== */
+            margin-top: 50px;
 
-.message {
-    padding: 12px;
+            font-size: 15px;
 
-    margin-top: 15px;
+            font-weight: 600;
+        }
 
-    border-radius: 8px;
 
-    display: none;
-}
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
 
-.message.success {
-    display: block;
+        .message {
+            padding: 12px;
 
-    background: #dcfce7;
+            margin-top: 15px;
 
-    color: #166534;
-}
+            border-radius: 8px;
 
-.message.error {
-    display: block;
+            display: none;
+        }
 
-    background: #fee2e2;
+        .message.success {
+            display: block;
 
-    color: #991b1b;
-}
+            background: #dcfce7;
 
+            color: #166534;
+        }
 
-/* =====================================================
-   ORDER MANAGEMENT
-===================================================== */
+        .message.error {
+            display: block;
 
-.orders-section {
-    width: 100%;
+            background: #fee2e2;
 
-    padding: 28px;
+            color: #991b1b;
+        }
 
-    background:
-        rgba(10, 12, 16, 0.78);
 
-    border-top:
-        1px solid rgba(214, 168, 79, 0.25);
+        /* =====================================================
+           ORDER MANAGEMENT
+        ===================================================== */
 
-    backdrop-filter:
-        blur(8px);
-}
+        .orders-section {
+            width: 100%;
 
-.orders-section h2 {
-    color: #fff4c7;
-}
+            padding: 28px;
 
-.orders-grid {
-    display: grid;
+            background:
+                rgba(10, 12, 16, 0.78);
 
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(300px, 1fr)
-        );
+            border-top:
+                1px solid rgba(214, 168, 79, 0.25);
 
-    gap: 20px;
-}
+            backdrop-filter:
+                blur(8px);
+        }
 
-.order-card {
-    background:
-        rgba(255, 255, 255, 0.45);
+        .orders-section h2 {
+            color: #fff4c7;
+        }
 
-    color: #1f2937;
+        .orders-grid {
+            display: grid;
 
-    border-radius: 14px;
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(300px, 1fr)
+                );
 
-    padding: 20px;
+            gap: 20px;
+        }
 
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.30);
+        .order-card {
+            background:
+                rgba(255, 255, 255, 0.45);
 
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.35);
+            color: #1f2937;
 
-    backdrop-filter:
-        blur(10px);
-}
+            border-radius: 14px;
 
-.order-header {
-    display: flex;
+            padding: 20px;
 
-    justify-content:
-        space-between;
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.30);
 
-    align-items: center;
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.35);
 
-    margin-bottom: 15px;
+            backdrop-filter:
+                blur(10px);
+        }
 
-    gap: 10px;
-}
+        .order-header {
+            display: flex;
 
-.order-number {
-    font-size: 20px;
+            justify-content:
+                space-between;
 
-    font-weight: 800;
+            align-items: center;
 
-    color: #111827;
+            margin-bottom: 15px;
 
-    letter-spacing: 0.3px;
-}
+            gap: 10px;
+        }
 
-.status-badge {
-    padding: 6px 10px;
+        .order-number {
+            font-size: 20px;
 
-    border-radius: 20px;
+            font-weight: 800;
 
-    font-size: 12px;
+            color: #111827;
 
-    font-weight: bold;
-}
+            letter-spacing: 0.3px;
+        }
 
-.status-pending {
-    background: #fef3c7;
-    color: #92400e;
-}
+        .status-badge {
+            padding: 6px 10px;
 
-.status-preparing {
-    background: #dbeafe;
-    color: #1e40af;
-}
+            border-radius: 20px;
 
-.status-ready {
-    background: #dcfce7;
-    color: #166534;
-}
+            font-size: 12px;
 
-.status-served {
-    background: #ede9fe;
-    color: #6b21a8;
-}
+            font-weight: bold;
+        }
 
-.status-completed {
-    background: #d1fae5;
-    color: #065f46;
-}
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
 
-.status-cancelled {
-    background: #fee2e2;
-    color: #991b1b;
-}
+        .status-preparing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
-.order-info {
-    color: #374151;
+        .status-ready {
+            background: #dcfce7;
+            color: #166534;
+        }
 
-    font-size: 14px;
+        .status-served {
+            background: #ede9fe;
+            color: #6b21a8;
+        }
 
-    line-height: 1.7;
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
 
-    margin-bottom: 15px;
-}
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-.order-info strong {
-    color: #111827;
+        .order-info {
+            color: #374151;
 
-    font-weight: 700;
-}
+            font-size: 14px;
 
-.order-items {
-    border-top:
-        1px solid
-        rgba(31, 41, 55, 0.15);
+            line-height: 1.7;
 
-    border-bottom:
-        1px solid
-        rgba(31, 41, 55, 0.15);
+            margin-bottom: 15px;
+        }
 
-    padding: 12px 0;
+        .order-info strong {
+            color: #111827;
 
-    margin-bottom: 15px;
-}
+            font-weight: 700;
+        }
 
-.order-item {
-    display: flex;
+        .order-items {
+            border-top:
+                1px solid
+                rgba(31, 41, 55, 0.15);
 
-    justify-content:
-        space-between;
+            border-bottom:
+                1px solid
+                rgba(31, 41, 55, 0.15);
 
-    gap: 12px;
+            padding: 12px 0;
 
-    padding: 7px 0;
+            margin-bottom: 15px;
+        }
 
-    color: #1f2937;
+        .order-item {
+            display: flex;
 
-    font-size: 14px;
+            justify-content:
+                space-between;
 
-    font-weight: 600;
-}
+            gap: 12px;
 
-.order-item span:last-child {
-    font-weight: 700;
+            padding: 7px 0;
 
-    color: #111827;
+            color: #1f2937;
 
-    white-space: nowrap;
-}
+            font-size: 14px;
 
-.order-total {
-    display: flex;
+            font-weight: 600;
+        }
 
-    justify-content:
-        space-between;
+        .order-item span:last-child {
+            font-weight: 700;
 
-    align-items: center;
+            color: #111827;
 
-    font-size: 19px;
+            white-space: nowrap;
+        }
 
-    font-weight: 800;
+        .order-total {
+            display: flex;
 
-    color: #111827;
+            justify-content:
+                space-between;
 
-    margin-bottom: 15px;
-}
+            align-items: center;
 
-.order-total span:last-child {
-    color: #dc2;
+            font-size: 19px;
 
-    font-size: 20px;
+            font-weight: 800;
 
-    font-weight: 800;
-}
+            color: #111827;
 
-.status-buttons button {
-    border: none;
+            margin-bottom: 15px;
+        }
 
-    padding: 9px 12px;
+        .order-total span:last-child {
+            color: #b8862c;
 
-    border-radius: 7px;
+            font-size: 20px;
 
-    cursor: pointer;
+            font-weight: 800;
+        }
 
-    font-size: 12px;
+        .status-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
 
-    font-weight: 700;
+        .status-buttons button {
+            border: none;
 
-    transition:
-        all 0.2s ease;
+            padding: 9px 12px;
 
-    box-shadow:
-        0 3px 8px
-        rgba(0, 0, 0, 0.15);
-}
+            border-radius: 7px;
 
-.status-buttons button:hover {
-    transform:
-        translateY(-2px);
+            cursor: pointer;
 
-    box-shadow:
-        0 5px 12px
-        rgba(0, 0, 0, 0.20);
-}
+            font-size: 12px;
 
-.btn-preparing {
-    background: #3b82f6;
-    color: white;
-}
+            font-weight: 700;
 
-.btn-ready {
-    background: #22c55e;
-    color: white;
-}
+            transition:
+                all 0.2s ease;
 
-.btn-served {
-    background: #8b5cf6;
-    color: white;
-}
+            box-shadow:
+                0 3px 8px
+                rgba(0, 0, 0, 0.15);
+        }
 
-.btn-completed {
-    background: #059669;
-    color: white;
-}
+        .status-buttons button:hover {
+            transform:
+                translateY(-2px);
 
-.btn-cancelled {
-    background: #ef4444;
-    color: white;
-}
+            box-shadow:
+                0 5px 12px
+                rgba(0, 0, 0, 0.20);
+        }
 
-.order-actions {
-    display: flex;
+        .btn-preparing {
+            background: #3b82f6;
+            color: white;
+        }
 
-    gap: 8px;
+        .btn-ready {
+            background: #22c55e;
+            color: white;
+        }
 
-    margin-top: 15px;
-}
+        .btn-served {
+            background: #8b5cf6;
+            color: white;
+        }
 
-.order-actions a {
-    flex: 1;
+        .btn-completed {
+            background: #059669;
+            color: white;
+        }
 
-    text-align: center;
+        .btn-cancelled {
+            background: #ef4444;
+            color: white;
+        }
 
-    text-decoration: none;
+        .order-actions {
+            display: flex;
 
-    padding: 10px;
+            gap: 8px;
 
-    border-radius: 7px;
+            margin-top: 15px;
+        }
 
-    background:
-        linear-gradient(
-            135deg,
-            #1f2937,
-            #111827
-        );
+        .order-actions a {
+            flex: 1;
 
-    color: white;
+            text-align: center;
 
-    font-size: 13px;
+            text-decoration: none;
 
-    font-weight: 700;
+            padding: 10px;
 
-    letter-spacing: 0.3px;
+            border-radius: 7px;
 
-    transition:
-        all 0.2s ease;
-}
+            background:
+                linear-gradient(
+                    135deg,
+                    #1f2937,
+                    #111827
+                );
 
-.order-actions a:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+            color: white;
 
-    color: #111827;
+            font-size: 13px;
 
-    transform:
-        translateY(-2px);
-}
+            font-weight: 700;
 
-.cart-section h2 {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+            letter-spacing: 0.3px;
 
-    font-size: 24px;
+            transition:
+                all 0.2s ease;
+        }
 
-    color: #111827;
+        .order-actions a:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #d6a84f,
+                    #b8862c
+                );
 
-    margin-bottom: 18px;
+            color: #111827;
 
-    letter-spacing: 0.5px;
-}
+            transform:
+                translateY(-2px);
+        }
 
-.cart-section p {
-    color: #374151;
+        .cart-section h2 {
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
 
-    font-size: 14px;
+            font-size: 24px;
 
-    margin: 8px 0;
-}
+            color: #111827;
 
-.cart-section p strong {
-    color: #111827;
+            margin-bottom: 18px;
 
-    font-weight: bold;
-}
+            letter-spacing: 0.5px;
+        }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+        .cart-section p {
+            color: #374151;
 
-@media (max-width: 900px) {
+            font-size: 14px;
 
-    .pos-container {
-        flex-direction: column;
-    }
+            margin: 8px 0;
+        }
 
-    .menu-section,
-    .cart-section {
-        width: 100%;
-    }
+        .cart-section p strong {
+            color: #111827;
 
-    .brand-name {
-        font-size: 32px;
-        letter-spacing: 5px;
-    }
+            font-weight: bold;
+        }
 
-}
 
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
 
-@media (max-width: 500px) {
+        @media (max-width: 900px) {
 
-    .header {
-        padding: 18px;
-    }
+            .pos-container {
+                flex-direction: column;
+            }
 
-    .brand-area {
-        align-items: flex-start;
+            .menu-section,
+            .cart-section {
+                width: 100%;
+            }
 
-        flex-direction: column;
-    }
+            .brand-name {
+                font-size: 32px;
+                letter-spacing: 5px;
+            }
 
-    .brand-name {
-        font-size: 27px;
-        letter-spacing: 3px;
-    }
+        }
 
-    .brand-subtitle {
-        font-size: 10px;
-        letter-spacing: 2px;
-    }
 
-    .menu-section,
-    .cart-section,
-    .orders-section {
-        padding: 18px;
-    }
+        @media (max-width: 500px) {
 
-    .menu-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+            .header {
+                padding: 18px;
+            }
 
-        gap: 10px;
-    }
+            .brand-area {
+                align-items: flex-start;
 
-    .menu-item-image,
-    .menu-item-no-image {
-        height: 115px;
-    }
+                flex-direction: column;
+            }
 
-}
+            .brand-name {
+                font-size: 27px;
+                letter-spacing: 3px;
+            }
 
-/* =====================================================
-   STEP 15 — MOBILE POS IMPROVEMENTS
-===================================================== */
+            .brand-subtitle {
+                font-size: 10px;
+                letter-spacing: 2px;
+            }
 
-@media (max-width: 700px) {
+            .menu-section,
+            .cart-section,
+            .orders-section {
+                padding: 18px;
+            }
 
-    body {
-        background-attachment: scroll;
-    }
+            .menu-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
 
-    .header {
-        padding: 16px;
-    }
+                gap: 10px;
+            }
 
-    .brand-area {
-        gap: 14px;
-    }
+            .menu-item-image,
+            .menu-item-no-image {
+                height: 115px;
+            }
 
-    .dashboard-btn {
-        width: 100%;
-        text-align: center;
-        padding: 13px;
-    }
+        }
 
-    .pos-container {
-        min-height: auto;
-    }
 
-    .menu-section {
-        padding: 16px;
-    }
+        /* =====================================================
+           STEP 15 — MOBILE POS IMPROVEMENTS
+        ===================================================== */
 
-    .cart-section {
-        padding: 16px;
-    }
+        @media (max-width: 700px) {
 
-    .order-types {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-    }
+            body {
+                background-attachment: scroll;
+            }
 
-    .order-type-btn {
-        width: 100%;
-        padding: 13px 8px;
-        font-size: 13px;
-    }
+            .header {
+                padding: 16px;
+            }
 
-    .tables {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
+            .brand-area {
+                gap: 14px;
+            }
 
-    .table-btn {
-        width: 100%;
-        padding: 12px 5px;
-        font-size: 13px;
-    }
+            .dashboard-btn {
+                width: 100%;
+                text-align: center;
+                padding: 13px;
+            }
 
-    .categories {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
+            .pos-container {
+                min-height: auto;
+            }
 
-    .category-btn {
-        width: 100%;
-        padding: 11px 6px;
-        font-size: 13px;
-    }
+            .menu-section {
+                padding: 16px;
+            }
 
-    .menu-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
+            .cart-section {
+                padding: 16px;
+            }
 
-    .menu-item {
-        padding: 9px;
-        border-radius: 11px;
-    }
+            .order-types {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
 
-    .menu-item-image,
-    .menu-item-no-image {
-        height: 110px;
-        border-radius: 9px;
-        margin-bottom: 8px;
-    }
+            .order-type-btn {
+                width: 100%;
+                padding: 13px 8px;
+                font-size: 13px;
+            }
 
-    .menu-item-no-image {
-        font-size: 34px;
-    }
+            .tables {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
 
-    .item-name {
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
+            .table-btn {
+                width: 100%;
+                padding: 12px 5px;
+                font-size: 13px;
+            }
 
-    .item-price {
-        font-size: 14px;
-    }
+            .categories {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
 
-    .cart-section h2 {
-        font-size: 21px;
-    }
+            .category-btn {
+                width: 100%;
+                padding: 11px 6px;
+                font-size: 13px;
+            }
 
-    .cart-item {
-        padding: 13px 0;
-    }
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
 
-    .quantity {
-        gap: 5px;
-    }
+            .menu-item {
+                padding: 9px;
+                border-radius: 11px;
+            }
 
-    .quantity button {
-        width: 34px;
-        height: 34px;
-    }
+            .menu-item-image,
+            .menu-item-no-image {
+                height: 110px;
+                border-radius: 9px;
+                margin-bottom: 8px;
+            }
 
-    .payment-methods {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-    }
+            .menu-item-no-image {
+                font-size: 34px;
+            }
 
-    .payment-btn {
-        min-width: 0;
-        padding: 12px 5px;
-        font-size: 12px;
-    }
+            .item-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
 
-    .checkout {
-        padding: 15px;
-        font-size: 17px;
-    }
+            .item-price {
+                font-size: 14px;
+            }
 
-    .orders-section {
-        padding: 16px;
-    }
+            .cart-section h2 {
+                font-size: 21px;
+            }
 
-    .orders-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
+            .cart-item {
+                padding: 13px 0;
+            }
 
-    .order-card {
-        padding: 16px;
-    }
+            .quantity {
+                gap: 5px;
+            }
 
-    .order-header {
-        align-items: flex-start;
-    }
+            .quantity button {
+                width: 34px;
+                height: 34px;
+            }
 
-    .order-number {
-        font-size: 17px;
-    }
+            .payment-methods {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
 
-    .status-buttons {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 7px;
-    }
+            .payment-btn {
+                min-width: 0;
+                padding: 12px 5px;
+                font-size: 12px;
+            }
 
-    .status-buttons button {
-        width: 100%;
-        padding: 11px 6px;
-    }
+            .checkout {
+                padding: 15px;
+                font-size: 17px;
+            }
 
-    .order-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
+            .orders-section {
+                padding: 16px;
+            }
 
-}
+            .orders-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
 
+            .order-card {
+                padding: 16px;
+            }
 
-/* =====================================================
-   VERY SMALL PHONES
-===================================================== */
+            .order-header {
+                align-items: flex-start;
+            }
 
-@media (max-width: 380px) {
+            .order-number {
+                font-size: 17px;
+            }
 
-    .menu-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 7px;
-    }
+            .status-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
 
-    .menu-item {
-        padding: 7px;
-    }
+            .status-buttons button {
+                width: 100%;
+                padding: 11px 6px;
+            }
 
-    .menu-item-image,
-    .menu-item-no-image {
-        height: 95px;
-    }
+            .order-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
 
-    .item-name {
-        font-size: 13px;
-    }
+        }
 
-    .item-price {
-        font-size: 13px;
-    }
 
-    .tables {
-        grid-template-columns: repeat(2, 1fr);
-    }
+        /* =====================================================
+           VERY SMALL PHONES
+        ===================================================== */
 
-    .payment-methods {
-        grid-template-columns: 1fr;
-    }
+        @media (max-width: 380px) {
 
-}
+            .menu-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 7px;
+            }
 
+            .menu-item {
+                padding: 7px;
+            }
 
-/* =====================================================
-   STEP 15 — TABLE MANAGEMENT
-===================================================== */
+            .menu-item-image,
+            .menu-item-no-image {
+                height: 95px;
+            }
 
-.table-management {
-    margin-top: 25px;
+            .item-name {
+                font-size: 13px;
+            }
 
-    padding: 20px;
+            .item-price {
+                font-size: 13px;
+            }
 
-    background:
-        rgba(255, 255, 255, 0.08);
+            .tables {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-    border:
-        1px solid
-        rgba(214, 168, 79, 0.25);
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
 
-    border-radius: 14px;
+        }
 
-    backdrop-filter:
-        blur(10px);
-}
 
-.table-management-header {
-    display: flex;
+        /* =====================================================
+           PROFESSIONAL TABLE MANAGEMENT
+        ===================================================== */
 
-    justify-content: space-between;
+        .table-management {
+            margin-top: 22px;
+            padding: 18px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(214,168,79,0.25);
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+        }
 
-    align-items: center;
+        .table-management h3 {
+            margin: 0 0 14px;
+            color: #fff4c7;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 18px;
+        }
 
-    gap: 15px;
+        .table-management-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-    margin-bottom: 18px;
-}
+        .table-manage-btn {
+            border: none;
+            padding: 11px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
 
-.table-management-header h3 {
-    margin: 0;
+        .table-manage-btn:hover {
+            transform: translateY(-2px);
+        }
 
-    color: #fff4c7;
+        .add-table-btn {
+            background: linear-gradient(135deg,#16a34a,#15803d);
+            color: white;
+        }
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-}
+        .edit-table-btn {
+            background: linear-gradient(135deg,#3b82f6,#1d4ed8);
+            color: white;
+        }
 
-.add-table-btn {
-    border: none;
+        .delete-table-btn {
+            background: linear-gradient(135deg,#dc2626,#991b1b);
+            color: white;
+        }
 
-    padding: 10px 16px;
+        .table-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.70);
+            backdrop-filter: blur(5px);
+        }
 
-    border-radius: 8px;
+        .table-modal.active {
+            display: flex;
+        }
 
-    background:
-        linear-gradient(
-            135deg,
-            #d6a84f,
-            #b8862c
-        );
+        .table-modal-content {
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 14px;
+            background: linear-gradient(135deg,#1f2937,#111827);
+            border: 1px solid rgba(214,168,79,0.35);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+        }
 
-    color: #111827;
+        .table-modal-content h2 {
+            color: #fff4c7;
+            margin: 0 0 20px;
+        }
 
-    cursor: pointer;
+        #table-number-input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            background: #f9fafb;
+            color: #111827;
+        }
 
-    font-weight: bold;
+        #table-number-input:focus {
+            border-color: #d6a84f;
+            box-shadow: 0 0 0 3px rgba(214,168,79,0.15);
+        }
 
-    transition: 0.2s;
-}
+        .table-modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
 
-.add-table-btn:hover {
-    transform:
-        translateY(-2px);
-}
+        .table-modal-actions button {
+            flex: 1;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
 
-.table-management-list {
-    display: grid;
+        .table-modal-actions button:first-child {
+            background: linear-gradient(135deg,#16a34a,#15803d);
+            color: white;
+        }
 
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(180px, 1fr)
-        );
+        .table-modal-actions button:last-child {
+            background: #e5e7eb;
+            color: #111827;
+        }
 
-    gap: 12px;
-}
 
-.managed-table {
-    padding: 15px;
+        /* =====================================================
+           PROFESSIONAL BILLING SUMMARY
+        ===================================================== */
 
-    border-radius: 10px;
+        .billing-summary {
+            margin-top: 0;
+        }
 
-    background:
-        rgba(255, 255, 255, 0.10);
+        .billing-summary .summary-row {
+            align-items: center;
+            gap: 12px;
+        }
 
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.12);
-}
+        .billing-summary .summary-row > span:first-child {
+            font-weight: 600;
+        }
 
-.managed-table-title {
-    font-size: 16px;
+        .billing-input {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 130px;
+            justify-content: flex-end;
+        }
 
-    font-weight: bold;
+        .billing-input span {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4b5563;
+        }
 
-    color: white;
+        .billing-input input {
+            width: 105px;
+            padding: 8px 9px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+            text-align: right;
+            background: #fff;
+            color: #111827;
+        }
 
-    margin-bottom: 8px;
-}
+        .billing-input input:focus {
+            border-color: #d6a84f;
+            box-shadow: 0 0 0 3px rgba(214,168,79,0.12);
+        }
 
-.table-status {
-    font-size: 12px;
+        .billing-summary .payment-row {
+            padding-top: 10px;
+            border-top: 1px dashed rgba(31,41,55,0.18);
+        }
 
-    font-weight: bold;
+        .billing-summary .total {
+            margin-top: 15px;
+            padding-top: 14px;
+            border-top: 2px solid rgba(31,41,55,0.14);
+        }
 
-    margin-bottom: 12px;
-}
+        #payment-status {
+            color: #b45309;
+        }
 
-.table-status.available {
-    color: #4ade80;
-}
+        #change-amount {
+            color: #166534;
+        }
 
-.table-status.occupied {
-    color: #f87171;
-}
+        @media (max-width: 700px) {
 
-.table-management-actions {
-    display: flex;
+            .table-management-buttons {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
 
-    gap: 7px;
-}
+            .table-manage-btn {
+                width: 100%;
+                padding: 13px;
+            }
 
-.table-management-actions button {
-    flex: 1;
+            .table-modal-content {
+                padding: 20px;
+            }
 
-    border: none;
+            .billing-summary .summary-row {
+                align-items: flex-start;
+            }
 
-    padding: 8px 6px;
+            .billing-input {
+                min-width: 0;
+            }
 
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-.edit-table-btn {
-    background: #3b82f6;
-
-    color: white;
-}
-
-.delete-table-btn {
-    background: #ef4444;
-
-    color: white;
-}
-
-.delete-table-btn:disabled,
-.edit-table-btn:disabled {
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-
-/* =====================================================
-   TABLE MODAL
-===================================================== */
-
-.table-modal {
-    display: none;
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    background:
-        rgba(0, 0, 0, 0.70);
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-}
-
-.table-modal.active {
-    display: flex;
-}
-
-.table-modal-box {
-    width: 100%;
-
-    max-width: 400px;
-
-    background: #ffffff;
-
-    color: #111827;
-
-    border-radius: 14px;
-
-    padding: 25px;
-
-    box-shadow:
-        0 20px 50px
-        rgba(0, 0, 0, 0.45);
-}
-
-.table-modal-box h3 {
-    margin-top: 0;
-
-    margin-bottom: 18px;
-}
-
-.table-input {
-    width: 100%;
-
-    padding: 12px;
-
-    border:
-        1px solid #d1d5db;
-
-    border-radius: 8px;
-
-    font-size: 16px;
-
-    outline: none;
-}
-
-.table-input:focus {
-    border-color: #d6a84f;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(214, 168, 79, 0.15);
-}
-
-.table-modal-actions {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 18px;
-}
-
-.table-modal-actions button {
-    flex: 1;
-
-    padding: 11px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: bold;
-}
-
-.save-table-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #15803d
-        );
-
-    color: white;
-}
-
-.cancel-table-btn {
-    background: #e5e7eb;
-
-    color: #111827;
-}
-
-
-/* =====================================================
-   TABLE MANAGEMENT MOBILE
-===================================================== */
-
-@media (max-width: 700px) {
-
-    .table-management {
-        padding: 15px;
-    }
-
-    .table-management-header {
-        align-items: stretch;
-
-        flex-direction: column;
-    }
-
-    .add-table-btn {
-        width: 100%;
-
-        padding: 12px;
-    }
-
-    .table-management-list {
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 8px;
-    }
-
-    .managed-table {
-        padding: 12px;
-    }
-
-    .table-management-actions {
-        flex-direction: column;
-    }
-
-    .table-management-actions button {
-        width: 100%;
-
-        padding: 10px;
-    }
-
-}
-
-/* =====================================================
-   3D — TABLE MANAGEMENT CSS
-===================================================== */
-
-.table-management {
-    margin-top: 18px;
-    margin-bottom: 20px;
-    padding: 18px;
-
-    background:
-        rgba(255, 255, 255, 0.08);
-
-    border:
-        1px solid
-        rgba(214, 168, 79, 0.25);
-
-    border-radius: 12px;
-
-    backdrop-filter: blur(8px);
-}
-
-.table-management h3 {
-    margin-top: 0;
-    margin-bottom: 14px;
-
-    color: #fff4c7;
-
-    font-size: 18px;
-}
-
-.table-management-buttons {
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-}
-
-.table-manage-btn {
-    border: none;
-
-    padding: 11px 15px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: 700;
-
-    font-size: 13px;
-
-    transition:
-        all 0.2s ease;
-}
-
-.table-manage-btn:hover {
-    transform:
-        translateY(-2px);
-}
-
-.add-table-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #15803d
-        );
-
-    color: white;
-}
-
-.edit-table-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #1d4ed8
-        );
-
-    color: white;
-}
-
-.delete-table-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #dc2626,
-            #991b1b
-        );
-
-    color: white;
-}
-
-
-/* =====================================================
-   TABLE MODAL
-===================================================== */
-
-.table-modal {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(0, 0, 0, 0.70);
-
-    backdrop-filter:
-        blur(5px);
-}
-
-.table-modal-content {
-    width: 100%;
-
-    max-width: 400px;
-
-    padding: 25px;
-
-    border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1f2937,
-            #111827
-        );
-
-    border:
-        1px solid
-        rgba(214, 168, 79, 0.35);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.55);
-}
-
-.table-modal-content h2 {
-    color: #fff4c7;
-
-    margin-top: 0;
-
-    margin-bottom: 20px;
-}
-
-#table-number-input {
-    width: 100%;
-
-    padding: 13px;
-
-    border: 1px solid #4b5563;
-
-    border-radius: 8px;
-
-    outline: none;
-
-    font-size: 16px;
-
-    background: #f9fafb;
-
-    color: #111827;
-}
-
-#table-number-input:focus {
-    border-color: #d6a84f;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(214, 168, 79, 0.15);
-}
-
-.table-modal-actions {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 18px;
-}
-
-.table-modal-actions button {
-    flex: 1;
-
-    border: none;
-
-    padding: 12px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: 700;
-}
-
-.table-modal-actions button:first-child {
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #15803d
-        );
-
-    color: white;
-}
-
-.table-modal-actions button:last-child {
-    background: #e5e7eb;
-
-    color: #111827;
-}
-
-
-/* =====================================================
-   MOBILE TABLE MANAGEMENT
-===================================================== */
-
-@media (max-width: 700px) {
-
-    .table-management {
-        padding: 14px;
-    }
-
-    .table-management-buttons {
-        display: grid;
-
-        grid-template-columns: 1fr;
-
-        gap: 8px;
-    }
-
-    .table-manage-btn {
-        width: 100%;
-
-        padding: 13px;
-    }
-
-    .table-modal-content {
-        padding: 20px;
-    }
-
-}
+        }
 
     </style>
 
@@ -2045,6 +1701,14 @@ h2 {
             class="dashboard-btn"
         >
             📊 Dashboard
+        </a>
+
+
+        <a
+            href="{% url 'logout' %}"
+            class="dashboard-btn"
+        >
+            🔒 Logout
         </a>
 
     </div>
@@ -2215,8 +1879,6 @@ h2 {
                 >
 
 
-                    <!-- FOOD IMAGE -->
-
                     {% if item.image %}
 
                         <img
@@ -2234,14 +1896,10 @@ h2 {
                     {% endif %}
 
 
-                    <!-- NAME -->
-
                     <span class="item-name">
                         {{ item.name }}
                     </span>
 
-
-                    <!-- PRICE -->
 
                     <span class="item-price">
                         Rs. {{ item.price }}
@@ -2264,94 +1922,95 @@ h2 {
 
         </div>
 
-    </div>
 
-    <!-- =====================================================
-     3D — TABLE MANAGEMENT CONTROLS
-===================================================== -->
+        <!-- =====================================================
+             TABLE MANAGEMENT
+        ===================================================== -->
 
-<div class="table-management">
+        <div class="table-management">
 
-    <h3>
-        Table Management
-    </h3>
+            <h3>
+                Table Management
+            </h3>
 
-    <div class="table-management-buttons">
+            <div class="table-management-buttons">
 
-        <button
-            type="button"
-            class="table-manage-btn add-table-btn"
-            onclick="openAddTableModal()"
-        >
-            ➕ Add Table
-        </button>
+                <button
+                    type="button"
+                    class="table-manage-btn add-table-btn"
+                    onclick="openAddTableModal()"
+                >
+                    ➕ Add Table
+                </button>
 
-        <button
-            type="button"
-            class="table-manage-btn edit-table-btn"
-            onclick="openEditTableModal()"
-        >
-            ✏️ Edit Selected
-        </button>
+                <button
+                    type="button"
+                    class="table-manage-btn edit-table-btn"
+                    onclick="openEditTableModal()"
+                >
+                    ✏️ Edit Selected
+                </button>
 
-        <button
-            type="button"
-            class="table-manage-btn delete-table-btn"
-            onclick="deleteSelectedTable()"
-        >
-            🗑️ Delete Selected
-        </button>
+                <button
+                    type="button"
+                    class="table-manage-btn delete-table-btn"
+                    onclick="deleteSelectedTable()"
+                >
+                    🗑️ Delete Selected
+                </button>
 
-    </div>
-
-</div>
-
-<!-- =====================================================
-     3D — TABLE MODAL
-===================================================== -->
-
-<div
-    id="table-modal"
-    class="table-modal"
-    style="display: none;"
->
-
-    <div class="table-modal-content">
-
-        <h2 id="table-modal-title">
-            Add Table
-        </h2>
-
-        <input
-            type="number"
-            id="table-number-input"
-            placeholder="Enter table number"
-            min="1"
-        >
-
-        <div class="table-modal-actions">
-
-            <button
-                type="button"
-                onclick="saveTable()"
-            >
-                Save
-            </button>
-
-            <button
-                type="button"
-                onclick="closeTableModal()"
-            >
-                Cancel
-            </button>
+            </div>
 
         </div>
 
     </div>
 
-</div>
 
-    
+    <!-- =====================================================
+         TABLE MODAL
+    ===================================================== -->
+
+    <div
+        id="table-modal"
+        class="table-modal"
+    >
+
+        <div class="table-modal-content">
+
+            <h2 id="table-modal-title">
+                Add Table
+            </h2>
+
+            <input
+                type="number"
+                id="table-number-input"
+                placeholder="Enter table number"
+                min="1"
+            >
+
+            <div class="table-modal-actions">
+
+                <button
+                    type="button"
+                    onclick="saveTable()"
+                >
+                    Save
+                </button>
+
+                <button
+                    type="button"
+                    onclick="closeTableModal()"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
     <!-- =================================================
          CART SECTION
     ================================================= -->
@@ -2397,121 +2056,199 @@ h2 {
 
         <div class="summary">
 
+            <div class="billing-summary">
 
-            <!-- SUBTOTAL -->
-
-            <div class="summary-row">
-
-                <span>
-                    Subtotal
-                </span>
-
-                <span id="subtotal">
-                    Rs. 0
-                </span>
-
-            </div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">Rs. 0.00</strong>
+                </div>
 
 
-            <!-- DISCOUNT -->
+                <div class="summary-row">
 
-            <div class="summary-row">
+                    <span>
+                        Discount
+                    </span>
 
-                <span>
-                    Discount
-                </span>
+                    <div class="billing-input">
 
-                <span>
-                    Rs. 0
-                </span>
+                        <span>
+                            Rs.
+                        </span>
 
-            </div>
+                        <input
+                            type="number"
+                            id="discount-input"
+                            value="0"
+                            min="0"
+                            step="0.01"
+                            oninput="updateCart()"
+                        >
 
-
-            <!-- TOTAL -->
-
-            <div class="summary-row total">
-
-                <span>
-                    Total
-                </span>
-
-                <span id="total">
-                    Rs. 0
-                </span>
-
-            </div>
-
-
-            <!-- PAYMENT -->
-
-            <div class="payment-section">
-
-                <h3>
-                    Payment Method
-                </h3>
-
-
-                <div class="payment-methods">
-
-
-                    <button
-                        type="button"
-                        class="payment-btn active"
-                        onclick="selectPaymentMethod(
-                            'cash',
-                            this
-                        )"
-                    >
-                        💵 Cash
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="payment-btn"
-                        onclick="selectPaymentMethod(
-                            'card',
-                            this
-                        )"
-                    >
-                        💳 Card
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="payment-btn"
-                        onclick="selectPaymentMethod(
-                            'online',
-                            this
-                        )"
-                    >
-                        🌐 Online
-                    </button>
-
+                    </div>
 
                 </div>
 
+
+                <div class="summary-row">
+
+                    <span>
+                        GST / Sales Tax (5%)
+                    </span>
+
+                    <strong id="tax">
+                        Rs. 0.00
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Service Charge
+                    </span>
+
+                    <strong id="service-charge">
+                        Rs. 400.00
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row total">
+
+                    <span>
+                        Grand Total
+                    </span>
+
+                    <strong id="total">
+                        Rs. 400.00
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row payment-row">
+
+                    <span>
+                        Paid Amount
+                    </span>
+
+                    <div class="billing-input">
+
+                        <span>
+                            Rs.
+                        </span>
+
+                        <input
+                            type="number"
+                            id="paid-amount"
+                            value="0"
+                            min="0"
+                            step="0.01"
+                            oninput="validatePayment()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Payment Status
+                    </span>
+
+                    <strong id="payment-status">
+                        Unpaid
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Change / Return
+                    </span>
+
+                    <strong id="change-amount">
+                        Rs. 0.00
+                    </strong>
+
+                </div>
+
+
+                <!-- PAYMENT METHOD -->
+
+                <div class="payment-section">
+
+                    <h3>
+                        Payment Method
+                    </h3>
+
+
+                    <div class="payment-methods">
+
+                        <button
+                            type="button"
+                            class="payment-btn active"
+                            onclick="selectPaymentMethod(
+                                'cash',
+                                this
+                            )"
+                        >
+                            💵 Cash
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="payment-btn"
+                            onclick="selectPaymentMethod(
+                                'card',
+                                this
+                            )"
+                        >
+                            💳 Card
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="payment-btn"
+                            onclick="selectPaymentMethod(
+                                'online',
+                                this
+                            )"
+                        >
+                            🌐 Online
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHECKOUT -->
+
+                <button
+                    type="button"
+                    class="checkout"
+                    onclick="checkout()"
+                >
+                    Checkout
+                </button>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
             </div>
-
-
-            <!-- CHECKOUT -->
-
-            <button
-                type="button"
-                class="checkout"
-                onclick="checkout()"
-            >
-                Checkout
-            </button>
-
-
-            <div
-                id="message"
-                class="message"
-            ></div>
-
 
         </div>
 
@@ -2541,8 +2278,6 @@ h2 {
             <div class="order-card">
 
 
-                <!-- ORDER HEADER -->
-
                 <div class="order-header">
 
                     <div class="order-number">
@@ -2550,18 +2285,37 @@ h2 {
                     </div>
 
 
-                    <span class="status-badge status-{{ order.status }}">
-
+                    <span
+                        class="status-badge status-{{ order.status }}"
+                    >
                         {{ order.get_status_display }}
-
                     </span>
 
                 </div>
 
 
-                <!-- ORDER INFORMATION -->
-
                 <div class="order-info">
+
+                    {% if order.customer_name %}
+
+                        Customer:
+
+                        <strong>
+                            {{ order.customer_name }}
+                        </strong>
+
+                        <br>
+
+                        Phone:
+
+                        <strong>
+                            {{ order.customer_phone }}
+                        </strong>
+
+                        <br>
+
+                    {% endif %}
+
 
                     Type:
 
@@ -2613,8 +2367,6 @@ h2 {
                 </div>
 
 
-                <!-- ORDER ITEMS -->
-
                 <div class="order-items">
 
 
@@ -2645,19 +2397,15 @@ h2 {
 
                     {% empty %}
 
-
                         <p>
                             No items.
                         </p>
-
 
                     {% endfor %}
 
 
                 </div>
 
-
-                <!-- TOTAL -->
 
                 <div class="order-total">
 
@@ -2672,8 +2420,6 @@ h2 {
 
                 </div>
 
-
-                <!-- STATUS BUTTONS -->
 
                 <div class="status-buttons">
 
@@ -2761,8 +2507,6 @@ h2 {
                 </div>
 
 
-                <!-- KOT / BILL -->
-
                 <div class="order-actions">
 
 
@@ -2825,6 +2569,17 @@ let selectedOrderType = "dine_in";
 
 let selectedPaymentMethod = "cash";
 
+let editingTableId = null;
+
+
+/* =========================================================
+   FIXED BILLING DEFAULTS
+========================================================= */
+
+const SALES_TAX_RATE = 0.05;
+
+const SERVICE_CHARGE = 400;
+
 
 /* =========================================================
    ORDER TYPE
@@ -2834,74 +2589,61 @@ function selectOrderType(orderType, button) {
 
     selectedOrderType = orderType;
 
-
-    document
-        .querySelectorAll(".order-type-btn")
-        .forEach(function(btn) {
-
+    document.querySelectorAll(".order-type-btn").forEach(
+        function(btn) {
             btn.classList.remove("active");
-
-        });
-
+        }
+    );
 
     if (button) {
-
         button.classList.add("active");
-
     }
-
 
     const typeText =
         document.getElementById(
             "selected-order-type"
         );
 
-
-    if (typeText) {
-
-        if (orderType === "takeaway") {
-
-            typeText.innerText =
-                "Takeaway";
-
-        } else {
-
-            typeText.innerText =
-                "Dine In";
-
-        }
-
-    }
-
-
     const tableSection =
         document.getElementById(
             "table-section"
         );
-
 
     const tableRow =
         document.getElementById(
             "selected-table-row"
         );
 
+    const selectedTableElement =
+        document.getElementById(
+            "selected-table"
+        );
+
+
+    if (typeText) {
+
+        typeText.innerText =
+            orderType === "takeaway"
+                ? "Takeaway"
+                : "Dine In";
+    }
+
 
     if (orderType === "takeaway") {
 
         selectedTable = null;
 
+        if (selectedTableElement) {
 
-        document.getElementById(
-            "selected-table"
-        ).innerText =
-            "Not Required";
+            selectedTableElement.innerText =
+                "Not Required";
+        }
 
 
         if (tableSection) {
 
             tableSection.style.display =
                 "none";
-
         }
 
 
@@ -2909,8 +2651,19 @@ function selectOrderType(orderType, button) {
 
             tableRow.style.display =
                 "none";
-
         }
+
+
+        document
+            .querySelectorAll(".table-btn")
+            .forEach(function(btn) {
+
+                btn.classList.remove(
+                    "selected"
+                );
+
+            });
+
 
     } else {
 
@@ -2918,7 +2671,6 @@ function selectOrderType(orderType, button) {
 
             tableSection.style.display =
                 "block";
-
         }
 
 
@@ -2926,14 +2678,14 @@ function selectOrderType(orderType, button) {
 
             tableRow.style.display =
                 "block";
-
         }
 
 
-        document.getElementById(
-            "selected-table"
-        ).innerText =
-            "None";
+        if (selectedTableElement) {
+
+            selectedTableElement.innerText =
+                "None";
+        }
 
     }
 
@@ -2944,26 +2696,33 @@ function selectOrderType(orderType, button) {
    PAYMENT METHOD
 ========================================================= */
 
-function selectPaymentMethod(method, button) {
+function selectPaymentMethod(
+    method,
+    button
+) {
 
     selectedPaymentMethod = method;
-
 
     document
         .querySelectorAll(".payment-btn")
         .forEach(function(btn) {
 
-            btn.classList.remove("active");
+            btn.classList.remove(
+                "active"
+            );
 
         });
 
 
     if (button) {
 
-        button.classList.add("active");
-
+        button.classList.add(
+            "active"
+        );
     }
 
+
+    validatePayment();
 }
 
 
@@ -2978,16 +2737,9 @@ function getCSRFToken() {
             "[name=csrfmiddlewaretoken]"
         );
 
-
-    if (!csrfInput) {
-
-        return "";
-
-    }
-
-
-    return csrfInput.value;
-
+    return csrfInput
+        ? csrfInput.value
+        : "";
 }
 
 
@@ -2995,49 +2747,58 @@ function getCSRFToken() {
    MESSAGE
 ========================================================= */
 
-function showMessage(message, type) {
+function showMessage(
+    message,
+    type
+) {
 
     const messageBox =
         document.getElementById(
             "message"
         );
 
-
     if (!messageBox) {
-
         return;
-
     }
 
 
     messageBox.innerText =
         message;
 
-
     messageBox.className =
         "message " + type;
 
 
-    setTimeout(function() {
+    clearTimeout(
+        window.messageTimer
+    );
 
-        messageBox.className =
-            "message";
 
-    }, 4000);
+    window.messageTimer =
+        setTimeout(function() {
 
+            messageBox.className =
+                "message";
+
+        }, 4000);
 }
 
 
 /* =========================================================
-   SELECT TABLE
+   TABLE SELECTION
 ========================================================= */
 
-function selectTable(id, number, button) {
+function selectTable(
+    id,
+    number,
+    button
+) {
 
-    if (selectedOrderType !== "dine_in") {
-
+    if (
+        selectedOrderType !==
+        "dine_in"
+    ) {
         return;
-
     }
 
 
@@ -3054,7 +2815,6 @@ function selectTable(id, number, button) {
 
         selectedTableElement.innerText =
             "Table " + number;
-
     }
 
 
@@ -3062,22 +2822,25 @@ function selectTable(id, number, button) {
         .querySelectorAll(".table-btn")
         .forEach(function(btn) {
 
-            btn.classList.remove("selected");
+            btn.classList.remove(
+                "selected"
+            );
 
         });
 
 
     if (button) {
 
-        button.classList.add("selected");
-
+        button.classList.add(
+            "selected"
+        );
     }
 
 }
 
 
 /* =========================================================
-   SHOW ALL
+   MENU FILTER
 ========================================================= */
 
 function showAll(button) {
@@ -3086,7 +2849,8 @@ function showAll(button) {
         .querySelectorAll(".menu-item")
         .forEach(function(item) {
 
-            item.style.display = "";
+            item.style.display =
+                "";
 
         });
 
@@ -3095,48 +2859,38 @@ function showAll(button) {
         .querySelectorAll(".category-btn")
         .forEach(function(btn) {
 
-            btn.classList.remove("active");
+            btn.classList.remove(
+                "active"
+            );
 
         });
 
 
     if (button) {
 
-        button.classList.add("active");
-
+        button.classList.add(
+            "active"
+        );
     }
 
 }
 
 
-/* =========================================================
-   FILTER CATEGORY
-========================================================= */
-
-function filterCategory(categoryId, button) {
+function filterCategory(
+    categoryId,
+    button
+) {
 
     document
         .querySelectorAll(".menu-item")
         .forEach(function(item) {
 
-            const itemCategory =
+            item.style.display =
                 String(
                     item.dataset.category
-                );
-
-
-            if (
-                itemCategory ===
-                String(categoryId)
-            ) {
-
-                item.style.display = "";
-
-            } else {
-
-                item.style.display = "none";
-
-            }
+                ) === String(categoryId)
+                    ? ""
+                    : "none";
 
         });
 
@@ -3145,31 +2899,38 @@ function filterCategory(categoryId, button) {
         .querySelectorAll(".category-btn")
         .forEach(function(btn) {
 
-            btn.classList.remove("active");
+            btn.classList.remove(
+                "active"
+            );
 
         });
 
 
     if (button) {
 
-        button.classList.add("active");
-
+        button.classList.add(
+            "active"
+        );
     }
 
 }
 
 
 /* =========================================================
-   ADD TO CART
+   CART
 ========================================================= */
 
-function addToCart(id, name, price) {
+function addToCart(
+    id,
+    name,
+    price
+) {
 
     const numericPrice =
-        Number(price);
+        Number(price) || 0;
 
 
-    let existingItem =
+    const existingItem =
         cart.find(function(item) {
 
             return item.id === id;
@@ -3199,12 +2960,50 @@ function addToCart(id, name, price) {
 
 
     updateCart();
+}
 
+
+function increaseItem(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity += 1;
+
+    updateCart();
+}
+
+
+function decreaseItem(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity -= 1;
+
+
+    if (
+        cart[index].quantity <= 0
+    ) {
+
+        cart.splice(
+            index,
+            1
+        );
+
+    }
+
+
+    updateCart();
 }
 
 
 /* =========================================================
-   UPDATE CART
+   BILLING CALCULATION
 ========================================================= */
 
 function updateCart() {
@@ -3216,175 +3015,327 @@ function updateCart() {
 
 
     if (!cartContainer) {
-
         return;
-
     }
 
-
-    if (cart.length === 0) {
-
-        cartContainer.innerHTML =
-            '<div class="empty">Cart is empty</div>';
-
-
-        document.getElementById(
-            "subtotal"
-        ).innerText =
-            "Rs. 0";
-
-
-        document.getElementById(
-            "total"
-        ).innerText =
-            "Rs. 0";
-
-
-        return;
-
-    }
-
-
-    let html = "";
 
     let subtotal = 0;
 
-
-    cart.forEach(function(item, index) {
-
-        const itemTotal =
-            item.price *
-            item.quantity;
+    let html = "";
 
 
-        subtotal += itemTotal;
+    cart.forEach(
+        function(item, index) {
+
+            const itemTotal =
+                item.price *
+                item.quantity;
 
 
-        html += `
-
-            <div class="cart-item">
-
-                <div>
-
-                    <strong>
-                        ${escapeHTML(item.name)}
-                    </strong>
-
-                    <br>
-
-                    Rs. ${item.price}
-                    ×
-                    ${item.quantity}
-
-                </div>
+            subtotal += itemTotal;
 
 
-                <div class="quantity">
+            html += `
 
-                    <button
-                        type="button"
-                        onclick="decreaseItem(${index})"
-                    >
-                        −
-                    </button>
+                <div class="cart-item">
 
+                    <div>
 
-                    <strong>
+                        <strong>
+                            ${escapeHTML(item.name)}
+                        </strong>
+
+                        <br>
+
+                        Rs.
+                        ${item.price.toFixed(2)}
+                        ×
                         ${item.quantity}
-                    </strong>
+
+                    </div>
 
 
-                    <button
-                        type="button"
-                        onclick="increaseItem(${index})"
-                    >
-                        +
-                    </button>
+                    <div class="quantity">
+
+                        <button
+                            type="button"
+                            onclick="decreaseItem(${index})"
+                        >
+                            −
+                        </button>
+
+
+                        <strong>
+                            ${item.quantity}
+                        </strong>
+
+
+                        <button
+                            type="button"
+                            onclick="increaseItem(${index})"
+                        >
+                            +
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+            `;
 
-        `;
-
-    });
+        }
+    );
 
 
     cartContainer.innerHTML =
-        html;
+        html ||
+        '<div class="empty">Cart is empty</div>';
 
 
-    document.getElementById(
-        "subtotal"
-    ).innerText =
-        "Rs. " + subtotal;
+    const discountInput =
+        document.getElementById(
+            "discount-input"
+        );
 
 
-    document.getElementById(
-        "total"
-    ).innerText =
-        "Rs. " + subtotal;
+    let discount =
+        discountInput
+            ? Number(
+                discountInput.value
+              ) || 0
+            : 0;
+
+
+    discount =
+        Math.max(
+            0,
+            Math.min(
+                discount,
+                subtotal
+            )
+        );
+
+
+    if (discountInput) {
+
+        discountInput.value =
+            discount;
+    }
+
+
+    const taxableAmount =
+        subtotal - discount;
+
+
+    const taxAmount =
+        taxableAmount *
+        SALES_TAX_RATE;
+
+
+    /*
+       FIXED SERVICE CHARGE
+       Rs. 400
+    */
+
+    const serviceAmount =
+        subtotal > 0
+            ? SERVICE_CHARGE
+            : 0;
+
+
+    const grandTotal =
+        taxableAmount +
+        taxAmount +
+        serviceAmount;
+
+
+    setText(
+        "subtotal",
+        "Rs. " +
+        subtotal.toFixed(2)
+    );
+
+
+    setText(
+        "tax",
+        "Rs. " +
+        taxAmount.toFixed(2)
+    );
+
+
+    setText(
+        "service-charge",
+        "Rs. " +
+        serviceAmount.toFixed(2)
+    );
+
+
+    setText(
+        "total",
+        "Rs. " +
+        grandTotal.toFixed(2)
+    );
+
+
+    window.currentBilling = {
+
+        subtotal:
+            subtotal,
+
+        discount:
+            discount,
+
+        tax:
+            taxAmount,
+
+        service_charge:
+            serviceAmount,
+
+        total:
+            grandTotal
+
+    };
+
+
+    validatePayment();
 
 }
 
 
 /* =========================================================
-   INCREASE ITEM
+   SET TEXT
 ========================================================= */
 
-function increaseItem(index) {
+function setText(
+    id,
+    value
+) {
 
-    if (!cart[index]) {
+    const element =
+        document.getElementById(id);
 
-        return;
 
+    if (element) {
+
+        element.innerText =
+            value;
     }
-
-
-    cart[index].quantity += 1;
-
-
-    updateCart();
 
 }
 
 
 /* =========================================================
-   DECREASE ITEM
+   PAYMENT VALIDATION
 ========================================================= */
 
-function decreaseItem(index) {
+function validatePayment() {
 
-    if (!cart[index]) {
+    const paidInput =
+        document.getElementById(
+            "paid-amount"
+        );
+
+
+    const statusElement =
+        document.getElementById(
+            "payment-status"
+        );
+
+
+    const changeElement =
+        document.getElementById(
+            "change-amount"
+        );
+
+
+    if (
+        !paidInput ||
+        !statusElement ||
+        !changeElement
+    ) {
+        return;
+    }
+
+
+    const total =
+        window.currentBilling
+            ? Number(
+                window.currentBilling.total
+              ) || 0
+            : 0;
+
+
+    let paid =
+        Number(
+            paidInput.value
+        ) || 0;
+
+
+    if (paid < 0) {
+
+        paid = 0;
+
+        paidInput.value =
+            "0";
+    }
+
+
+    if (total <= 0) {
+
+        statusElement.innerText =
+            "Unpaid";
+
+        statusElement.style.color =
+            "#b45309";
+
+        changeElement.innerText =
+            "Rs. 0.00";
 
         return;
-
     }
 
 
-    cart[index].quantity -= 1;
+    if (paid >= total) {
+
+        statusElement.innerText =
+            "Paid";
+
+        statusElement.style.color =
+            "#166534";
 
 
-    if (cart[index].quantity <= 0) {
+        changeElement.innerText =
+            "Rs. " +
+            (
+                paid - total
+            ).toFixed(2);
 
-        cart.splice(index, 1);
+    } else {
 
+        statusElement.innerText =
+            "Unpaid";
+
+        statusElement.style.color =
+            "#b45309";
+
+
+        changeElement.innerText =
+            "Rs. 0.00";
     }
-
-
-    updateCart();
 
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   HTML ESCAPE
 ========================================================= */
 
 function escapeHTML(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     div.textContent =
@@ -3392,7 +3343,6 @@ function escapeHTML(text) {
 
 
     return div.innerHTML;
-
 }
 
 
@@ -3410,12 +3360,12 @@ function checkout() {
         );
 
         return;
-
     }
 
 
     if (
-        selectedOrderType === "dine_in" &&
+        selectedOrderType ===
+        "dine_in" &&
         !selectedTable
     ) {
 
@@ -3425,7 +3375,57 @@ function checkout() {
         );
 
         return;
+    }
 
+
+    const billing =
+        window.currentBilling || {
+
+            subtotal: 0,
+
+            discount: 0,
+
+            tax: 0,
+
+            service_charge: 0,
+
+            total: 0
+
+        };
+
+
+    const paidInput =
+        document.getElementById(
+            "paid-amount"
+        );
+
+
+    const paidAmount =
+        paidInput
+            ? Number(
+                paidInput.value
+              ) || 0
+            : 0;
+
+
+    if (
+        billing.total > 0 &&
+        paidAmount < billing.total
+    ) {
+
+        showMessage(
+            "Paid Amount is less than Grand Total.",
+            "error"
+        );
+
+
+        if (paidInput) {
+
+            paidInput.focus();
+        }
+
+
+        return;
     }
 
 
@@ -3433,6 +3433,11 @@ function checkout() {
         document.querySelector(
             ".checkout"
         );
+
+
+    if (!checkoutButton) {
+        return;
+    }
 
 
     checkoutButton.disabled =
@@ -3443,31 +3448,61 @@ function checkout() {
         "Processing...";
 
 
+    /*
+       Billing values are now sent
+       to the backend as well.
+    */
+
     const orderData = {
 
         table_id:
             selectedTable,
 
         items:
-            cart.map(function(item) {
+            cart.map(
+                function(item) {
 
-                return {
+                    return {
 
-                    id:
-                        item.id,
+                        id:
+                            item.id,
 
-                    quantity:
-                        item.quantity
+                        quantity:
+                            item.quantity
 
-                };
+                    };
 
-            }),
+                }
+            ),
 
         order_type:
             selectedOrderType,
 
         payment_method:
-            selectedPaymentMethod
+            selectedPaymentMethod,
+
+        subtotal:
+            billing.subtotal,
+
+        discount:
+            billing.discount,
+
+        tax:
+            billing.tax,
+
+        service_charge:
+            billing.service_charge,
+
+        total:
+            billing.total,
+
+        paid_amount:
+            paidAmount,
+
+        payment_status:
+            paidAmount >= billing.total
+                ? "paid"
+                : "unpaid"
 
     };
 
@@ -3476,7 +3511,8 @@ function checkout() {
         "{% url 'create_order' %}",
         {
 
-            method: "POST",
+            method:
+                "POST",
 
             headers: {
 
@@ -3492,93 +3528,118 @@ function checkout() {
             },
 
             body:
-                JSON.stringify(orderData)
+                JSON.stringify(
+                    orderData
+                )
 
         }
     )
 
 
-    .then(function(response) {
+    .then(
+        function(response) {
 
-        return response.json();
+            if (!response.ok) {
 
-    })
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+            return response.json();
+
+        }
+    )
 
 
-    .then(function(data) {
+    .then(
+        function(data) {
 
-        if (data.success) {
+            if (data.success) {
 
-            showMessage(
-                "Order created successfully!",
-                "success"
+                showMessage(
+                    "Order created successfully!",
+                    "success"
+                );
+
+
+                cart = [];
+
+                selectedTable =
+                    null;
+
+
+                updateCart();
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "{% url 'order_success' 0 %}"
+                            .replace(
+                                "/0/",
+                                "/" +
+                                data.order_id +
+                                "/"
+                            );
+
+                    },
+                    800
+                );
+
+
+            } else {
+
+                showMessage(
+                    data.message ||
+                    "Could not create order.",
+                    "error"
+                );
+
+            }
+
+        }
+    )
+
+
+    .catch(
+        function(error) {
+
+            console.error(
+                "Checkout error:",
+                error
             );
 
 
-            cart = [];
-
-
-            updateCart();
-
-
-            setTimeout(function() {
-
-                window.location.href =
-                    "{% url 'order_success' 0 %}"
-                    .replace(
-                        "/0/",
-                        "/" +
-                        data.order_id +
-                        "/"
-                    );
-
-            }, 800);
-
-
-        } else {
-
             showMessage(
-                data.message ||
-                "Could not create order.",
+                "Server error. Please try again.",
                 "error"
             );
 
         }
-
-    })
-
-
-    .catch(function(error) {
-
-        console.error(
-            "Checkout error:",
-            error
-        );
+    )
 
 
-        showMessage(
-            "Server error. Please try again.",
-            "error"
-        );
+    .finally(
+        function() {
 
-    })
+            checkoutButton.disabled =
+                false;
 
+            checkoutButton.innerText =
+                "Checkout";
 
-    .finally(function() {
-
-        checkoutButton.disabled =
-            false;
-
-        checkoutButton.innerText =
-            "Checkout";
-
-    });
+        }
+    );
 
 }
 
 
 /* =========================================================
-   UPDATE ORDER STATUS
+   ORDER STATUS
 ========================================================= */
 
 function updateOrderStatus(
@@ -3586,32 +3647,22 @@ function updateOrderStatus(
     newStatus
 ) {
 
-    if (!orderId) {
-
+    if (
+        !orderId ||
+        !newStatus
+    ) {
         return;
-
     }
 
 
-    if (!newStatus) {
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
+    if (
+        !confirm(
             "Change order status to " +
             newStatus +
             "?"
-        );
-
-
-    if (!confirmed) {
-
+        )
+    ) {
         return;
-
     }
 
 
@@ -3629,7 +3680,8 @@ function updateOrderStatus(
         statusUrl,
         {
 
-            method: "POST",
+            method:
+                "POST",
 
             headers: {
 
@@ -3646,118 +3698,125 @@ function updateOrderStatus(
 
             body:
                 JSON.stringify({
-
                     status:
                         newStatus
-
                 })
 
         }
     )
 
 
-    .then(function(response) {
+    .then(
+        function(response) {
 
-        return response.json();
+            if (!response.ok) {
 
-    })
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+            return response.json();
+
+        }
+    )
 
 
-    .then(function(data) {
+    .then(
+        function(data) {
 
-        if (data.success) {
+            if (data.success) {
 
-            window.location.reload();
+                window.location.reload();
 
-        } else {
+            } else {
+
+                alert(
+                    data.message ||
+                    "Could not update order status."
+                );
+
+            }
+
+        }
+    )
+
+
+    .catch(
+        function(error) {
+
+            console.error(
+                "Status update error:",
+                error
+            );
+
 
             alert(
-                data.message ||
-                "Could not update order status."
+                "Server error while updating order status."
             );
 
         }
-
-    })
-
-
-    .catch(function(error) {
-
-        console.error(
-            "Status update error:",
-            error
-        );
-
-
-        alert(
-            "Server error while updating order status."
-        );
-
-    });
+    );
 
 }
 
 
 /* =========================================================
-   PAGE LOADED
-========================================================= */
-
-console.log(
-    "SIGNATURE — Jawad Khan Bistro POS loaded successfully."
-);
-
-/* =========================================================
-   3D — TABLE MANAGEMENT
-========================================================= */
-
-let editingTableId = null;
-
-
-/* =========================================================
-   OPEN ADD TABLE MODAL
+   TABLE MANAGEMENT
 ========================================================= */
 
 function openAddTableModal() {
 
-    editingTableId = null;
+    editingTableId =
+        null;
+
 
     const modal =
         document.getElementById(
             "table-modal"
         );
 
+
     const title =
         document.getElementById(
             "table-modal-title"
         );
+
 
     const input =
         document.getElementById(
             "table-number-input"
         );
 
-    if (!modal || !title || !input) {
 
+    if (
+        !modal ||
+        !title ||
+        !input
+    ) {
         return;
-
     }
+
 
     title.innerText =
         "Add Table";
 
-    input.value = "";
 
-    modal.style.display =
-        "flex";
+    input.value =
+        "";
+
+
+    modal.classList.add(
+        "active"
+    );
+
 
     input.focus();
 
 }
 
-
-/* =========================================================
-   OPEN EDIT TABLE MODAL
-========================================================= */
 
 function openEditTableModal() {
 
@@ -3769,22 +3828,71 @@ function openEditTableModal() {
         );
 
         return;
-
     }
 
-    editingTableId =
-        selectedTable;
 
     const selectedButton =
         document.querySelector(
             ".table-btn.selected"
         );
 
+
     if (!selectedButton) {
 
-        return;
+        showMessage(
+            "Please select an available table first.",
+            "error"
+        );
 
+        return;
     }
+
+
+    if (
+        selectedButton.classList.contains(
+            "occupied"
+        )
+    ) {
+
+        showMessage(
+            "Occupied table cannot be edited.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    editingTableId =
+        selectedTable;
+
+
+    const modal =
+        document.getElementById(
+            "table-modal"
+        );
+
+
+    const title =
+        document.getElementById(
+            "table-modal-title"
+        );
+
+
+    const input =
+        document.getElementById(
+            "table-number-input"
+        );
+
+
+    if (
+        !modal ||
+        !title ||
+        !input
+    ) {
+        return;
+    }
+
 
     const tableNumber =
         selectedButton.innerText
@@ -3794,44 +3902,26 @@ function openEditTableModal() {
             )
             .trim();
 
-    const modal =
-        document.getElementById(
-            "table-modal"
-        );
-
-    const title =
-        document.getElementById(
-            "table-modal-title"
-        );
-
-    const input =
-        document.getElementById(
-            "table-number-input"
-        );
-
-    if (!modal || !title || !input) {
-
-        return;
-
-    }
 
     title.innerText =
         "Edit Table";
 
+
     input.value =
         tableNumber;
 
-    modal.style.display =
-        "flex";
+
+    modal.classList.add(
+        "active"
+    );
+
 
     input.focus();
 
+    input.select();
+
 }
 
-
-/* =========================================================
-   CLOSE TABLE MODAL
-========================================================= */
 
 function closeTableModal() {
 
@@ -3840,22 +3930,21 @@ function closeTableModal() {
             "table-modal"
         );
 
+
     if (modal) {
 
-        modal.style.display =
-            "none";
+        modal.classList.remove(
+            "active"
+        );
 
     }
+
 
     editingTableId =
         null;
 
 }
 
-
-/* =========================================================
-   SAVE TABLE
-========================================================= */
 
 function saveTable() {
 
@@ -3864,77 +3953,71 @@ function saveTable() {
             "table-number-input"
         );
 
+
     if (!input) {
-
         return;
-
     }
 
-    const tableNumber =
-        input.value.trim();
-
-    if (!tableNumber) {
-
-        alert(
-            "Please enter table number."
-        );
-
-        input.focus();
-
-        return;
-
-    }
 
     const number =
-        Number(tableNumber);
+        Number(input.value);
+
 
     if (
         !Number.isInteger(number) ||
         number < 1
     ) {
 
-        alert(
-            "Please enter a valid table number."
+        showMessage(
+            "Please enter a valid table number.",
+            "error"
         );
+
 
         input.focus();
 
         return;
-
     }
 
 
-    let url = "";
-
-    let method = "POST";
+    let url;
 
 
-    /* =====================================================
-       ADD TABLE
-    ===================================================== */
-
-    if (!editingTableId) {
+    if (
+        editingTableId ===
+        null
+    ) {
 
         url =
             "{% url 'add_table' %}";
 
-    }
-
-
-    /* =====================================================
-       EDIT TABLE
-    ===================================================== */
-
-    else {
+    } else {
 
         url =
             "{% url 'edit_table' 0 %}"
-                .replace(
-                    "/0/",
-                    "/" +
-                    editingTableId +
-                    "/"
-                );
+            .replace(
+                "/0/",
+                "/" +
+                editingTableId +
+                "/"
+            );
+
+    }
+
+
+    const saveButton =
+        document.querySelector(
+            ".table-modal-actions button:first-child"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled =
+            true;
+
+        saveButton.innerText =
+            "Saving...";
 
     }
 
@@ -3944,7 +4027,7 @@ function saveTable() {
         {
 
             method:
-                method,
+                "POST",
 
             headers: {
 
@@ -3961,71 +4044,107 @@ function saveTable() {
 
             body:
                 JSON.stringify({
-
                     number:
                         number
-
                 })
 
         }
     )
 
-    .then(function(response) {
 
-        return response.json();
+    .then(
+        function(response) {
 
-    })
+            if (!response.ok) {
 
-    .then(function(data) {
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
 
-        if (data.success) {
+            }
 
-            closeTableModal();
+            return response.json();
 
-            showMessage(
-                data.message ||
-                "Table saved successfully.",
-                "success"
+        }
+    )
+
+
+    .then(
+        function(data) {
+
+            if (data.success) {
+
+                closeTableModal();
+
+
+                showMessage(
+                    data.message ||
+                    "Table saved successfully.",
+                    "success"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.reload();
+
+                    },
+                    500
+                );
+
+
+            } else {
+
+                showMessage(
+                    data.message ||
+                    "Could not save table.",
+                    "error"
+                );
+
+            }
+
+        }
+    )
+
+
+    .catch(
+        function(error) {
+
+            console.error(
+                "Table save error:",
+                error
             );
 
-            setTimeout(function() {
-
-                window.location.reload();
-
-            }, 500);
-
-        } else {
 
             showMessage(
-                data.message ||
-                "Could not save table.",
+                "Server error while saving table.",
                 "error"
             );
 
         }
+    )
 
-    })
 
-    .catch(function(error) {
+    .finally(
+        function() {
 
-        console.error(
-            "Table save error:",
-            error
-        );
+            if (saveButton) {
 
-        showMessage(
-            "Server error. Please try again.",
-            "error"
-        );
+                saveButton.disabled =
+                    false;
 
-    });
+                saveButton.innerText =
+                    "Save";
+
+            }
+
+        }
+    );
 
 }
 
-
-/* =========================================================
-   DELETE SELECTED TABLE
-========================================================= */
 
 function deleteSelectedTable() {
 
@@ -4037,7 +4156,6 @@ function deleteSelectedTable() {
         );
 
         return;
-
     }
 
 
@@ -4046,10 +4164,9 @@ function deleteSelectedTable() {
             ".table-btn.selected"
         );
 
+
     if (!selectedButton) {
-
         return;
-
     }
 
 
@@ -4065,7 +4182,6 @@ function deleteSelectedTable() {
         );
 
         return;
-
     }
 
 
@@ -4078,29 +4194,25 @@ function deleteSelectedTable() {
             .trim();
 
 
-    const confirmed =
-        confirm(
+    if (
+        !confirm(
             "Delete Table " +
             tableNumber +
             "?"
-        );
-
-
-    if (!confirmed) {
-
+        )
+    ) {
         return;
-
     }
 
 
     const deleteUrl =
         "{% url 'delete_table' 0 %}"
-            .replace(
-                "/0/",
-                "/" +
-                selectedTable +
-                "/"
-            );
+        .replace(
+            "/0/",
+            "/" +
+            selectedTable +
+            "/"
+        );
 
 
     fetch(
@@ -4126,62 +4238,87 @@ function deleteSelectedTable() {
         }
     )
 
-    .then(function(response) {
 
-        return response.json();
+    .then(
+        function(response) {
 
-    })
+            if (!response.ok) {
 
-    .then(function(data) {
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
 
-        if (data.success) {
+            }
 
-            selectedTable =
-                null;
+            return response.json();
 
-            showMessage(
-                data.message ||
-                "Table deleted successfully.",
-                "success"
+        }
+    )
+
+
+    .then(
+        function(data) {
+
+            if (data.success) {
+
+                selectedTable =
+                    null;
+
+
+                showMessage(
+                    data.message ||
+                    "Table deleted successfully.",
+                    "success"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.reload();
+
+                    },
+                    500
+                );
+
+
+            } else {
+
+                showMessage(
+                    data.message ||
+                    "Could not delete table.",
+                    "error"
+                );
+
+            }
+
+        }
+    )
+
+
+    .catch(
+        function(error) {
+
+            console.error(
+                "Table delete error:",
+                error
             );
 
-            setTimeout(function() {
-
-                window.location.reload();
-
-            }, 500);
-
-        } else {
 
             showMessage(
-                data.message ||
-                "Could not delete table.",
+                "Server error while deleting table.",
                 "error"
             );
 
         }
-
-    })
-
-    .catch(function(error) {
-
-        console.error(
-            "Table delete error:",
-            error
-        );
-
-        showMessage(
-            "Server error. Please try again.",
-            "error"
-        );
-
-    });
+    );
 
 }
 
 
 /* =========================================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
+   MODAL CONTROLS
 ========================================================= */
 
 document.addEventListener(
@@ -4193,6 +4330,7 @@ document.addEventListener(
                 "table-modal"
             );
 
+
         if (
             modal &&
             event.target === modal
@@ -4203,6 +4341,67 @@ document.addEventListener(
         }
 
     }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeTableModal();
+
+        }
+
+
+        if (
+            event.key ===
+            "Enter" &&
+            document
+                .getElementById(
+                    "table-modal"
+                )
+                ?.classList.contains(
+                    "active"
+                )
+        ) {
+
+            saveTable();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+window.currentBilling = {
+
+    subtotal: 0,
+
+    discount: 0,
+
+    tax: 0,
+
+    service_charge: 0,
+
+    total: 0
+
+};
+
+
+updateCart();
+
+
+console.log(
+    "SIGNATURE — Jawad Khan Bistro POS loaded successfully."
 );
 
 </script>

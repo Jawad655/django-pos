@@ -1,0 +1,270 @@
+{% extends "website/base.html" %}
+
+{% block title %}
+Order Confirmed | SIGNATURE
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .success-page {
+        min-height: 100vh;
+        padding: 150px 20px 90px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #0b0b0b;
+    }
+
+    .success-card {
+        width: min(620px, 100%);
+
+        padding: 55px 35px;
+
+        text-align: center;
+
+        background: #111111;
+
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 24px;
+    }
+
+    .success-icon {
+        width: 75px;
+        height: 75px;
+
+        margin: 0 auto 25px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: rgba(215,181,109,0.13);
+        border: 1px solid rgba(215,181,109,0.35);
+
+        color: #d7b56d;
+
+        font-size: 34px;
+        font-weight: 800;
+    }
+
+    .success-card .label {
+        display: block;
+
+        margin-bottom: 10px;
+
+        color: #d7b56d;
+
+        font-size: 12px;
+        font-weight: 800;
+
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .success-card h1 {
+        margin-bottom: 14px;
+
+        font-size: clamp(32px, 6vw, 52px);
+        line-height: 1.08;
+    }
+
+    .success-card > p {
+        margin-bottom: 28px;
+
+        color: #999999;
+
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .order-number {
+        margin: 25px 0;
+
+        padding: 18px;
+
+        border-radius: 14px;
+
+        background: #181818;
+
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .order-number span {
+        display: block;
+
+        margin-bottom: 6px;
+
+        color: #777777;
+
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .order-number strong {
+        color: #d7b56d;
+
+        font-size: 24px;
+    }
+
+    .success-total {
+        margin-bottom: 30px;
+
+        color: #bcbcbc;
+
+        font-size: 14px;
+    }
+
+    .success-total strong {
+        color: #ffffff;
+        font-size: 18px;
+    }
+
+    .success-actions {
+        display: flex;
+
+        justify-content: center;
+        flex-wrap: wrap;
+
+        gap: 12px;
+    }
+
+    .success-btn,
+    .success-btn-secondary {
+        min-height: 48px;
+
+        padding: 0 24px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 30px;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        transition: 0.3s ease;
+    }
+
+    .success-btn {
+        background: #d7b56d;
+        color: #111111;
+    }
+
+    .success-btn:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .success-btn-secondary {
+        border: 1px solid rgba(255,255,255,0.18);
+        color: #ffffff;
+    }
+
+    .success-btn-secondary:hover {
+        border-color: #d7b56d;
+        color: #d7b56d;
+    }
+
+    @media (max-width: 600px) {
+
+        .success-page {
+            padding-top: 120px;
+        }
+
+        .success-card {
+            padding: 42px 24px;
+        }
+
+        .success-actions {
+            flex-direction: column;
+        }
+
+        .success-btn,
+        .success-btn-secondary {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="success-page">
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <span class="label">
+            Order Confirmed
+        </span>
+
+        <h1>
+            Thank You!
+        </h1>
+
+        <p>
+            Your order has been received successfully.
+            Our team will start preparing it shortly.
+        </p>
+
+        <div class="order-number">
+
+            <span>
+                Order Number
+            </span>
+
+            <strong>
+                #{{ order.id }}
+            </strong>
+
+        </div>
+
+        <div class="success-total">
+
+            Order Total:
+            <strong>
+                Rs. {{ order.total }}
+            </strong>
+
+        </div>
+
+        <div class="success-actions">
+
+            <a
+                href="{% url 'website_order' %}"
+                class="success-btn">
+
+                Order Again
+
+            </a>
+
+            <a
+                href="{% url 'website_home' %}"
+                class="success-btn-secondary">
+
+                Back to Home
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

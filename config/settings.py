@@ -139,10 +139,22 @@ DATABASES = {
     "default": {
 
         "ENGINE":
-            "django.db.backends.sqlite3",
+            "django.db.backends.postgresql",
 
         "NAME":
-            BASE_DIR / "db.sqlite3",
+            "restaurantpos_db",
+
+        "USER":
+            "postgres",
+
+        "PASSWORD":
+            "1947",
+
+        "HOST":
+            "localhost",
+
+        "PORT":
+            "5432",
     }
 }
 

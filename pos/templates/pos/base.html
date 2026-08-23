@@ -1,4 +1,5 @@
 {% load static %}
+{% load role_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -331,6 +332,22 @@
 
         }
 
+        .header-btn.logout-btn {
+            background:linear-gradient(
+                135deg,
+                #dc2626,
+                #b91c1c
+            );
+       }
+
+        .header-btn.logout-btn:hover {
+            background:linear-gradient(
+                135deg,
+                #ef4444,
+                #dc2626
+            );
+        }
+
     </style>
 
 
@@ -377,12 +394,17 @@
                 </a>
 
 
-                <a
-                    href="{% url 'dashboard' %}"
-                    class="header-btn dark"
-                >
-                    📊 Dashboard
-                </a>
+                {% is_manager user as manager_access %}
+
+                {% if manager_access %}
+                  
+                    <a
+                      href="{% url 'dashboard' %}"
+                      class="header-btn dark"
+                    >
+                      📊 Dashboard
+                    </a>
+                {% endif %}
 
                 <a
                     href="{% url 'inventory' %}"
@@ -390,7 +412,13 @@
                 >
                     📦 Inventory
                 </a>
-
+                
+                <a
+                   href="{% url 'logout' %}"
+                   class="header-btn logout-btn"
+                >
+                    🚪 Logout
+                </a>
 
             </div>
 

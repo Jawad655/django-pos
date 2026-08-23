@@ -67,6 +67,20 @@
             background: #1d4ed8;
         }
 
+        .logout-btn {
+            text-decoration: none;
+            color: white;
+            background: #dc2626;
+            padding: 10px 16px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
         /* =====================================================
            CONTAINER
         ====================================================== */
@@ -558,6 +572,14 @@
 
             📊 Dashboard
 
+        </a>
+
+        <a
+            href="{% url 'logout' %}"
+            class="logout-btn"
+        >
+        
+            🚪 Logout
         </a>
 
     </div>

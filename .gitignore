@@ -1,9 +1,12 @@
 # Database
 db.sqlite3
 db.sqlite3-journal
+db_backup.sqlite3
 
-# Media files
-media/
+# Database dumps
+data_dump.json
+data_dump_utf8.json
+data_dump_clean.json
 
 # Virtual environment
 venv/
@@ -11,3 +14,23 @@ venv/
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Environment variables / secrets
+.env
+.env.*
+
+# Media files
+media/
+
+# Static collected files
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

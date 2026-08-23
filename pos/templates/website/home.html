@@ -1,0 +1,910 @@
+{% extends "website/base.html" %}
+
+{% load static %}
+
+{% block title %}
+SIGNATURE — Jawad Khan Bistro | Home
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .hero {
+        min-height: 100vh;
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        background:
+            linear-gradient(
+                rgba(0, 0, 0, 0.62),
+                rgba(0, 0, 0, 0.78)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .hero-content {
+        width: min(1200px, 92%);
+        margin: auto;
+
+        padding-top: 78px;
+    }
+
+    .hero-tag {
+        display: inline-block;
+
+        margin-bottom: 18px;
+
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+
+        color: #d7b56d;
+    }
+
+    .hero h1 {
+        max-width: 760px;
+
+        font-size: clamp(44px, 7vw, 82px);
+        line-height: 1.02;
+
+        margin-bottom: 22px;
+
+        font-weight: 800;
+        letter-spacing: -2px;
+    }
+
+    .hero h1 span {
+        color: #d7b56d;
+    }
+
+    .hero p {
+        max-width: 620px;
+
+        margin-bottom: 34px;
+
+        color: #d2d2d2;
+
+        font-size: 17px;
+        line-height: 1.8;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 50px;
+        padding: 0 28px;
+
+        border-radius: 30px;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        transition: 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #d7b56d;
+        color: #111111;
+    }
+
+    .btn-primary:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #ffffff;
+        background: rgba(255,255,255,0.04);
+    }
+
+    .btn-secondary:hover {
+        border-color: #d7b56d;
+        color: #d7b56d;
+        transform: translateY(-2px);
+    }
+
+
+    /* =====================================================
+       SECTION COMMON
+    ===================================================== */
+
+    .section {
+        width: min(1200px, 92%);
+        margin: auto;
+
+        padding: 95px 0;
+    }
+
+    .section-heading {
+        max-width: 700px;
+        margin-bottom: 48px;
+    }
+
+    .section-label {
+        display: block;
+
+        margin-bottom: 10px;
+
+        color: #d7b56d;
+
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+        margin-bottom: 14px;
+
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.1;
+    }
+
+    .section-heading p {
+        color: #969696;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       FEATURED MENU
+    ===================================================== */
+
+    .featured-section {
+        background: #0b0b0b;
+    }
+
+    .featured-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 24px;
+    }
+
+    .food-card {
+        overflow: hidden;
+
+        background: #111111;
+
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+
+        transition: 0.35s ease;
+    }
+
+    .food-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(215,181,109,0.4);
+    }
+
+    .food-image {
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+
+        background: #181818;
+    }
+
+    .food-image img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        transition: 0.5s ease;
+    }
+
+    .food-card:hover .food-image img {
+        transform: scale(1.05);
+    }
+
+    .food-placeholder {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #666666;
+        font-size: 14px;
+    }
+
+    .food-info {
+        padding: 20px;
+    }
+
+    .food-category {
+        margin-bottom: 6px;
+
+        color: #d7b56d;
+
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .food-info h3 {
+        margin-bottom: 8px;
+
+        font-size: 20px;
+    }
+
+    .food-info p {
+        min-height: 48px;
+
+        color: #8f8f8f;
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .food-bottom {
+        margin-top: 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .food-price {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .food-link {
+        color: #d7b56d;
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .food-link:hover {
+        color: #ffffff;
+    }
+
+    .view-menu-wrap {
+        margin-top: 35px;
+        text-align: center;
+    }
+
+
+    /* =====================================================
+       ABOUT PREVIEW
+    ===================================================== */
+
+    .about-preview {
+        background: #0f0f0f;
+    }
+
+    .about-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 60px;
+
+        align-items: center;
+    }
+
+    .about-image {
+        min-height: 470px;
+
+        overflow: hidden;
+
+        border-radius: 20px;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.15),
+                rgba(0,0,0,0.35)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+    }
+
+    .about-content h2 {
+        margin-bottom: 20px;
+
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.1;
+    }
+
+    .about-content h2 span {
+        color: #d7b56d;
+    }
+
+    .about-content p {
+        margin-bottom: 16px;
+
+        color: #9a9a9a;
+
+        font-size: 15px;
+        line-height: 1.9;
+    }
+
+
+    /* =====================================================
+       WHY US
+    ===================================================== */
+
+    .features-section {
+        background: #0b0b0b;
+    }
+
+    .features-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 22px;
+    }
+
+    .feature-card {
+        padding: 30px;
+
+        background: #111111;
+
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+
+        margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 12px;
+
+        background: rgba(215,181,109,0.12);
+
+        color: #d7b56d;
+
+        font-size: 21px;
+    }
+
+    .feature-card h3 {
+        margin-bottom: 10px;
+
+        font-size: 18px;
+    }
+
+    .feature-card p {
+        color: #8f8f8f;
+
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       CALL TO ACTION
+    ===================================================== */
+
+    .cta-section {
+        padding: 90px 0;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.76),
+                rgba(0,0,0,0.82)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+
+        text-align: center;
+    }
+
+    .cta-box {
+        width: min(760px, 92%);
+        margin: auto;
+    }
+
+    .cta-box .section-label {
+        margin-bottom: 14px;
+    }
+
+    .cta-box h2 {
+        margin-bottom: 16px;
+
+        font-size: clamp(32px, 5vw, 56px);
+        line-height: 1.08;
+    }
+
+    .cta-box p {
+        margin-bottom: 28px;
+
+        color: #c0c0c0;
+
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 900px) {
+
+        .featured-grid,
+        .features-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .about-grid {
+            grid-template-columns: 1fr;
+
+            gap: 35px;
+        }
+
+        .about-image {
+            min-height: 380px;
+        }
+
+    }
+
+
+    @media (max-width: 620px) {
+
+        .hero {
+            min-height: 88vh;
+            background-attachment: scroll;
+        }
+
+        .hero-content {
+            padding-top: 75px;
+        }
+
+        .hero h1 {
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 15px;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            width: 100%;
+        }
+
+        .section {
+            padding: 70px 0;
+        }
+
+        .featured-grid,
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .about-image {
+            min-height: 300px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-tag">
+            Welcome to Signature
+        </span>
+
+        <h1>
+            Taste the
+            <span>Signature</span>
+            Experience.
+        </h1>
+
+        <p>
+            Exceptional food, elegant surroundings,
+            and warm hospitality — all brought together
+            at Jawad Khan Bistro.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="{% url 'website_menu' %}"
+                class="btn-primary">
+
+                Explore Our Menu
+
+            </a>
+
+            <a
+                href="{% url 'website_contact' %}"
+                class="btn-secondary">
+
+                Contact Us
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURED MENU
+===================================================== -->
+
+<section class="featured-section">
+
+    <div class="section">
+
+        <div class="section-heading">
+
+            <span class="section-label">
+                From Our Kitchen
+            </span>
+
+            <h2>
+                Guest Favorites
+            </h2>
+
+            <p>
+                Discover some of the dishes our guests
+                love most, prepared fresh from our kitchen.
+            </p>
+
+        </div>
+
+
+        {% if featured_items %}
+
+            <div class="featured-grid">
+
+                {% for item in featured_items %}
+
+                    <article class="food-card">
+
+                        <div class="food-image">
+
+                            {% if item.image %}
+
+                                <img
+                                    src="{{ item.image.url }}"
+                                    alt="{{ item.name }}">
+
+                            {% else %}
+
+                                <div class="food-placeholder">
+                                    Image Coming Soon
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="food-info">
+
+                            <div class="food-category">
+                                {{ item.category.name }}
+                            </div>
+
+                            <h3>
+                                {{ item.name }}
+                            </h3>
+
+                            <p>
+
+                                {% if item.description %}
+
+                                    {{ item.description|truncatechars:90 }}
+
+                                {% else %}
+
+                                    Freshly prepared
+                                    with care and quality
+                                    ingredients.
+
+                                {% endif %}
+
+                            </p>
+
+
+                            <div class="food-bottom">
+
+                                <span class="food-price">
+                                    Rs. {{ item.price }}
+                                </span>
+
+                                <a
+                                    href="{% url 'website_menu' %}"
+                                    class="food-link">
+
+                                    View Menu →
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="food-card">
+
+                <div class="food-info">
+
+                    <h3>
+                        Our Menu Is Coming Soon
+                    </h3>
+
+                    <p>
+                        Delicious dishes will appear here
+                        once they are added to the restaurant menu.
+                    </p>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="view-menu-wrap">
+
+            <a
+                href="{% url 'website_menu' %}"
+                class="btn-secondary">
+
+                View Full Menu
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT PREVIEW
+===================================================== -->
+
+<section class="about-preview">
+
+    <div class="section">
+
+        <div class="about-grid">
+
+            <div class="about-image">
+            </div>
+
+
+            <div class="about-content">
+
+                <span class="section-label">
+                    Our Story
+                </span>
+
+                <h2>
+                    More Than Just
+                    <span>Great Food.</span>
+                </h2>
+
+                <p>
+                    At Jawad Khan Bistro, we believe that
+                    dining should be more than simply having
+                    a meal. It should be an experience worth
+                    remembering.
+                </p>
+
+                <p>
+                    From carefully selected ingredients to
+                    thoughtful presentation and welcoming
+                    service, every detail is designed to make
+                    your visit special.
+                </p>
+
+                <a
+                    href="{% url 'website_about' %}"
+                    class="btn-primary">
+
+                    Discover Our Story
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WHY US
+===================================================== -->
+
+<section class="features-section">
+
+    <div class="section">
+
+        <div class="section-heading">
+
+            <span class="section-label">
+                Why Signature
+            </span>
+
+            <h2>
+                Made For Memorable Moments
+            </h2>
+
+            <p>
+                Quality ingredients, thoughtful cooking,
+                and genuine hospitality come together
+                in every visit.
+            </p>
+
+        </div>
+
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ★
+                </div>
+
+                <h3>
+                    Premium Quality
+                </h3>
+
+                <p>
+                    We focus on quality ingredients and
+                    consistent preparation to deliver food
+                    you can look forward to every time.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ♥
+                </div>
+
+                <h3>
+                    Made With Care
+                </h3>
+
+                <p>
+                    Every dish is prepared with attention
+                    to detail, from the kitchen to your table.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ◆
+                </div>
+
+                <h3>
+                    Warm Hospitality
+                </h3>
+
+                <p>
+                    We want every guest to feel comfortable,
+                    welcomed, and genuinely valued.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta-section">
+
+    <div class="cta-box">
+
+        <span class="section-label">
+            Hungry Yet?
+        </span>
+
+        <h2>
+            Your Table Is Waiting.
+        </h2>
+
+        <p>
+            Explore our menu and discover your next
+            favorite dish at Signature — Jawad Khan Bistro.
+        </p>
+
+        <a
+            href="{% url 'website_menu' %}"
+            class="btn-primary">
+
+            Explore Menu
+
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

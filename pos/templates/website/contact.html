@@ -1,0 +1,659 @@
+{% extends "website/base.html" %}
+
+{% load static %}
+
+{% block title %}
+SIGNATURE — Jawad Khan Bistro | Contact
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    .contact-page {
+        padding-top: 78px;
+        background: #0b0b0b;
+        min-height: 100vh;
+    }
+
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .contact-hero {
+        padding: 95px 0 75px;
+        text-align: center;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.68),
+                rgba(0,0,0,0.82)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+    }
+
+    .contact-hero-inner {
+        width: min(850px, 92%);
+        margin: auto;
+    }
+
+    .contact-label {
+        display: block;
+        margin-bottom: 12px;
+
+        color: #d7b56d;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .contact-hero h1 {
+        margin-bottom: 16px;
+
+        font-size: clamp(38px, 6vw, 64px);
+        line-height: 1.05;
+    }
+
+    .contact-hero p {
+        color: #b5b5b5;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       CONTENT
+    ===================================================== */
+
+    .contact-content {
+        width: min(1200px, 92%);
+        margin: auto;
+
+        padding: 80px 0 100px;
+    }
+
+    .contact-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 28px;
+    }
+
+
+    /* =====================================================
+       CONTACT CARDS
+    ===================================================== */
+
+    .contact-card {
+        padding: 30px;
+
+        background: #111111;
+
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+    }
+
+    .contact-card-icon {
+        width: 50px;
+        height: 50px;
+
+        margin-bottom: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 13px;
+
+        background: rgba(215,181,109,0.12);
+
+        color: #d7b56d;
+
+        font-size: 20px;
+    }
+
+    .contact-card h3 {
+        margin-bottom: 10px;
+        font-size: 19px;
+    }
+
+    .contact-card p {
+        color: #8f8f8f;
+
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .contact-card a {
+        color: #d7b56d;
+        transition: 0.3s ease;
+    }
+
+    .contact-card a:hover {
+        color: #ffffff;
+    }
+
+
+    /* =====================================================
+       MAIN CONTACT AREA
+    ===================================================== */
+
+    .contact-main {
+        margin-top: 28px;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 28px;
+    }
+
+
+    /* =====================================================
+       RESTAURANT DETAILS
+    ===================================================== */
+
+    .details-box {
+        padding: 35px;
+
+        background: #111111;
+
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 20px;
+    }
+
+    .details-label {
+        display: block;
+
+        margin-bottom: 10px;
+
+        color: #d7b56d;
+
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .details-box h2 {
+        margin-bottom: 18px;
+
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.1;
+    }
+
+    .details-box p {
+        margin-bottom: 15px;
+
+        color: #909090;
+
+        font-size: 14px;
+        line-height: 1.9;
+    }
+
+    .details-list {
+        margin-top: 25px;
+    }
+
+    .details-row {
+        padding: 14px 0;
+
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+
+        font-size: 14px;
+    }
+
+    .details-row:last-child {
+        border-bottom: none;
+    }
+
+    .details-row strong {
+        color: #ffffff;
+    }
+
+    .details-row span {
+        color: #8c8c8c;
+        text-align: right;
+    }
+
+
+    /* =====================================================
+       MAP / LOCATION PLACEHOLDER
+    ===================================================== */
+
+    .map-box {
+        min-height: 430px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 30px;
+
+        text-align: center;
+
+        border-radius: 20px;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.75)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+
+        border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .map-content {
+        max-width: 420px;
+    }
+
+    .map-content .map-icon {
+        width: 58px;
+        height: 58px;
+
+        margin: 0 auto 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 15px;
+
+        background: rgba(215,181,109,0.15);
+
+        color: #d7b56d;
+
+        font-size: 24px;
+    }
+
+    .map-content h3 {
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    .map-content p {
+        margin-bottom: 22px;
+
+        color: #c0c0c0;
+
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .map-btn {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        min-height: 48px;
+        padding: 0 24px;
+
+        border-radius: 30px;
+
+        background: #d7b56d;
+        color: #111111;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        transition: 0.3s ease;
+    }
+
+    .map-btn:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+
+    /* =====================================================
+       FINAL CTA
+    ===================================================== */
+
+    .contact-cta {
+        margin-top: 55px;
+
+        padding: 70px 25px;
+
+        text-align: center;
+
+        border-radius: 22px;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.68),
+                rgba(0,0,0,0.82)
+            ),
+            url("{% static 'images/restaurant.jpg' %}");
+
+        background-size: cover;
+        background-position: center;
+    }
+
+    .contact-cta h2 {
+        margin-bottom: 14px;
+
+        font-size: clamp(30px, 5vw, 52px);
+    }
+
+    .contact-cta p {
+        width: min(650px, 100%);
+        margin: 0 auto 28px;
+
+        color: #c1c1c1;
+
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .contact-btn {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        min-height: 50px;
+        padding: 0 28px;
+
+        border-radius: 30px;
+
+        background: #d7b56d;
+        color: #111111;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        transition: 0.3s ease;
+    }
+
+    .contact-btn:hover {
+        background: #ffffff;
+        transform: translateY(-2px);
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 850px) {
+
+        .contact-grid,
+        .contact-main {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 620px) {
+
+        .contact-page {
+            padding-top: 70px;
+        }
+
+        .contact-hero {
+            padding: 70px 0 55px;
+        }
+
+        .contact-content {
+            padding: 60px 0 75px;
+        }
+
+        .contact-card,
+        .details-box {
+            padding: 25px;
+        }
+
+        .map-box {
+            min-height: 330px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="contact-page">
+
+    <!-- =================================================
+         HERO
+    ================================================= -->
+
+    <section class="contact-hero">
+
+        <div class="contact-hero-inner">
+
+            <span class="contact-label">
+                Get In Touch
+            </span>
+
+            <h1>
+                Contact Us
+            </h1>
+
+            <p>
+                We'd love to hear from you.
+                Reach out to us, visit us,
+                or simply come by for a great meal.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CONTACT CONTENT
+    ================================================= -->
+
+    <section class="contact-content">
+
+        <div class="contact-grid">
+
+            <div class="contact-card">
+
+                <div class="contact-card-icon">
+                    ☎
+                </div>
+
+                <h3>
+                    Call Us
+                </h3>
+
+                <p>
+                    Have a question or want to make an inquiry?
+                    Give us a call.
+                </p>
+
+                <p>
+                    <a href="tel:+92XXXXXXXXXX">
+                        +92 XXX XXXXXXX
+                    </a>
+                </p>
+
+            </div>
+
+
+            <div class="contact-card">
+
+                <div class="contact-card-icon">
+                    ✉
+                </div>
+
+                <h3>
+                    Email Us
+                </h3>
+
+                <p>
+                    Send us a message and we'll get back to you.
+                </p>
+
+                <p>
+                    <a href="mailto:info@example.com">
+                        info@example.com
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="contact-main">
+
+            <!-- =================================================
+                 RESTAURANT DETAILS
+            ================================================= -->
+
+            <div class="details-box">
+
+                <span class="details-label">
+                    Visit Us
+                </span>
+
+                <h2>
+                    Jawad Khan Bistro
+                </h2>
+
+                <p>
+                    Come and enjoy the Signature experience
+                    in a welcoming restaurant environment
+                    designed for great meals and good memories.
+                </p>
+
+
+                <div class="details-list">
+
+                    <div class="details-row">
+
+                        <strong>
+                            Address
+                        </strong>
+
+                        <span>
+                            Your Restaurant Address
+                        </span>
+
+                    </div>
+
+
+                    <div class="details-row">
+
+                        <strong>
+                            Phone
+                        </strong>
+
+                        <span>
+                            +92 XXX XXXXXXX
+                        </span>
+
+                    </div>
+
+
+                    <div class="details-row">
+
+                        <strong>
+                            Opening Hours
+                        </strong>
+
+                        <span>
+                            Mon – Sun<br>
+                            11:00 AM – 11:00 PM
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MAP
+            ================================================= -->
+
+            <div class="map-box">
+
+                <div class="map-content">
+
+                    <div class="map-icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Find Us
+                    </h3>
+
+                    <p>
+                        Your Google Maps location can be
+                        connected here once the restaurant
+                        address is finalized.
+                    </p>
+
+                    <a
+                        href="#"
+                        class="map-btn">
+
+                        Open Location
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CTA
+        ================================================= -->
+
+        <div class="contact-cta">
+
+            <h2>
+                Ready For Something Delicious?
+            </h2>
+
+            <p>
+                Explore our menu and discover dishes
+                prepared specially for you.
+            </p>
+
+            <a
+                href="{% url 'website_menu' %}"
+                class="contact-btn">
+
+                Explore Our Menu
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

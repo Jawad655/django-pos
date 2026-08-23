@@ -19,61 +19,90 @@
         body {
             margin: 0;
             padding: 30px;
+
             background: #f4f6f8;
+
             font-family: Arial, sans-serif;
+
             color: #1f2937;
         }
+
+
+        /* =========================
+           BILL CONTAINER
+        ========================= */
 
         .bill {
             width: 100%;
             max-width: 500px;
+
             margin: auto;
+
             background: white;
+
             padding: 30px;
 
             box-shadow:
                 0 3px 15px rgba(0, 0, 0, 0.10);
         }
 
+
         /* =========================
-           HEADER
+           RESTAURANT HEADER
         ========================= */
 
         .restaurant-name {
             text-align: center;
+
             font-size: 28px;
+
             font-weight: bold;
+
+            letter-spacing: 1px;
+
             margin-bottom: 5px;
         }
 
         .restaurant-subtitle {
             text-align: center;
+
             color: #6b7280;
+
             margin-bottom: 25px;
         }
 
         .bill-title {
             text-align: center;
+
             font-size: 22px;
+
             font-weight: bold;
+
             margin-bottom: 20px;
         }
 
+
         /* =========================
-           ORDER INFO
+           ORDER INFORMATION
         ========================= */
 
         .info {
             border-top: 2px dashed #333;
+
             border-bottom: 2px dashed #333;
+
             padding: 15px 0;
+
             margin-bottom: 20px;
         }
 
         .info-row {
             display: flex;
+
             justify-content: space-between;
+
             gap: 15px;
+
             margin: 8px 0;
         }
 
@@ -85,13 +114,17 @@
             text-align: right;
         }
 
+
         /* =========================
            ITEMS
         ========================= */
 
         .items-header {
             display: grid;
-            grid-template-columns: 1fr 60px 90px;
+
+            grid-template-columns:
+                1fr 60px 90px;
+
             gap: 10px;
 
             padding: 10px 0;
@@ -108,7 +141,10 @@
 
         .item {
             display: grid;
-            grid-template-columns: 1fr 60px 90px;
+
+            grid-template-columns:
+                1fr 60px 90px;
+
             gap: 10px;
 
             padding: 12px 0;
@@ -118,6 +154,8 @@
 
         .item-name {
             font-weight: bold;
+
+            overflow-wrap: anywhere;
         }
 
         .item-qty,
@@ -125,34 +163,59 @@
             text-align: right;
         }
 
+
         /* =========================
            SUMMARY
         ========================= */
 
         .summary {
             margin-top: 20px;
+
             padding-top: 10px;
         }
 
         .summary-row {
             display: flex;
+
             justify-content: space-between;
 
             margin: 10px 0;
         }
 
+        .summary-row span:first-child {
+            color: #4b5563;
+        }
+
+        .tax-row,
+        .service-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin: 10px 0;
+        }
+
+        .tax-row span:first-child,
+        .service-row span:first-child {
+            color: #4b5563;
+        }
+
         .grand-total {
             display: flex;
+
             justify-content: space-between;
 
             margin-top: 15px;
+
             padding-top: 15px;
 
             border-top: 2px solid #222;
 
             font-size: 23px;
+
             font-weight: bold;
         }
+
 
         /* =========================
            PAYMENT
@@ -160,7 +223,7 @@
 
         .payment {
             margin-top: 20px;
-            padding: 12px;
+            padding: 14px;
 
             background: #f3f4f6;
 
@@ -168,7 +231,29 @@
 
             display: flex;
             justify-content: space-between;
+
+            gap: 15px;
         }
+
+        .payment div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .payment div span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .payment div strong {
+            font-size: 15px;
+        }
+
+        .payment-status {
+            color: #16a34a;
+        }
+
 
         /* =========================
            FOOTER
@@ -178,6 +263,7 @@
             text-align: center;
 
             margin-top: 30px;
+
             padding-top: 20px;
 
             border-top: 2px dashed #333;
@@ -185,13 +271,16 @@
 
         .thank-you {
             font-size: 18px;
+
             font-weight: bold;
+
             margin-bottom: 5px;
         }
 
         .footer-text {
             color: #6b7280;
         }
+
 
         /* =========================
            PRINT BUTTON
@@ -205,43 +294,111 @@
             padding: 14px;
 
             border: none;
+
             border-radius: 8px;
 
             background: #2563eb;
+
             color: white;
 
             font-size: 18px;
+
             font-weight: bold;
 
             cursor: pointer;
+
+            transition: 0.2s;
         }
 
         .print-btn:hover {
             background: #1d4ed8;
         }
 
+
         /* =========================
-           PRINT
+           LOGOUT BUTTON
+        ========================= */
+
+        .logout-btn {
+            display: block;
+
+            width: 100%;
+
+            margin-top: 12px;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #dc2626;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+
+        /* =========================
+           PRINT VERSION
         ========================= */
 
         @media print {
 
             body {
                 background: white;
+
                 padding: 0;
             }
 
             .bill {
                 max-width: 100%;
+
                 box-shadow: none;
-                padding: 10px;
+
+                padding: 5px;
             }
 
-            .print-btn {
+            .print-btn,
+            .logout-btn {
                 display: none;
             }
 
+            .restaurant-name {
+                font-size: 22px;
+            }
+
+            .restaurant-subtitle {
+                margin-bottom: 15px;
+            }
+
+            .bill-title {
+                font-size: 18px;
+
+                margin-bottom: 15px;
+            }
+
+            .footer {
+                margin-top: 20px;
+            }
+
         }
+
 
         /* =========================
            MOBILE
@@ -261,10 +418,67 @@
                 font-size: 24px;
             }
 
+            .restaurant-subtitle {
+                font-size: 14px;
+            }
+
+            .bill-title {
+                font-size: 20px;
+            }
+
             .items-header,
             .item {
                 grid-template-columns:
-                    1fr 45px 75px;
+                    1fr 40px 80px;
+
+                gap: 6px;
+            }
+
+            .info-row {
+                gap: 10px;
+            }
+
+            .grand-total {
+                font-size: 21px;
+            }
+
+        }
+
+
+        /* =========================
+           SMALL MOBILE
+        ========================= */
+
+        @media (max-width: 360px) {
+
+            body {
+                padding: 5px;
+            }
+
+            .bill {
+                padding: 15px;
+            }
+
+            .items-header,
+            .item {
+                grid-template-columns:
+                    1fr 35px 70px;
+
+                gap: 5px;
+
+                font-size: 14px;
+            }
+
+            .restaurant-name {
+                font-size: 21px;
+            }
+
+            .bill-title {
+                font-size: 18px;
+            }
+
+            .grand-total {
+                font-size: 19px;
             }
 
         }
@@ -286,21 +500,21 @@
 
     <div class="restaurant-name">
 
-        RESTAURANT POS
+        SIGNATURE
 
     </div>
 
 
     <div class="restaurant-subtitle">
 
-        Restaurant Management System
+        Jawad Khan Bistro
 
     </div>
 
 
     <div class="bill-title">
 
-        CUSTOMER BILL
+        CUSTOMER RECEIPT
 
     </div>
 
@@ -331,8 +545,10 @@
                 Order Type
             </span>
 
-            <strong>
+            <strong id="orderType">
+
                 {{ order.get_order_type_display }}
+
             </strong>
 
         </div>
@@ -369,6 +585,19 @@
 
             <strong>
                 {{ order.get_payment_method_display }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-row">
+
+            <span>
+                Status
+            </span>
+
+            <strong>
+                {{ order.get_status_display }}
             </strong>
 
         </div>
@@ -478,18 +707,22 @@
     <div class="summary">
 
 
+        <!-- SUBTOTAL -->
+
         <div class="summary-row">
 
             <span>
                 Subtotal
             </span>
 
-            <strong>
+            <strong id="subtotal">
                 Rs. {{ order.total }}
             </strong>
 
         </div>
 
+
+        <!-- DISCOUNT -->
 
         <div class="summary-row">
 
@@ -497,12 +730,44 @@
                 Discount
             </span>
 
-            <strong>
-                Rs. 0
+            <strong id="discount">
+                Rs. 0.00
             </strong>
 
         </div>
 
+
+        <!-- GST -->
+
+        <div class="tax-row">
+
+            <span>
+                GST (5%)
+            </span>
+
+            <strong id="gst">
+                Rs. 0.00
+            </strong>
+
+        </div>
+
+
+        <!-- SERVICE CHARGE -->
+
+        <div class="service-row">
+
+            <span>
+                Service Charge
+            </span>
+
+            <strong id="serviceCharge">
+                Rs. 0.00
+            </strong>
+
+        </div>
+
+
+        <!-- GRAND TOTAL -->
 
         <div class="grand-total">
 
@@ -510,8 +775,8 @@
                 TOTAL
             </span>
 
-            <span>
-                Rs. {{ order.total }}
+            <span id="grandTotal">
+                Rs. 0.00
             </span>
 
         </div>
@@ -526,13 +791,30 @@
 
     <div class="payment">
 
-        <span>
-            Payment Method
-        </span>
+        <div>
 
-        <strong>
-            {{ order.get_payment_method_display }}
-        </strong>
+            <span>
+                Payment Method
+            </span>
+
+            <strong>
+                {{ order.get_payment_method_display }}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Payment Status
+            </span>
+
+            <strong class="payment-status">
+                {{ order.get_payment_status_display }}
+            </strong>
+
+        </div>
 
     </div>
 
@@ -573,7 +855,190 @@
     </button>
 
 
+    <!-- =========================
+         LOGOUT
+    ========================= -->
+
+    <a
+        href="{% url 'logout' %}"
+        class="logout-btn"
+    >
+
+        🚪 Logout
+
+    </a>
+
+
 </div>
+
+
+<!-- =========================
+     BILL CALCULATION
+========================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        /*
+        ==========================================
+        BILLING RULES
+        ==========================================
+
+        DINE-IN:
+            GST = 5%
+            Service Charge = Rs. 400
+
+        TAKEAWAY:
+            GST = Rs. 0
+            Service Charge = Rs. 0
+        ==========================================
+        */
+
+
+        const orderTypeElement =
+            document.getElementById("orderType");
+
+        const subtotalElement =
+            document.getElementById("subtotal");
+
+        const discountElement =
+            document.getElementById("discount");
+
+        const gstElement =
+            document.getElementById("gst");
+
+        const serviceChargeElement =
+            document.getElementById("serviceCharge");
+
+        const grandTotalElement =
+            document.getElementById("grandTotal");
+
+
+        /*
+        ==========================================
+        GET ORDER TYPE
+        ==========================================
+        */
+
+        const orderType =
+            orderTypeElement.textContent
+                .trim()
+                .toLowerCase();
+
+
+        /*
+        ==========================================
+        GET SUBTOTAL
+        ==========================================
+        */
+
+        const subtotal =
+            parseFloat(
+                subtotalElement.textContent
+                    .replace("Rs.", "")
+                    .replace(/,/g, "")
+                    .trim()
+            ) || 0;
+
+
+        /*
+        ==========================================
+        DISCOUNT
+        ==========================================
+        */
+
+        const discount = 0;
+
+
+        /*
+        ==========================================
+        DEFAULT VALUES
+        ==========================================
+        */
+
+        let gst = 0;
+
+        let serviceCharge = 0;
+
+
+        /*
+        ==========================================
+        DINE-IN CALCULATION
+        ==========================================
+        */
+
+        if (
+            orderType === "dine in" ||
+            orderType === "dine-in" ||
+            orderType === "dine_in"
+        ) {
+
+            /*
+            GST = 5% of subtotal
+            */
+
+            gst = subtotal * 0.05;
+
+
+            /*
+            Fixed Service Charge
+            */
+
+            serviceCharge = 400;
+
+        }
+
+
+        /*
+        ==========================================
+        TAKEAWAY
+        ==========================================
+
+        GST = 0
+        Service Charge = 0
+        ==========================================
+        */
+
+
+        /*
+        ==========================================
+        GRAND TOTAL
+        ==========================================
+        */
+
+        const grandTotal =
+            subtotal
+            - discount
+            + gst
+            + serviceCharge;
+
+
+        /*
+        ==========================================
+        DISPLAY VALUES
+        ==========================================
+        */
+
+        discountElement.textContent =
+            "Rs. " + discount.toFixed(2);
+
+
+        gstElement.textContent =
+            "Rs. " + gst.toFixed(2);
+
+
+        serviceChargeElement.textContent =
+            "Rs. " + serviceCharge.toFixed(2);
+
+
+        grandTotalElement.textContent =
+            "Rs. " + grandTotal.toFixed(2);
+
+
+    });
+
+</script>
 
 
 </body>

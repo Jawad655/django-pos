@@ -1,18 +1,20 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from functools import wraps
-from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.db.models import Sum
 from django.utils import timezone
 from django.utils.dateparse import parse_date
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+from django.db import transaction
 import json
 
 from .models import (
+    Restaurant,
+    Branch,
     Category,
     MenuItem,
     Table,
@@ -22,7 +24,48 @@ from .models import (
     StockIn,
     StockUsage,
     MenuItemIngredient,
+    UserBranch,
 )
+
+
+# =========================================================
+# BILLING CONSTANTS
+# =========================================================
+
+TAX_RATE = Decimal("0.05")
+FIXED_SERVICE_CHARGE = Decimal("400.00")
+
+
+# =========================================================
+# SMALL HELPERS
+# =========================================================
+
+def decimal_value(value, default="0"):
+    try:
+        return Decimal(str(value if value not in [None, ""] else default))
+    except (InvalidOperation, ValueError, TypeError):
+        raise ValueError("Invalid numeric value.")
+
+
+def get_current_branch(user):
+
+    if not user.is_authenticated:
+        return None
+
+    user_branch = (
+        UserBranch.objects
+        .select_related("branch")
+        .filter(
+            user=user,
+            branch__active=True
+        )
+        .first()
+    )
+
+    if not user_branch:
+        return None
+
+    return user_branch.branch
 
 
 # =========================================================
@@ -69,9 +112,7 @@ def login_view(request):
                         user
                     )
 
-                    next_url = request.GET.get(
-                        "next"
-                    )
+                    next_url = request.GET.get("next")
 
                     if next_url:
                         return redirect(next_url)
@@ -102,6 +143,7 @@ def logout_view(request):
     logout(request)
 
     return redirect("login")
+
 
 # =========================================================
 # ROLE HELPERS
@@ -152,6 +194,7 @@ def is_kitchen_staff(user):
         )
     )
 
+
 # =========================================================
 # MANAGER ACCESS
 # =========================================================
@@ -162,7 +205,6 @@ def manager_required(view_func):
     def wrapper(request, *args, **kwargs):
 
         if not is_manager(request.user):
-
             raise PermissionDenied
 
         return view_func(
@@ -173,6 +215,28 @@ def manager_required(view_func):
 
     return wrapper
 
+
+# =========================================================
+# ORDER STAFF ACCESS
+# =========================================================
+
+def order_staff_required(view_func):
+
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+
+        if not is_kitchen_staff(request.user):
+            raise PermissionDenied
+
+        return view_func(
+            request,
+            *args,
+            **kwargs
+        )
+
+    return wrapper
+
+
 # =========================================================
 # POS HOME
 # =========================================================
@@ -180,24 +244,39 @@ def manager_required(view_func):
 @login_required(login_url="login")
 def pos_home(request):
 
-    categories = Category.objects.all()
+    branch = get_current_branch(request.user)
 
-    menu_items = MenuItem.objects.filter(
-        available=True
-    ).select_related(
-        "category"
+    if not branch:
+        raise PermissionDenied
+
+    categories = (
+        Category.objects
+        .filter(branch=branch)
+        .order_by("name")
     )
 
-    tables = Table.objects.all().order_by(
-        "number"
+    menu_items = (
+        MenuItem.objects
+        .filter(
+            branch=branch,
+            available=True
+        )
+        .select_related("category")
+        .order_by("name")
     )
 
-    orders = Order.objects.prefetch_related(
-        "items"
-    ).select_related(
-        "table"
-    ).order_by(
-        "-created_at"
+    tables = (
+        Table.objects
+        .filter(branch=branch)
+        .order_by("number")
+    )
+
+    orders = (
+        Order.objects
+        .filter(branch=branch)
+        .prefetch_related("items")
+        .select_related("table")
+        .order_by("-created_at")
     )
 
     return render(
@@ -208,34 +287,40 @@ def pos_home(request):
             "menu_items": menu_items,
             "tables": tables,
             "orders": orders,
+            "branch": branch,
         }
     )
 
 
 # =========================================================
-# TABLE MANAGEMENT
+# ADD TABLE
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_table(request):
 
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
+
     try:
 
-        data = json.loads(
-            request.body
-        )
+        data = json.loads(request.body)
 
-        number = data.get(
-            "number"
-        )
+        number = data.get("number")
+        capacity = data.get("capacity", 4)
 
-        capacity = data.get(
-            "capacity",
-            4
-        )
-
-        if not number:
+        if number in [None, ""]:
 
             return JsonResponse(
                 {
@@ -246,16 +331,12 @@ def add_table(request):
             )
 
         try:
-
             number = int(number)
 
             if number <= 0:
                 raise ValueError
 
-        except (
-            ValueError,
-            TypeError
-        ):
+        except (ValueError, TypeError):
 
             return JsonResponse(
                 {
@@ -265,33 +346,30 @@ def add_table(request):
                 status=400
             )
 
+        try:
+            capacity = int(capacity)
+
+            if capacity <= 0:
+                raise ValueError
+
+        except (ValueError, TypeError):
+            capacity = 4
+
         if Table.objects.filter(
+            branch=branch,
             number=number
         ).exists():
 
             return JsonResponse(
                 {
                     "success": False,
-                    "message": "This table number already exists."
+                    "message": "This table number already exists in this branch."
                 },
                 status=400
             )
 
-        try:
-
-            capacity = int(capacity)
-
-            if capacity <= 0:
-                raise ValueError
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            capacity = 4
-
         table = Table.objects.create(
+            branch=branch,
             number=number,
             capacity=capacity,
             is_occupied=False
@@ -305,7 +383,7 @@ def add_table(request):
                     "id": table.id,
                     "number": table.number,
                     "capacity": table.capacity,
-                    "is_occupied": table.is_occupied
+                    "is_occupied": table.is_occupied,
                 }
             }
         )
@@ -336,13 +414,27 @@ def add_table(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def edit_table(request, table_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         table = Table.objects.get(
-            id=table_id
+            id=table_id,
+            branch=branch
         )
 
     except Table.DoesNotExist:
@@ -367,20 +459,15 @@ def edit_table(request, table_id):
 
     try:
 
-        data = json.loads(
-            request.body
-        )
+        data = json.loads(request.body)
 
-        number = data.get(
-            "number"
-        )
-
+        number = data.get("number")
         capacity = data.get(
             "capacity",
             table.capacity
         )
 
-        if not number:
+        if number in [None, ""]:
 
             return JsonResponse(
                 {
@@ -397,10 +484,7 @@ def edit_table(request, table_id):
             if number <= 0:
                 raise ValueError
 
-        except (
-            ValueError,
-            TypeError
-        ):
+        except (ValueError, TypeError):
 
             return JsonResponse(
                 {
@@ -411,6 +495,7 @@ def edit_table(request, table_id):
             )
 
         if Table.objects.filter(
+            branch=branch,
             number=number
         ).exclude(
             id=table.id
@@ -419,7 +504,7 @@ def edit_table(request, table_id):
             return JsonResponse(
                 {
                     "success": False,
-                    "message": "This table number already exists."
+                    "message": "This table number already exists in this branch."
                 },
                 status=400
             )
@@ -431,10 +516,7 @@ def edit_table(request, table_id):
             if capacity <= 0:
                 raise ValueError
 
-        except (
-            ValueError,
-            TypeError
-        ):
+        except (ValueError, TypeError):
 
             capacity = table.capacity
 
@@ -456,7 +538,7 @@ def edit_table(request, table_id):
                     "id": table.id,
                     "number": table.number,
                     "capacity": table.capacity,
-                    "is_occupied": table.is_occupied
+                    "is_occupied": table.is_occupied,
                 }
             }
         )
@@ -487,13 +569,27 @@ def edit_table(request, table_id):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def delete_table(request, table_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         table = Table.objects.get(
-            id=table_id
+            id=table_id,
+            branch=branch
         )
 
     except Table.DoesNotExist:
@@ -517,15 +613,14 @@ def delete_table(request, table_id):
         )
 
     if Order.objects.filter(
+        branch=branch,
         table=table
     ).exists():
 
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "This table has order history "
-                    "and cannot be deleted."
+                "message": "This table has order history and cannot be deleted."
             },
             status=400
         )
@@ -548,7 +643,14 @@ def delete_table(request, table_id):
 @manager_required
 def dashboard(request):
 
-    orders = Order.objects.all()
+    branch = get_current_branch(request.user)
+
+    if not branch:
+        raise PermissionDenied
+
+    orders = Order.objects.filter(
+        branch=branch
+    )
 
     total_orders = orders.count()
 
@@ -564,11 +666,13 @@ def dashboard(request):
         status="pending"
     ).count()
 
-    total_sales = orders.filter(
-        status="completed"
-    ).aggregate(
-        total=Sum("total")
-    )["total"] or Decimal("0")
+    total_sales = (
+        orders
+        .filter(status="completed")
+        .aggregate(total=Sum("total"))
+        .get("total")
+        or Decimal("0")
+    )
 
     today = timezone.localdate()
 
@@ -576,29 +680,45 @@ def dashboard(request):
         created_at__date=today
     )
 
-    today_sales = today_orders.filter(
-        status="completed"
-    ).aggregate(
-        total=Sum("total")
-    )["total"] or Decimal("0")
+    today_sales = (
+        today_orders
+        .filter(status="completed")
+        .aggregate(total=Sum("total"))
+        .get("total")
+        or Decimal("0")
+    )
 
-    total_menu_items = MenuItem.objects.count()
+    total_menu_items = MenuItem.objects.filter(
+        branch=branch
+    ).count()
 
-    total_categories = Category.objects.count()
+    total_categories = Category.objects.filter(
+        branch=branch
+    ).count()
 
-    total_tables = Table.objects.count()
+    total_tables = Table.objects.filter(
+        branch=branch
+    ).count()
 
     occupied_tables = Table.objects.filter(
+        branch=branch,
         is_occupied=True
     ).count()
 
-    low_stock_items = [
-        ingredient
-        for ingredient in Ingredient.objects.filter(
-            active=True
-        )
-        if ingredient.is_low_stock
-    ]
+    low_stock_items = []
+
+    ingredients = Ingredient.objects.filter(
+        branch=branch,
+        active=True
+    )
+
+    for ingredient in ingredients:
+
+        if (
+            ingredient.is_low_stock
+            or ingredient.is_out_of_stock
+        ):
+            low_stock_items.append(ingredient)
 
     return render(
         request,
@@ -616,6 +736,7 @@ def dashboard(request):
             "total_tables": total_tables,
             "occupied_tables": occupied_tables,
             "low_stock_items": low_stock_items,
+            "branch": branch,
         }
     )
 
@@ -625,23 +746,37 @@ def dashboard(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 def menu(request):
 
-    categories = Category.objects.prefetch_related(
-        "items"
-    ).all()
+    branch = get_current_branch(request.user)
 
-    ingredients = Ingredient.objects.filter(
-        active=True
-    ).order_by(
-        "name"
+    if not branch:
+        raise PermissionDenied
+
+    categories = (
+        Category.objects
+        .filter(branch=branch)
+        .prefetch_related("items")
+        .order_by("name")
     )
 
-    menu_items = MenuItem.objects.select_related(
-        "category"
-    ).prefetch_related(
-        "ingredients__ingredient"
-    ).all()
+    ingredients = (
+        Ingredient.objects
+        .filter(
+            branch=branch,
+            active=True
+        )
+        .order_by("name")
+    )
+
+    menu_items = (
+        MenuItem.objects
+        .filter(branch=branch)
+        .select_related("category")
+        .prefetch_related("ingredients__ingredient")
+        .order_by("name")
+    )
 
     return render(
         request,
@@ -650,6 +785,7 @@ def menu(request):
             "categories": categories,
             "ingredients": ingredients,
             "menu_items": menu_items,
+            "branch": branch,
         }
     )
 
@@ -659,8 +795,21 @@ def menu(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_category(request):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     name = request.POST.get(
         "name",
@@ -678,18 +827,20 @@ def add_category(request):
         )
 
     if Category.objects.filter(
+        branch=branch,
         name__iexact=name
     ).exists():
 
         return JsonResponse(
             {
                 "success": False,
-                "message": "This category already exists."
+                "message": "This category already exists in this branch."
             },
             status=400
         )
 
     category = Category.objects.create(
+        branch=branch,
         name=name
     )
 
@@ -698,7 +849,7 @@ def add_category(request):
             "success": True,
             "message": "Category added successfully.",
             "id": category.id,
-            "name": category.name
+            "name": category.name,
         }
     )
 
@@ -708,13 +859,27 @@ def add_category(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def edit_category(request, category_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         category = Category.objects.get(
-            id=category_id
+            id=category_id,
+            branch=branch
         )
 
     except Category.DoesNotExist:
@@ -743,6 +908,7 @@ def edit_category(request, category_id):
         )
 
     if Category.objects.filter(
+        branch=branch,
         name__iexact=name
     ).exclude(
         id=category.id
@@ -751,14 +917,13 @@ def edit_category(request, category_id):
         return JsonResponse(
             {
                 "success": False,
-                "message": "This category already exists."
+                "message": "This category already exists in this branch."
             },
             status=400
         )
 
     category.name = name
-
-    category.save()
+    category.save(update_fields=["name"])
 
     return JsonResponse(
         {
@@ -773,13 +938,27 @@ def edit_category(request, category_id):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def delete_category(request, category_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         category = Category.objects.get(
-            id=category_id
+            id=category_id,
+            branch=branch
         )
 
     except Category.DoesNotExist:
@@ -797,9 +976,10 @@ def delete_category(request, category_id):
         return JsonResponse(
             {
                 "success": False,
-                "message":
+                "message": (
                     "This category contains menu items. "
                     "Delete or move the items first."
+                )
             },
             status=400
         )
@@ -819,8 +999,21 @@ def delete_category(request, category_id):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_menu_item(request):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     name = request.POST.get(
         "name",
@@ -837,9 +1030,13 @@ def add_menu_item(request):
         ""
     ).strip()
 
+    description = request.POST.get(
+        "description",
+        ""
+    ).strip()
+
     available = (
-        request.POST.get("available")
-        == "on"
+        request.POST.get("available") == "on"
     )
 
     if not name:
@@ -875,7 +1072,8 @@ def add_menu_item(request):
     try:
 
         category = Category.objects.get(
-            id=category_id
+            id=category_id,
+            branch=branch
         )
 
     except Category.DoesNotExist:
@@ -890,15 +1088,12 @@ def add_menu_item(request):
 
     try:
 
-        price = Decimal(price)
+        price = decimal_value(price)
 
         if price <= 0:
             raise ValueError
 
-    except (
-        ValueError,
-        TypeError
-    ):
+    except (ValueError, TypeError, InvalidOperation):
 
         return JsonResponse(
             {
@@ -908,16 +1103,16 @@ def add_menu_item(request):
             status=400
         )
 
-    image = request.FILES.get(
-        "image"
-    )
+    image = request.FILES.get("image")
 
     MenuItem.objects.create(
+        branch=branch,
         category=category,
         name=name,
+        description=description,
         price=price,
         image=image,
-        available=available,
+        available=available
     )
 
     return JsonResponse(
@@ -933,13 +1128,27 @@ def add_menu_item(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def edit_menu_item(request, item_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         item = MenuItem.objects.get(
-            id=item_id
+            id=item_id,
+            branch=branch
         )
 
     except MenuItem.DoesNotExist:
@@ -967,9 +1176,13 @@ def edit_menu_item(request, item_id):
         ""
     ).strip()
 
+    description = request.POST.get(
+        "description",
+        ""
+    ).strip()
+
     available = (
-        request.POST.get("available")
-        == "on"
+        request.POST.get("available") == "on"
     )
 
     if not name:
@@ -1005,7 +1218,8 @@ def edit_menu_item(request, item_id):
     try:
 
         category = Category.objects.get(
-            id=category_id
+            id=category_id,
+            branch=branch
         )
 
     except Category.DoesNotExist:
@@ -1020,15 +1234,12 @@ def edit_menu_item(request, item_id):
 
     try:
 
-        price = Decimal(price)
+        price = decimal_value(price)
 
         if price <= 0:
             raise ValueError
 
-    except (
-        ValueError,
-        TypeError
-    ):
+    except (ValueError, TypeError, InvalidOperation):
 
         return JsonResponse(
             {
@@ -1041,7 +1252,13 @@ def edit_menu_item(request, item_id):
     item.name = name
     item.price = price
     item.category = category
+    item.description = description
     item.available = available
+
+    image = request.FILES.get("image")
+
+    if image:
+        item.image = image
 
     item.save()
 
@@ -1058,13 +1275,27 @@ def edit_menu_item(request, item_id):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def delete_menu_item(request, item_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         item = MenuItem.objects.get(
-            id=item_id
+            id=item_id,
+            branch=branch
         )
 
     except MenuItem.DoesNotExist:
@@ -1084,10 +1315,10 @@ def delete_menu_item(request, item_id):
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "This item has already been used "
-                    "in an order. Make it unavailable "
-                    "instead of deleting it."
+                "message": (
+                    "This item has already been used in an order. "
+                    "Make it unavailable instead of deleting it."
+                )
             },
             status=400
         )
@@ -1103,7 +1334,7 @@ def delete_menu_item(request, item_id):
 
 
 # =========================================================
-# CREATE ORDER
+# CREATE POS ORDER
 # =========================================================
 
 @login_required(login_url="login")
@@ -1112,18 +1343,22 @@ def create_order(request):
 
     try:
 
-        data = json.loads(
-            request.body
-        )
+        data = json.loads(request.body)
 
-        table_id = data.get(
-            "table_id"
-        )
+        branch = get_current_branch(request.user)
 
-        items = data.get(
-            "items",
-            []
-        )
+        if not branch:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "No branch assigned to this user."
+                },
+                status=400
+            )
+
+        table_id = data.get("table_id")
+        items = data.get("items", [])
 
         order_type = data.get(
             "order_type",
@@ -1134,6 +1369,26 @@ def create_order(request):
             "payment_method",
             "cash"
         )
+
+        try:
+
+            discount = decimal_value(
+                data.get("discount", "0")
+            )
+
+            paid_amount = decimal_value(
+                data.get("paid_amount", "0")
+            )
+
+        except ValueError:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Invalid payment or discount amount."
+                },
+                status=400
+            )
 
         if order_type not in [
             "dine_in",
@@ -1162,7 +1417,7 @@ def create_order(request):
                 status=400
             )
 
-        if not items:
+        if not isinstance(items, list) or not items:
 
             return JsonResponse(
                 {
@@ -1172,14 +1427,28 @@ def create_order(request):
                 status=400
             )
 
+        discount = max(discount, Decimal("0"))
+        paid_amount = max(paid_amount, Decimal("0"))
+
         table = None
+
+        if order_type == "dine_in" and not table_id:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Please select a table."
+                },
+                status=400
+            )
 
         if table_id:
 
             try:
 
                 table = Table.objects.get(
-                    id=table_id
+                    id=table_id,
+                    branch=branch
                 )
 
             except Table.DoesNotExist:
@@ -1192,114 +1461,242 @@ def create_order(request):
                     status=404
                 )
 
-        order = Order.objects.create(
-            table=table,
-            order_type=order_type,
-            payment_method=payment_method,
-            payment_status="paid",
-            status="pending",
-            total=0
-        )
-
-        total = Decimal("0")
-
-        for item in items:
-
-            try:
-
-                menu_item = MenuItem.objects.get(
-                    id=item["id"],
-                    available=True
-                )
-
-                quantity = int(
-                    item["quantity"]
-                )
-
-            except (
-                MenuItem.DoesNotExist,
-                KeyError,
-                ValueError,
-                TypeError
+            if (
+                order_type == "dine_in"
+                and table.is_occupied
             ):
-
-                order.delete()
 
                 return JsonResponse(
                     {
                         "success": False,
-                        "message":
-                            "Invalid menu item or quantity."
+                        "message": "This table is already occupied."
                     },
                     status=400
                 )
 
-            if quantity <= 0:
-                continue
+        with transaction.atomic():
 
-            price = menu_item.price
+            if table:
 
-            OrderItem.objects.create(
-                order=order,
-                menu_item=menu_item,
-                quantity=quantity,
-                price=price
-            )
-
-            total += price * quantity
-
-            for recipe in menu_item.ingredients.select_related(
-                "ingredient"
-            ):
-
-                usage_quantity = (
-                    recipe.quantity *
-                    quantity
-                )
-
-                StockUsage.objects.create(
-                    ingredient=recipe.ingredient,
-                    quantity=usage_quantity,
-                    reason=(
-                        f"Order #{order.id} - "
-                        f"{menu_item.name}"
+                table = (
+                    Table.objects
+                    .select_for_update()
+                    .get(
+                        id=table.id,
+                        branch=branch
                     )
                 )
 
-        if not order.items.exists():
+                if (
+                    order_type == "dine_in"
+                    and table.is_occupied
+                ):
 
-            order.delete()
+                    raise ValueError(
+                        "This table is already occupied."
+                    )
 
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message": "No valid items in order."
-                },
-                status=400
+            order = Order.objects.create(
+                branch=branch,
+                table=table,
+                order_type=order_type,
+                payment_method=payment_method,
+                payment_status="unpaid",
+                status="pending",
+                total=0,
+                discount=0,
+                tax=0,
+                service_charge=0,
+                paid_amount=0,
+                change_amount=0
             )
 
-        order.total = total
+            subtotal = Decimal("0")
+            valid_item_count = 0
 
-        order.save()
+            for item in items:
 
-        if table:
+                try:
 
-            table.is_occupied = True
+                    menu_item_id = int(
+                        item.get("id")
+                    )
 
-            table.save(
-                update_fields=[
-                    "is_occupied"
-                ]
+                    quantity = int(
+                        item.get("quantity")
+                    )
+
+                except (
+                    TypeError,
+                    ValueError,
+                    AttributeError
+                ):
+
+                    raise ValueError(
+                        "Invalid menu item data."
+                    )
+
+                if quantity <= 0:
+                    continue
+
+                try:
+
+                    menu_item = (
+                        MenuItem.objects
+                        .select_related("category")
+                        .get(
+                            id=menu_item_id,
+                            branch=branch,
+                            available=True
+                        )
+                    )
+
+                except MenuItem.DoesNotExist:
+
+                    raise ValueError(
+                        "One of the selected menu items is no longer available."
+                    )
+
+                price = menu_item.price
+
+                OrderItem.objects.create(
+                    order=order,
+                    menu_item=menu_item,
+                    quantity=quantity,
+                    price=price
+                )
+
+                subtotal += price * quantity
+                valid_item_count += 1
+
+                recipes = (
+                    MenuItemIngredient.objects
+                    .filter(
+                        menu_item=menu_item,
+                        ingredient__branch=branch,
+                        ingredient__active=True
+                    )
+                    .select_related("ingredient")
+                )
+
+                for recipe in recipes:
+
+                    usage_quantity = (
+                        recipe.quantity * quantity
+                    )
+
+                    if (
+                        recipe.ingredient.current_stock
+                        < usage_quantity
+                    ):
+
+                        raise ValueError(
+                            f"Insufficient stock for {recipe.ingredient.name}."
+                        )
+
+                    StockUsage.objects.create(
+                        ingredient=recipe.ingredient,
+                        quantity=usage_quantity,
+                        reason=(
+                            f"Order #{order.id} - "
+                            f"{menu_item.name}"
+                        )
+                    )
+
+            if valid_item_count == 0:
+
+                raise ValueError(
+                    "No valid items in order."
+                )
+
+            if discount > subtotal:
+                discount = subtotal
+
+            taxable_amount = subtotal - discount
+
+            tax = (
+                taxable_amount * TAX_RATE
+            ).quantize(
+                Decimal("0.01")
             )
+
+            service_charge = FIXED_SERVICE_CHARGE
+
+            grand_total = (
+                taxable_amount
+                + tax
+                + service_charge
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            if payment_method in [
+                "card",
+                "online"
+            ]:
+
+                paid_amount = grand_total
+                change_amount = Decimal("0")
+                payment_status = "paid"
+
+            else:
+
+                if paid_amount >= grand_total:
+
+                    change_amount = (
+                        paid_amount - grand_total
+                    ).quantize(
+                        Decimal("0.01")
+                    )
+
+                    payment_status = "paid"
+
+                else:
+
+                    change_amount = Decimal("0")
+                    payment_status = "unpaid"
+
+            order.total = grand_total
+            order.discount = discount
+            order.tax = tax
+            order.service_charge = service_charge
+            order.paid_amount = paid_amount
+            order.change_amount = change_amount
+            order.payment_status = payment_status
+
+            order.save()
+
+            if table:
+
+                table.is_occupied = True
+
+                table.save(
+                    update_fields=["is_occupied"]
+                )
 
         return JsonResponse(
             {
                 "success": True,
                 "order_id": order.id,
-                "total": str(
-                    order.total
-                )
+                "subtotal": str(subtotal),
+                "discount": str(discount),
+                "tax": str(tax),
+                "service_charge": str(service_charge),
+                "total": str(order.total),
+                "paid_amount": str(order.paid_amount),
+                "change_amount": str(order.change_amount),
+                "payment_status": order.payment_status,
             }
+        )
+
+    except json.JSONDecodeError:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid order data."
+            },
+            status=400
         )
 
     except Exception as e:
@@ -1318,21 +1715,15 @@ def create_order(request):
 # =========================================================
 
 @login_required(login_url="login")
+@order_staff_required
 @require_POST
-def update_order_status(
-    request,
-    order_id
-):
+def update_order_status(request, order_id):
 
     try:
 
-        data = json.loads(
-            request.body
-        )
+        data = json.loads(request.body)
 
-        new_status = data.get(
-            "status"
-        )
+        new_status = data.get("status")
 
         allowed_statuses = [
             "pending",
@@ -1353,13 +1744,50 @@ def update_order_status(
                 status=400
             )
 
+        branch = get_current_branch(request.user)
+
+        if not branch:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "No branch assigned to this user."
+                },
+                status=400
+            )
+
         try:
 
-            order = Order.objects.select_related(
-                "table"
-            ).get(
-                id=order_id
-            )
+            with transaction.atomic():
+
+                order = (
+                    Order.objects
+                    .select_for_update()
+                    .select_related("table")
+                    .get(
+                        id=order_id,
+                        branch=branch
+                    )
+                )
+
+                order.status = new_status
+
+                order.save(
+                    update_fields=["status"]
+                )
+
+                if order.table:
+
+                    order.table.is_occupied = (
+                        new_status not in [
+                            "completed",
+                            "cancelled"
+                        ]
+                    )
+
+                    order.table.save(
+                        update_fields=["is_occupied"]
+                    )
 
         except Order.DoesNotExist:
 
@@ -1371,35 +1799,24 @@ def update_order_status(
                 status=404
             )
 
-        order.status = new_status
-
-        order.save()
-
-        if order.table:
-
-            order.table.is_occupied = (
-                new_status not in [
-                    "completed",
-                    "cancelled"
-                ]
-            )
-
-            order.table.save(
-                update_fields=[
-                    "is_occupied"
-                ]
-            )
-
         return JsonResponse(
             {
                 "success": True,
-                "message":
-                    "Order status updated successfully.",
+                "message": "Order status updated successfully.",
                 "order_id": order.id,
                 "status": order.status,
-                "status_display":
-                    order.get_status_display()
+                "status_display": order.get_status_display(),
             }
+        )
+
+    except json.JSONDecodeError:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid data."
+            },
+            status=400
         )
 
     except Exception as e:
@@ -1420,24 +1837,21 @@ def update_order_status(
 @login_required(login_url="login")
 def bill(request, order_id):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        order = Order.objects.get(
-            id=order_id
-        )
+    if not branch:
+        raise PermissionDenied
 
-    except Order.DoesNotExist:
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        branch=branch
+    )
 
-        return render(
-            request,
-            "pos/error.html",
-            {
-                "message": "Order not found."
-            }
-        )
-
-    items = order.items.select_related(
-        "menu_item"
+    items = (
+        order.items
+        .select_related("menu_item")
+        .all()
     )
 
     return render(
@@ -1446,6 +1860,7 @@ def bill(request, order_id):
         {
             "order": order,
             "items": items,
+            "branch": branch,
         }
     )
 
@@ -1457,24 +1872,21 @@ def bill(request, order_id):
 @login_required(login_url="login")
 def kot(request, order_id):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        order = Order.objects.get(
-            id=order_id
-        )
+    if not branch:
+        raise PermissionDenied
 
-    except Order.DoesNotExist:
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        branch=branch
+    )
 
-        return render(
-            request,
-            "pos/error.html",
-            {
-                "message": "Order not found."
-            }
-        )
-
-    items = order.items.select_related(
-        "menu_item"
+    items = (
+        order.items
+        .select_related("menu_item")
+        .all()
     )
 
     return render(
@@ -1483,6 +1895,7 @@ def kot(request, order_id):
         {
             "order": order,
             "items": items,
+            "branch": branch,
         }
     )
 
@@ -1492,32 +1905,25 @@ def kot(request, order_id):
 # =========================================================
 
 @login_required(login_url="login")
-def order_success(
-    request,
-    order_id
-):
+def order_success(request, order_id):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        order = Order.objects.get(
-            id=order_id
-        )
+    if not branch:
+        raise PermissionDenied
 
-    except Order.DoesNotExist:
-
-        return render(
-            request,
-            "pos/error.html",
-            {
-                "message": "Order not found."
-            }
-        )
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        branch=branch
+    )
 
     return render(
         request,
         "pos/success.html",
         {
-            "order": order
+            "order": order,
+            "branch": branch,
         }
     )
 
@@ -1527,10 +1933,19 @@ def order_success(
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 def sales_report(request):
 
-    orders = Order.objects.all().order_by(
-        "-created_at"
+    branch = get_current_branch(request.user)
+
+    if not branch:
+        raise PermissionDenied
+
+    orders = (
+        Order.objects
+        .filter(branch=branch)
+        .select_related("table")
+        .order_by("-created_at")
     )
 
     start_date = request.GET.get(
@@ -1545,9 +1960,7 @@ def sales_report(request):
 
     if start_date:
 
-        parsed_start = parse_date(
-            start_date
-        )
+        parsed_start = parse_date(start_date)
 
         if parsed_start:
 
@@ -1557,9 +1970,7 @@ def sales_report(request):
 
     if end_date:
 
-        parsed_end = parse_date(
-            end_date
-        )
+        parsed_end = parse_date(end_date)
 
         if parsed_end:
 
@@ -1571,9 +1982,12 @@ def sales_report(request):
         status="completed"
     )
 
-    total_sales = completed_orders.aggregate(
-        total=Sum("total")
-    )["total"] or Decimal("0")
+    total_sales = (
+        completed_orders
+        .aggregate(total=Sum("total"))
+        .get("total")
+        or Decimal("0")
+    )
 
     return render(
         request,
@@ -1582,18 +1996,16 @@ def sales_report(request):
             "orders": orders,
             "total_sales": total_sales,
             "total_orders": orders.count(),
-            "completed_count":
-                completed_orders.count(),
-            "cancelled_count":
-                orders.filter(
-                    status="cancelled"
-                ).count(),
-            "pending_count":
-                orders.filter(
-                    status="pending"
-                ).count(),
+            "completed_count": completed_orders.count(),
+            "cancelled_count": orders.filter(
+                status="cancelled"
+            ).count(),
+            "pending_count": orders.filter(
+                status="pending"
+            ).count(),
             "start_date": start_date,
             "end_date": end_date,
+            "branch": branch,
         }
     )
 
@@ -1603,20 +2015,31 @@ def sales_report(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 def inventory(request):
 
-    ingredients = Ingredient.objects.filter(
-        active=True
-    ).order_by(
-        "name"
+    branch = get_current_branch(request.user)
+
+    if not branch:
+        raise PermissionDenied
+
+    ingredients = (
+        Ingredient.objects
+        .filter(
+            branch=branch,
+            active=True
+        )
+        .order_by("name")
     )
 
-    menu_items = MenuItem.objects.filter(
-        available=True
-    ).prefetch_related(
-        "ingredients__ingredient"
-    ).order_by(
-        "name"
+    menu_items = (
+        MenuItem.objects
+        .filter(
+            branch=branch,
+            available=True
+        )
+        .prefetch_related("ingredients__ingredient")
+        .order_by("name")
     )
 
     total_ingredients = ingredients.count()
@@ -1632,41 +2055,49 @@ def inventory(request):
         if ingredient.is_out_of_stock:
 
             out_of_stock += 1
-
-            low_stock_ingredients.append(
-                ingredient
-            )
+            low_stock_ingredients.append(ingredient)
 
         elif ingredient.is_low_stock:
 
             low_stock += 1
-
-            low_stock_ingredients.append(
-                ingredient
-            )
+            low_stock_ingredients.append(ingredient)
 
         else:
 
             in_stock += 1
 
-    recent_stock_in = StockIn.objects.select_related(
-        "ingredient"
-    ).order_by(
-        "-created_at"
-    )[:50]
+    recent_stock_in = (
+        StockIn.objects
+        .filter(
+            ingredient__branch=branch
+        )
+        .select_related("ingredient")
+        .order_by("-created_at")[:50]
+    )
 
-    recent_stock_usage = StockUsage.objects.select_related(
-        "ingredient"
-    ).order_by(
-        "-created_at"
-    )[:50]
+    recent_stock_usage = (
+        StockUsage.objects
+        .filter(
+            ingredient__branch=branch
+        )
+        .select_related("ingredient")
+        .order_by("-created_at")[:50]
+    )
 
-    recipes = MenuItemIngredient.objects.select_related(
-        "menu_item",
-        "ingredient"
-    ).order_by(
-        "menu_item__name",
-        "ingredient__name"
+    recipes = (
+        MenuItemIngredient.objects
+        .filter(
+            menu_item__branch=branch,
+            ingredient__branch=branch
+        )
+        .select_related(
+            "menu_item",
+            "ingredient"
+        )
+        .order_by(
+            "menu_item__name",
+            "ingredient__name"
+        )
     )
 
     return render(
@@ -1679,13 +2110,11 @@ def inventory(request):
             "in_stock": in_stock,
             "low_stock": low_stock,
             "out_of_stock": out_of_stock,
-            "low_stock_ingredients":
-                low_stock_ingredients,
-            "recent_stock_in":
-                recent_stock_in,
-            "recent_stock_usage":
-                recent_stock_usage,
+            "low_stock_ingredients": low_stock_ingredients,
+            "recent_stock_in": recent_stock_in,
+            "recent_stock_usage": recent_stock_usage,
             "recipes": recipes,
+            "branch": branch,
         }
     )
 
@@ -1695,8 +2124,21 @@ def inventory(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_ingredient(request):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     name = request.POST.get(
         "name",
@@ -1718,13 +2160,13 @@ def add_ingredient(request):
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Ingredient name is required."
+                "message": "Ingredient name is required."
             },
             status=400
         )
 
     if Ingredient.objects.filter(
+        branch=branch,
         name__iexact=name,
         active=True
     ).exists():
@@ -1732,8 +2174,7 @@ def add_ingredient(request):
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "This ingredient already exists."
+                "message": "This ingredient already exists in this branch."
             },
             status=400
         )
@@ -1755,28 +2196,25 @@ def add_ingredient(request):
 
     try:
 
-        minimum_stock = Decimal(
-            minimum_stock or "0"
+        minimum_stock = decimal_value(
+            minimum_stock
         )
 
         if minimum_stock < 0:
             raise ValueError
 
-    except (
-        ValueError,
-        TypeError
-    ):
+    except (ValueError, TypeError, InvalidOperation):
 
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Invalid minimum stock."
+                "message": "Invalid minimum stock."
             },
             status=400
         )
 
     ingredient = Ingredient.objects.create(
+        branch=branch,
         name=name,
         unit=unit,
         minimum_stock=minimum_stock,
@@ -1787,10 +2225,9 @@ def add_ingredient(request):
     return JsonResponse(
         {
             "success": True,
-            "message":
-                "Ingredient added successfully.",
+            "message": "Ingredient added successfully.",
             "id": ingredient.id,
-            "name": ingredient.name
+            "name": ingredient.name,
         }
     )
 
@@ -1800,16 +2237,27 @@ def add_ingredient(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
-def edit_ingredient(
-    request,
-    ingredient_id
-):
+def edit_ingredient(request, ingredient_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         ingredient = Ingredient.objects.get(
-            id=ingredient_id
+            id=ingredient_id,
+            branch=branch
         )
 
     except Ingredient.DoesNotExist:
@@ -1817,8 +2265,7 @@ def edit_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Ingredient not found."
+                "message": "Ingredient not found."
             },
             status=404
         )
@@ -1843,13 +2290,13 @@ def edit_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Ingredient name is required."
+                "message": "Ingredient name is required."
             },
             status=400
         )
 
     if Ingredient.objects.filter(
+        branch=branch,
         name__iexact=name,
         active=True
     ).exclude(
@@ -1859,31 +2306,7 @@ def edit_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "This ingredient already exists."
-            },
-            status=400
-        )
-
-    try:
-
-        minimum_stock = Decimal(
-            minimum_stock or "0"
-        )
-
-        if minimum_stock < 0:
-            raise ValueError
-
-    except (
-        ValueError,
-        TypeError
-    ):
-
-        return JsonResponse(
-            {
-                "success": False,
-                "message":
-                    "Invalid minimum stock."
+                "message": "This ingredient already exists in this branch."
             },
             status=400
         )
@@ -1903,6 +2326,25 @@ def edit_ingredient(
             status=400
         )
 
+    try:
+
+        minimum_stock = decimal_value(
+            minimum_stock
+        )
+
+        if minimum_stock < 0:
+            raise ValueError
+
+    except (ValueError, TypeError, InvalidOperation):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid minimum stock."
+            },
+            status=400
+        )
+
     ingredient.name = name
     ingredient.unit = unit
     ingredient.minimum_stock = minimum_stock
@@ -1912,8 +2354,7 @@ def edit_ingredient(
     return JsonResponse(
         {
             "success": True,
-            "message":
-                "Ingredient updated successfully."
+            "message": "Ingredient updated successfully."
         }
     )
 
@@ -1923,16 +2364,27 @@ def edit_ingredient(
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
-def delete_ingredient(
-    request,
-    ingredient_id
-):
+def delete_ingredient(request, ingredient_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         ingredient = Ingredient.objects.get(
-            id=ingredient_id
+            id=ingredient_id,
+            branch=branch
         )
 
     except Ingredient.DoesNotExist:
@@ -1940,8 +2392,7 @@ def delete_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Ingredient not found."
+                "message": "Ingredient not found."
             },
             status=404
         )
@@ -1951,9 +2402,10 @@ def delete_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
+                "message": (
                     "This ingredient is used in a recipe. "
                     "Remove it from recipes first."
+                )
             },
             status=400
         )
@@ -1963,9 +2415,10 @@ def delete_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
+                "message": (
                     "This ingredient has stock history. "
                     "It cannot be deleted."
+                )
             },
             status=400
         )
@@ -1975,9 +2428,10 @@ def delete_ingredient(
         return JsonResponse(
             {
                 "success": False,
-                "message":
+                "message": (
                     "This ingredient has usage history. "
                     "It cannot be deleted."
+                )
             },
             status=400
         )
@@ -1987,8 +2441,7 @@ def delete_ingredient(
     return JsonResponse(
         {
             "success": True,
-            "message":
-                "Ingredient deleted successfully."
+            "message": "Ingredient deleted successfully."
         }
     )
 
@@ -1998,134 +2451,124 @@ def delete_ingredient(
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_stock_in(request):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        ingredient_id = request.POST.get(
-            "ingredient_id",
-            ""
-        ).strip()
-
-        quantity = request.POST.get(
-            "quantity",
-            ""
-        ).strip()
-
-        unit_price = request.POST.get(
-            "unit_price",
-            "0"
-        ).strip()
-
-        supplier = request.POST.get(
-            "supplier",
-            ""
-        ).strip()
-
-        note = request.POST.get(
-            "note",
-            ""
-        ).strip()
-
-        if not ingredient_id:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please select an ingredient."
-                },
-                status=400
-            )
-
-        try:
-
-            ingredient = Ingredient.objects.get(
-                id=ingredient_id,
-                active=True
-            )
-
-        except Ingredient.DoesNotExist:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Ingredient not found."
-                },
-                status=404
-            )
-
-        try:
-
-            quantity = Decimal(
-                quantity
-            )
-
-            if quantity <= 0:
-                raise ValueError
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please enter a valid quantity."
-                },
-                status=400
-            )
-
-        try:
-
-            unit_price = Decimal(
-                unit_price or "0"
-            )
-
-            if unit_price < 0:
-                raise ValueError
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please enter a valid unit price."
-                },
-                status=400
-            )
-
-        stock = StockIn.objects.create(
-            ingredient=ingredient,
-            quantity=quantity,
-            unit_price=unit_price,
-            supplier=supplier,
-            note=note
-        )
+    if not branch:
 
         return JsonResponse(
             {
-                "success": True,
-                "message":
-                    "Stock added successfully.",
-                "stock_id": stock.id,
-                "ingredient": ingredient.name,
-                "quantity": str(quantity),
-                "unit": ingredient.unit,
-                "current_stock":
-                    str(
-                        ingredient.current_stock
-                    )
-            }
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
         )
+
+    ingredient_id = request.POST.get(
+        "ingredient_id",
+        ""
+    ).strip()
+
+    quantity = request.POST.get(
+        "quantity",
+        ""
+    ).strip()
+
+    unit_price = request.POST.get(
+        "unit_price",
+        "0"
+    ).strip()
+
+    supplier = request.POST.get(
+        "supplier",
+        ""
+    ).strip()
+
+    note = request.POST.get(
+        "note",
+        ""
+    ).strip()
+
+    if not ingredient_id:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please select an ingredient."
+            },
+            status=400
+        )
+
+    try:
+
+        ingredient = Ingredient.objects.get(
+            id=ingredient_id,
+            branch=branch,
+            active=True
+        )
+
+    except Ingredient.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Ingredient not found."
+            },
+            status=404
+        )
+
+    try:
+
+        quantity = decimal_value(quantity)
+
+        if quantity <= 0:
+            raise ValueError
+
+    except (ValueError, TypeError, InvalidOperation):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please enter a valid quantity."
+            },
+            status=400
+        )
+
+    try:
+
+        unit_price = decimal_value(
+            unit_price
+        )
+
+        if unit_price < 0:
+            raise ValueError
+
+    except (ValueError, TypeError, InvalidOperation):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please enter a valid unit price."
+            },
+            status=400
+        )
+
+    try:
+
+        with transaction.atomic():
+
+            stock = StockIn.objects.create(
+                ingredient=ingredient,
+                quantity=quantity,
+                unit_price=unit_price,
+                supplier=supplier,
+                note=note
+            )
+
+            ingredient.refresh_from_db()
 
     except Exception as e:
 
@@ -2136,6 +2579,20 @@ def add_stock_in(request):
             },
             status=400
         )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Stock added successfully.",
+            "stock_id": stock.id,
+            "ingredient": ingredient.name,
+            "quantity": str(quantity),
+            "unit": ingredient.unit,
+            "current_stock": str(
+                ingredient.current_stock
+            ),
+        }
+    )
 
 
 # =========================================================
@@ -2143,113 +2600,113 @@ def add_stock_in(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_stock_usage(request):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        ingredient_id = request.POST.get(
-            "ingredient_id",
-            ""
-        ).strip()
-
-        quantity = request.POST.get(
-            "quantity",
-            ""
-        ).strip()
-
-        reason = request.POST.get(
-            "reason",
-            ""
-        ).strip()
-
-        note = request.POST.get(
-            "note",
-            ""
-        ).strip()
-
-        if not ingredient_id:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please select an ingredient."
-                },
-                status=400
-            )
-
-        try:
-
-            ingredient = Ingredient.objects.get(
-                id=ingredient_id,
-                active=True
-            )
-
-        except Ingredient.DoesNotExist:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Ingredient not found."
-                },
-                status=404
-            )
-
-        try:
-
-            quantity = Decimal(
-                quantity
-            )
-
-            if quantity <= 0:
-                raise ValueError
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please enter a valid quantity."
-                },
-                status=400
-            )
-
-        if quantity > ingredient.current_stock:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Usage quantity cannot be greater "
-                        "than current stock."
-                },
-                status=400
-            )
-
-        usage = StockUsage.objects.create(
-            ingredient=ingredient,
-            quantity=quantity,
-            reason=reason,
-            note=note
-        )
+    if not branch:
 
         return JsonResponse(
             {
-                "success": True,
-                "message":
-                    "Stock usage recorded successfully.",
-                "usage_id": usage.id,
-                "current_stock":
-                    str(
-                        ingredient.current_stock
-                    )
-            }
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
+
+    ingredient_id = request.POST.get(
+        "ingredient_id",
+        ""
+    ).strip()
+
+    quantity = request.POST.get(
+        "quantity",
+        ""
+    ).strip()
+
+    reason = request.POST.get(
+        "reason",
+        ""
+    ).strip()
+
+    note = request.POST.get(
+        "note",
+        ""
+    ).strip()
+
+    if not ingredient_id:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please select an ingredient."
+            },
+            status=400
+        )
+
+    try:
+
+        with transaction.atomic():
+
+            ingredient = (
+                Ingredient.objects
+                .select_for_update()
+                .get(
+                    id=ingredient_id,
+                    branch=branch,
+                    active=True
+                )
+            )
+
+            try:
+
+                quantity = decimal_value(quantity)
+
+                if quantity <= 0:
+                    raise ValueError
+
+            except (ValueError, TypeError, InvalidOperation):
+
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "Please enter a valid quantity."
+                    },
+                    status=400
+                )
+
+            if quantity > ingredient.current_stock:
+
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": (
+                            "Usage quantity cannot be greater "
+                            "than current stock."
+                        )
+                    },
+                    status=400
+                )
+
+            usage = StockUsage.objects.create(
+                ingredient=ingredient,
+                quantity=quantity,
+                reason=reason,
+                note=note
+            )
+
+            ingredient.refresh_from_db()
+
+    except Ingredient.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Ingredient not found."
+            },
+            status=404
         )
 
     except Exception as e:
@@ -2261,6 +2718,17 @@ def add_stock_usage(request):
             },
             status=400
         )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Stock usage recorded successfully.",
+            "usage_id": usage.id,
+            "current_stock": str(
+                ingredient.current_stock
+            ),
+        }
+    )
 
 
 # =========================================================
@@ -2268,124 +2736,116 @@ def add_stock_usage(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
 def add_recipe(request):
 
-    try:
+    branch = get_current_branch(request.user)
 
-        menu_item_id = request.POST.get(
-            "menu_item_id",
-            ""
-        ).strip()
-
-        ingredient_id = request.POST.get(
-            "ingredient_id",
-            ""
-        ).strip()
-
-        quantity = request.POST.get(
-            "quantity",
-            ""
-        ).strip()
-
-        if not menu_item_id or not ingredient_id:
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please select menu item and ingredient."
-                },
-                status=400
-            )
-
-        try:
-
-            menu_item = MenuItem.objects.get(
-                id=menu_item_id
-            )
-
-            ingredient = Ingredient.objects.get(
-                id=ingredient_id,
-                active=True
-            )
-
-        except (
-            MenuItem.DoesNotExist,
-            Ingredient.DoesNotExist
-        ):
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Menu item or ingredient not found."
-                },
-                status=404
-            )
-
-        try:
-
-            quantity = Decimal(
-                quantity
-            )
-
-            if quantity <= 0:
-                raise ValueError
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "Please enter a valid quantity."
-                },
-                status=400
-            )
-
-        if MenuItemIngredient.objects.filter(
-            menu_item=menu_item,
-            ingredient=ingredient
-        ).exists():
-
-            return JsonResponse(
-                {
-                    "success": False,
-                    "message":
-                        "This ingredient is already "
-                        "in this recipe."
-                },
-                status=400
-            )
-
-        recipe = MenuItemIngredient.objects.create(
-            menu_item=menu_item,
-            ingredient=ingredient,
-            quantity=quantity
-        )
-
-        return JsonResponse(
-            {
-                "success": True,
-                "message":
-                    "Recipe ingredient added successfully.",
-                "recipe_id": recipe.id
-            }
-        )
-
-    except Exception as e:
+    if not branch:
 
         return JsonResponse(
             {
                 "success": False,
-                "message": str(e)
+                "message": "No branch assigned to this user."
             },
             status=400
         )
+
+    menu_item_id = request.POST.get(
+        "menu_item_id",
+        ""
+    ).strip()
+
+    ingredient_id = request.POST.get(
+        "ingredient_id",
+        ""
+    ).strip()
+
+    quantity = request.POST.get(
+        "quantity",
+        ""
+    ).strip()
+
+    if not menu_item_id or not ingredient_id:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please select menu item and ingredient."
+            },
+            status=400
+        )
+
+    try:
+
+        menu_item = MenuItem.objects.get(
+            id=menu_item_id,
+            branch=branch
+        )
+
+        ingredient = Ingredient.objects.get(
+            id=ingredient_id,
+            branch=branch,
+            active=True
+        )
+
+    except (
+        MenuItem.DoesNotExist,
+        Ingredient.DoesNotExist
+    ):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Menu item or ingredient not found."
+            },
+            status=404
+        )
+
+    try:
+
+        quantity = decimal_value(quantity)
+
+        if quantity <= 0:
+            raise ValueError
+
+    except (ValueError, TypeError, InvalidOperation):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please enter a valid quantity."
+            },
+            status=400
+        )
+
+    if MenuItemIngredient.objects.filter(
+        menu_item=menu_item,
+        ingredient=ingredient
+    ).exists():
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "This ingredient is already in this recipe."
+            },
+            status=400
+        )
+
+    recipe = MenuItemIngredient.objects.create(
+        menu_item=menu_item,
+        ingredient=ingredient,
+        quantity=quantity
+    )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Recipe ingredient added successfully.",
+            "recipe_id": recipe.id,
+        }
+    )
 
 
 # =========================================================
@@ -2393,16 +2853,35 @@ def add_recipe(request):
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
-def edit_recipe(
-    request,
-    recipe_id
-):
+def edit_recipe(request, recipe_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
-        recipe = MenuItemIngredient.objects.get(
-            id=recipe_id
+        recipe = (
+            MenuItemIngredient.objects
+            .select_related(
+                "menu_item",
+                "ingredient"
+            )
+            .get(
+                id=recipe_id,
+                menu_item__branch=branch,
+                ingredient__branch=branch
+            )
         )
 
     except MenuItemIngredient.DoesNotExist:
@@ -2410,8 +2889,7 @@ def edit_recipe(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Recipe entry not found."
+                "message": "Recipe entry not found."
             },
             status=404
         )
@@ -2423,36 +2901,28 @@ def edit_recipe(
 
     try:
 
-        quantity = Decimal(
-            quantity
-        )
+        quantity = decimal_value(quantity)
 
         if quantity <= 0:
             raise ValueError
 
-    except (
-        ValueError,
-        TypeError
-    ):
+    except (ValueError, TypeError, InvalidOperation):
 
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Please enter a valid quantity."
+                "message": "Please enter a valid quantity."
             },
             status=400
         )
 
     recipe.quantity = quantity
-
-    recipe.save()
+    recipe.save(update_fields=["quantity"])
 
     return JsonResponse(
         {
             "success": True,
-            "message":
-                "Recipe updated successfully."
+            "message": "Recipe updated successfully."
         }
     )
 
@@ -2462,16 +2932,28 @@ def edit_recipe(
 # =========================================================
 
 @login_required(login_url="login")
+@manager_required
 @require_POST
-def delete_recipe(
-    request,
-    recipe_id
-):
+def delete_recipe(request, recipe_id):
+
+    branch = get_current_branch(request.user)
+
+    if not branch:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "No branch assigned to this user."
+            },
+            status=400
+        )
 
     try:
 
         recipe = MenuItemIngredient.objects.get(
-            id=recipe_id
+            id=recipe_id,
+            menu_item__branch=branch,
+            ingredient__branch=branch
         )
 
     except MenuItemIngredient.DoesNotExist:
@@ -2479,8 +2961,7 @@ def delete_recipe(
         return JsonResponse(
             {
                 "success": False,
-                "message":
-                    "Recipe entry not found."
+                "message": "Recipe entry not found."
             },
             status=404
         )
@@ -2490,7 +2971,677 @@ def delete_recipe(
     return JsonResponse(
         {
             "success": True,
-            "message":
-                "Recipe ingredient removed successfully."
+            "message": "Recipe ingredient removed successfully."
+        }
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE HOME
+# =========================================================
+
+def website_home(request):
+
+    featured_items = (
+        MenuItem.objects
+        .filter(
+            available=True,
+            branch__active=True,
+            branch__restaurant__active=True
+        )
+        .select_related(
+            "category",
+            "branch"
+        )
+        .order_by("id")[:6]
+    )
+
+    return render(
+        request,
+        "website/home.html",
+        {
+            "featured_items": featured_items,
+        }
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE MENU
+# =========================================================
+
+def website_menu(request):
+
+    categories = (
+        Category.objects
+        .filter(
+            branch__active=True,
+            branch__restaurant__active=True,
+            items__available=True
+        )
+        .prefetch_related("items")
+        .distinct()
+        .order_by("name")
+    )
+
+    return render(
+        request,
+        "website/menu.html",
+        {
+            "categories": categories,
+        }
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE ABOUT
+# =========================================================
+
+def website_about(request):
+
+    return render(
+        request,
+        "website/about.html"
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE GALLERY
+# =========================================================
+
+def website_gallery(request):
+
+    return render(
+        request,
+        "website/gallery.html"
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE CONTACT
+# =========================================================
+
+def website_contact(request):
+
+    return render(
+        request,
+        "website/contact.html"
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE ORDER PAGE
+# =========================================================
+
+def website_order(request):
+
+    categories = (
+        Category.objects
+        .filter(
+            branch__active=True,
+            branch__restaurant__active=True,
+            items__available=True
+        )
+        .prefetch_related("items")
+        .distinct()
+        .order_by("name")
+    )
+
+    return render(
+        request,
+        "website/order.html",
+        {
+            "categories": categories,
+        }
+    )
+
+
+# =========================================================
+# PUBLIC WEBSITE CREATE ORDER
+# =========================================================
+
+@require_POST
+def website_create_order(request):
+
+    try:
+
+        data = json.loads(request.body)
+
+        customer_name = (
+            data.get(
+                "customer_name",
+                ""
+            ).strip()
+        )
+
+        customer_phone = (
+            data.get(
+                "customer_phone",
+                ""
+            ).strip()
+        )
+
+        order_type = data.get(
+            "order_type",
+            "takeaway"
+        )
+
+        items = data.get(
+            "items",
+            []
+        )
+
+        if not customer_name:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Please enter your name."
+                },
+                status=400
+            )
+
+        if not customer_phone:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Please enter your phone number."
+                },
+                status=400
+            )
+
+        if order_type not in [
+            "dine_in",
+            "takeaway"
+        ]:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Invalid order type."
+                },
+                status=400
+            )
+
+        if not isinstance(items, list) or not items:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "Your cart is empty."
+                },
+                status=400
+            )
+
+        branch = (
+            Branch.objects
+            .filter(
+                active=True,
+                restaurant__active=True
+            )
+            .order_by("id")
+            .first()
+        )
+
+        if not branch:
+
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": (
+                        "Online ordering is currently unavailable."
+                    )
+                },
+                status=400
+            )
+
+        with transaction.atomic():
+
+            order = Order.objects.create(
+                branch=branch,
+                customer_name=customer_name,
+                customer_phone=customer_phone,
+                order_type=order_type,
+                payment_method="cash",
+                payment_status="unpaid",
+                status="pending",
+                total=0,
+                discount=0,
+                tax=0,
+                service_charge=0,
+                paid_amount=0,
+                change_amount=0
+            )
+
+            subtotal = Decimal("0")
+            valid_item_count = 0
+
+            for item in items:
+
+                try:
+
+                    menu_item_id = int(
+                        item.get("id")
+                    )
+
+                    quantity = int(
+                        item.get("quantity")
+                    )
+
+                except (
+                    TypeError,
+                    ValueError,
+                    AttributeError
+                ):
+
+                    raise ValueError(
+                        "Invalid item data."
+                    )
+
+                if quantity <= 0:
+                    continue
+
+                try:
+
+                    menu_item = (
+                        MenuItem.objects
+                        .get(
+                            id=menu_item_id,
+                            branch=branch,
+                            available=True
+                        )
+                    )
+
+                except MenuItem.DoesNotExist:
+
+                    raise ValueError(
+                        "One of the selected items is no longer available."
+                    )
+
+                price = menu_item.price
+
+                OrderItem.objects.create(
+                    order=order,
+                    menu_item=menu_item,
+                    quantity=quantity,
+                    price=price
+                )
+
+                subtotal += price * quantity
+                valid_item_count += 1
+
+                recipes = (
+                    MenuItemIngredient.objects
+                    .filter(
+                        menu_item=menu_item,
+                        ingredient__branch=branch,
+                        ingredient__active=True
+                    )
+                    .select_related("ingredient")
+                )
+
+                for recipe in recipes:
+
+                    usage_quantity = (
+                        recipe.quantity * quantity
+                    )
+
+                    if (
+                        recipe.ingredient.current_stock
+                        < usage_quantity
+                    ):
+
+                        raise ValueError(
+                            f"Insufficient stock for {recipe.ingredient.name}."
+                        )
+
+                    StockUsage.objects.create(
+                        ingredient=recipe.ingredient,
+                        quantity=usage_quantity,
+                        reason=(
+                            f"Website Order #{order.id} - "
+                            f"{menu_item.name}"
+                        )
+                    )
+
+            if valid_item_count == 0:
+
+                raise ValueError(
+                    "No valid items were found."
+                )
+
+            tax = (
+                subtotal * TAX_RATE
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            service_charge = FIXED_SERVICE_CHARGE
+
+            grand_total = (
+                subtotal
+                + tax
+                + service_charge
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            order.total = grand_total
+            order.tax = tax
+            order.service_charge = service_charge
+
+            order.save(
+                update_fields=[
+                    "total",
+                    "tax",
+                    "service_charge"
+                ]
+            )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "order_id": order.id,
+                "subtotal": str(subtotal),
+                "tax": str(tax),
+                "service_charge": str(service_charge),
+                "total": str(grand_total),
+                "message": "Your order has been placed successfully.",
+            }
+        )
+
+    except json.JSONDecodeError:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Invalid order data."
+            },
+            status=400
+        )
+
+    except Exception as e:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": str(e)
+            },
+            status=400
+        )
+
+
+# =========================================================
+# PUBLIC WEBSITE ORDER SUCCESS
+# =========================================================
+
+def website_order_success(request, order_id):
+
+    order = get_object_or_404(
+        Order,
+        id=order_id
+    )
+
+    return render(
+        request,
+        "website/order_success.html",
+        {
+            "order": order,
+        }
+    )
+
+
+# =========================================================
+# BRANCH MANAGEMENT
+# =========================================================
+
+@login_required(login_url="login")
+@manager_required
+def branches(request):
+
+    branches = (
+        Branch.objects
+        .select_related("restaurant")
+        .order_by(
+            "restaurant__name",
+            "name"
+        )
+    )
+
+    return render(
+        request,
+        "pos/branches.html",
+        {
+            "branches": branches,
+        }
+    )
+
+
+# =========================================================
+# ADD BRANCH
+# =========================================================
+
+@login_required(login_url="login")
+@manager_required
+@require_POST
+def add_branch(request):
+
+    name = request.POST.get(
+        "name",
+        ""
+    ).strip()
+
+    address = request.POST.get(
+        "address",
+        ""
+    ).strip()
+
+    phone = request.POST.get(
+        "phone",
+        ""
+    ).strip()
+
+    if not name:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Branch name is required."
+            },
+            status=400
+        )
+
+    restaurant = (
+        Restaurant.objects
+        .filter(active=True)
+        .order_by("id")
+        .first()
+    )
+
+    if not restaurant:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Please create a restaurant first."
+            },
+            status=400
+        )
+
+    if Branch.objects.filter(
+        restaurant=restaurant,
+        name__iexact=name
+    ).exists():
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "This branch already exists."
+            },
+            status=400
+        )
+
+    branch = Branch.objects.create(
+        restaurant=restaurant,
+        name=name,
+        address=address,
+        phone=phone,
+        active=True
+    )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Branch added successfully.",
+            "id": branch.id,
+            "name": branch.name,
+        }
+    )
+
+
+# =========================================================
+# EDIT BRANCH
+# =========================================================
+
+@login_required(login_url="login")
+@manager_required
+@require_POST
+def edit_branch(request, branch_id):
+
+    try:
+
+        branch = Branch.objects.get(
+            id=branch_id
+        )
+
+    except Branch.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Branch not found."
+            },
+            status=404
+        )
+
+    name = request.POST.get(
+        "name",
+        ""
+    ).strip()
+
+    address = request.POST.get(
+        "address",
+        ""
+    ).strip()
+
+    phone = request.POST.get(
+        "phone",
+        ""
+    ).strip()
+
+    if not name:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Branch name is required."
+            },
+            status=400
+        )
+
+    if Branch.objects.filter(
+        restaurant=branch.restaurant,
+        name__iexact=name
+    ).exclude(
+        id=branch.id
+    ).exists():
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "This branch already exists."
+            },
+            status=400
+        )
+
+    branch.name = name
+    branch.address = address
+    branch.phone = phone
+
+    branch.save()
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Branch updated successfully."
+        }
+    )
+
+
+# =========================================================
+# DELETE BRANCH
+# =========================================================
+
+@login_required(login_url="login")
+@manager_required
+@require_POST
+def delete_branch(request, branch_id):
+
+    try:
+
+        branch = Branch.objects.get(
+            id=branch_id
+        )
+
+    except Branch.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Branch not found."
+            },
+            status=404
+        )
+
+    if UserBranch.objects.filter(
+        branch=branch
+    ).exists():
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": (
+                    "This branch is assigned to users "
+                    "and cannot be deleted."
+                )
+            },
+            status=400
+        )
+
+    if (
+        branch.categories.exists()
+        or branch.menu_items.exists()
+        or branch.tables.exists()
+        or branch.orders.exists()
+        or branch.ingredients.exists()
+    ):
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": (
+                    "This branch contains existing data "
+                    "and cannot be deleted."
+                )
+            },
+            status=400
+        )
+
+    branch.delete()
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": "Branch deleted successfully."
         }
     )

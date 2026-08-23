@@ -6,6 +6,58 @@ from . import views
 urlpatterns = [
 
     # =====================================================
+    # PUBLIC WEBSITE
+    # =====================================================
+
+    path(
+    "website/",
+        views.website_home,
+        name="website_home"
+    ),
+
+    path(
+        "website/menu/",
+        views.website_menu,
+        name="website_menu"
+    ),
+
+    path(
+        "website/about/",
+        views.website_about,
+        name="website_about"
+    ),
+
+    path(
+        "website/gallery/",
+        views.website_gallery,
+        name="website_gallery"
+    ),
+
+    path(
+        "website/contact/",
+        views.website_contact,
+        name="website_contact"
+    ),
+
+    path(
+        "website/order/",
+        views.website_order,
+        name="website_order"
+    ),
+
+    path(
+        "website/create-order/",
+        views.website_create_order,
+        name="website_create_order"
+    ),
+
+    path(
+        "website/order-success/<int:order_id>/",
+        views.website_order_success,
+        name="website_order_success"
+    ),
+
+    # =====================================================
     # LOGIN / LOGOUT
     # =====================================================
 
@@ -245,5 +297,33 @@ urlpatterns = [
         "delete-recipe/<int:recipe_id>/",
         views.delete_recipe,
         name="delete_recipe"
+    ),
+
+    # =========================================================
+    # BRANCH MANAGEMENT
+    # =========================================================
+
+    path(
+        "branches/",
+        views.branches,
+        name="branches"
+    ),
+
+    path(
+        "branches/add/",
+        views.add_branch,
+        name="add_branch"
+    ),
+
+    path(
+        "branches/<int:branch_id>/edit/",
+        views.edit_branch,
+        name="edit_branch"
+    ),
+
+    path(
+        "branches/<int:branch_id>/delete/",
+        views.delete_branch,
+        name="delete_branch"
     ),
 ]

@@ -1,10 +1,34 @@
 from django.db import models
+from django.db.models import Q
 
 
-class Category(models.Model):
+# =========================================================
+# RESTAURANT
+# =========================================================
+
+class Restaurant(models.Model):
 
     name = models.CharField(
-        max_length=100
+        max_length=150
+    )
+
+    address = models.TextField(
+        blank=True,
+        default=""
+    )
+
+    phone = models.CharField(
+        max_length=30,
+        blank=True,
+        default=""
+    )
+
+    active = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
     )
 
     def __str__(self):
@@ -12,7 +36,139 @@ class Category(models.Model):
         return self.name
 
 
+# =========================================================
+# BRANCH
+# =========================================================
+
+class Branch(models.Model):
+
+    restaurant = models.ForeignKey(
+        Restaurant,
+        on_delete=models.CASCADE,
+        related_name="branches"
+    )
+
+    name = models.CharField(
+        max_length=150
+    )
+
+    address = models.TextField(
+        blank=True,
+        default=""
+    )
+
+    phone = models.CharField(
+        max_length=30,
+        blank=True,
+        default=""
+    )
+
+    active = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "restaurant",
+                    "name"
+                ],
+                name="unique_branch_name_per_restaurant"
+            )
+        ]
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.restaurant.name} - "
+            f"{self.name}"
+        )
+
+
+# =========================================================
+# USER BRANCH
+# =========================================================
+
+class UserBranch(models.Model):
+
+    user = models.OneToOneField(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="branch_access"
+    )
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="users"
+    )
+
+    def __str__(self):
+
+        return (
+            f"{self.user.username} - "
+            f"{self.branch.name}"
+        )
+
+
+# =========================================================
+# CATEGORY
+# =========================================================
+
+class Category(models.Model):
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="categories"
+    )
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "branch",
+                    "name"
+                ],
+                name="unique_category_name_per_branch"
+            )
+        ]
+
+        ordering = [
+            "name"
+        ]
+
+    def __str__(self):
+
+        return self.name
+
+
+# =========================================================
+# MENU ITEM
+# =========================================================
+
 class MenuItem(models.Model):
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
 
     category = models.ForeignKey(
         Category,
@@ -44,16 +200,30 @@ class MenuItem(models.Model):
         default=True
     )
 
+    class Meta:
+
+        ordering = [
+            "name"
+        ]
+
     def __str__(self):
 
         return self.name
 
 
+# =========================================================
+# TABLE
+# =========================================================
+
 class Table(models.Model):
 
-    number = models.PositiveIntegerField(
-        unique=True
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="tables"
     )
+
+    number = models.PositiveIntegerField()
 
     capacity = models.PositiveIntegerField(
         default=4
@@ -63,43 +233,124 @@ class Table(models.Model):
         default=False
     )
 
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "branch",
+                    "number"
+                ],
+                name="unique_table_number_per_branch"
+            )
+        ]
+
+        ordering = [
+            "number"
+        ]
+
     def __str__(self):
 
-        return f"Table {self.number}"
+        return (
+            f"{self.branch.name} - "
+            f"Table {self.number}"
+        )
 
+
+# =========================================================
+# ORDER
+# =========================================================
 
 class Order(models.Model):
 
     ORDER_TYPES = [
-        ("dine_in", "Dine In"),
-        ("takeaway", "Takeaway"),
+        (
+            "dine_in",
+            "Dine In"
+        ),
+        (
+            "takeaway",
+            "Takeaway"
+        ),
     ]
 
     STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("preparing", "Preparing"),
-        ("ready", "Ready"),
-        ("served", "Served"),
-        ("completed", "Completed"),
-        ("cancelled", "Cancelled"),
+        (
+            "pending",
+            "Pending"
+        ),
+        (
+            "preparing",
+            "Preparing"
+        ),
+        (
+            "ready",
+            "Ready"
+        ),
+        (
+            "served",
+            "Served"
+        ),
+        (
+            "completed",
+            "Completed"
+        ),
+        (
+            "cancelled",
+            "Cancelled"
+        ),
     ]
 
     PAYMENT_METHODS = [
-        ("cash", "Cash"),
-        ("card", "Card"),
-        ("online", "Online"),
+        (
+            "cash",
+            "Cash"
+        ),
+        (
+            "card",
+            "Card"
+        ),
+        (
+            "online",
+            "Online"
+        ),
     ]
 
     PAYMENT_STATUS_CHOICES = [
-        ("unpaid", "Unpaid"),
-        ("paid", "Paid"),
+        (
+            "unpaid",
+            "Unpaid"
+        ),
+        (
+            "paid",
+            "Paid"
+        ),
     ]
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="orders"
+    )
 
     table = models.ForeignKey(
         Table,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name="orders"
+    )
+
+    customer_name = models.CharField(
+        max_length=150,
+        blank=True,
+        default=""
+    )
+
+    customer_phone = models.CharField(
+        max_length=30,
+        blank=True,
+        default=""
     )
 
     order_type = models.CharField(
@@ -132,14 +383,54 @@ class Order(models.Model):
         default="unpaid"
     )
 
+    discount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    tax = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    service_charge = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    paid_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    change_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+
+    class Meta:
+
+        ordering = [
+            "-created_at"
+        ]
 
     def __str__(self):
 
         return f"Order #{self.id}"
 
+
+# =========================================================
+# ORDER ITEM
+# =========================================================
 
 class OrderItem(models.Model):
 
@@ -151,7 +442,8 @@ class OrderItem(models.Model):
 
     menu_item = models.ForeignKey(
         MenuItem,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name="order_items"
     )
 
     quantity = models.PositiveIntegerField(
@@ -176,17 +468,46 @@ class OrderItem(models.Model):
             self.price *
             self.quantity
         )
-    
+
+
+# =========================================================
+# INGREDIENT
+# =========================================================
+
 class Ingredient(models.Model):
 
     UNIT_CHOICES = [
-        ("kg", "Kilogram"),
-        ("g", "Gram"),
-        ("liter", "Liter"),
-        ("ml", "Milliliter"),
-        ("piece", "Piece"),
-        ("pack", "Pack"),
+        (
+            "kg",
+            "Kilogram"
+        ),
+        (
+            "g",
+            "Gram"
+        ),
+        (
+            "liter",
+            "Liter"
+        ),
+        (
+            "ml",
+            "Milliliter"
+        ),
+        (
+            "piece",
+            "Piece"
+        ),
+        (
+            "pack",
+            "Pack"
+        ),
     ]
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        related_name="ingredients"
+    )
 
     name = models.CharField(
         max_length=150
@@ -222,6 +543,22 @@ class Ingredient(models.Model):
         auto_now=True
     )
 
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "branch",
+                    "name"
+                ],
+                name="unique_ingredient_name_per_branch"
+            )
+        ]
+
+        ordering = [
+            "name"
+        ]
+
     def __str__(self):
 
         return self.name
@@ -229,12 +566,22 @@ class Ingredient(models.Model):
     @property
     def is_low_stock(self):
 
-        return self.current_stock <= self.minimum_stock
+        return (
+            self.current_stock <=
+            self.minimum_stock
+        )
 
     @property
     def is_out_of_stock(self):
 
-        return self.current_stock <= 0
+        return (
+            self.current_stock <= 0
+        )
+
+
+# =========================================================
+# STOCK IN
+# =========================================================
 
 class StockIn(models.Model):
 
@@ -286,21 +633,37 @@ class StockIn(models.Model):
             self.unit_price
         )
 
-    def save(self, *args, **kwargs):
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
         is_new = self.pk is None
 
-        super().save(*args, **kwargs)
+        super().save(
+            *args,
+            **kwargs
+        )
 
         if is_new:
 
             ingredient = self.ingredient
 
-            ingredient.current_stock += self.quantity
+            ingredient.current_stock += (
+                self.quantity
+            )
 
             ingredient.save(
-                update_fields=["current_stock"]
+                update_fields=[
+                    "current_stock"
+                ]
             )
+
+
+# =========================================================
+# STOCK USAGE
+# =========================================================
 
 class StockUsage(models.Model):
 
@@ -338,17 +701,35 @@ class StockUsage(models.Model):
             f"{self.ingredient.unit}"
         )
 
-    def save(self, *args, **kwargs):
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
 
         if self.pk is None:
 
-            self.ingredient.current_stock -= self.quantity
+            ingredient = self.ingredient
 
-            self.ingredient.save(
-                update_fields=["current_stock"]
+            ingredient.current_stock -= (
+                self.quantity
             )
 
-        super().save(*args, **kwargs)
+            ingredient.save(
+                update_fields=[
+                    "current_stock"
+                ]
+            )
+
+        super().save(
+            *args,
+            **kwargs
+        )
+
+
+# =========================================================
+# MENU ITEM INGREDIENT / RECIPE
+# =========================================================
 
 class MenuItemIngredient(models.Model):
 
@@ -369,6 +750,18 @@ class MenuItemIngredient(models.Model):
         decimal_places=3
     )
 
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "menu_item",
+                    "ingredient"
+                ],
+                name="unique_ingredient_per_menu_item"
+            )
+        ]
+
     def __str__(self):
 
         return (
@@ -376,4 +769,4 @@ class MenuItemIngredient(models.Model):
             f"{self.ingredient.name} "
             f"({self.quantity} "
             f"{self.ingredient.unit})"
-        )   
+        )

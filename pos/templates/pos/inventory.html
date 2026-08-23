@@ -63,6 +63,19 @@ body {
     font-weight: bold;
 }
 
+.logout-btn {
+    text-decoration: none;
+    color: white;
+    background: #dc2626;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.logout-btn:hover {
+    background: #b91c1c;
+}
+
 .summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -297,6 +310,10 @@ td {
 
 <a href="/" class="back-btn">
 ← Back to POS
+</a>
+
+<a href="{% url 'logout' %}" class="logout-btn">
+🚪 Logout
 </a>
 
 </div>

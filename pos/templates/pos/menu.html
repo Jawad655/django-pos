@@ -97,6 +97,21 @@
             color: #111827;
         }
 
+        .logout-link {
+           background: #dc2626;
+           color: white;
+           text-decoration: none;
+           padding: 10px 15px;
+           border-radius: 7px;
+           font-size: 13px;
+           font-weight: bold;
+           display: inline-block;
+        }
+
+        .logout-link:hover {
+           background: #b91c1c;
+        }
+
         .forms {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
@@ -432,6 +447,14 @@
                 ← Back
 
             </button>
+
+            <a
+                href="{% url 'logout' %}"
+                class="logout-link">
+
+                🚪 Logout
+
+            </a>
 
         </div>
 
