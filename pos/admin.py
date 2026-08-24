@@ -3,6 +3,9 @@ from django.contrib.admin import SimpleListFilter
 from django.db import models
 
 from .models import (
+    Restaurant,
+    Branch,
+    UserBranch,
     Category,
     MenuItem,
     Table,
@@ -273,4 +276,96 @@ class MenuItemIngredientAdmin(admin.ModelAdmin):
     ordering = (
         "menu_item",
         "ingredient",
-    ) 
+    )
+
+
+# =====================================================
+# RESTAURANT
+# =====================================================
+
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "name",
+        "phone",
+        "active",
+        "created_at",
+    )
+
+    list_filter = (
+        "active",
+    )
+
+    search_fields = (
+        "name",
+        "phone",
+        "address",
+    )
+
+    ordering = (
+        "name",
+    )
+
+
+# =====================================================
+# BRANCH
+# =====================================================
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "restaurant",
+        "name",
+        "phone",
+        "active",
+        "created_at",
+    )
+
+    list_filter = (
+        "restaurant",
+        "active",
+    )
+
+    search_fields = (
+        "name",
+        "address",
+        "phone",
+        "restaurant__name",
+    )
+
+    ordering = (
+        "restaurant",
+        "name",
+    )
+
+
+# =====================================================
+# USER BRANCH
+# =====================================================
+
+@admin.register(UserBranch)
+class UserBranchAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "user",
+        "branch",
+    )
+
+    list_filter = (
+        "branch",
+    )
+
+    search_fields = (
+        "user__username",
+        "branch__name",
+        "branch__restaurant__name",
+    )
+
+    ordering = (
+        "user__username",
+    )
